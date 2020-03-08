@@ -10,7 +10,7 @@
         <title>{{ config('app.name', 'The Poultry Farm') }}</title>
 
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
-        <link href="{{asset("/css/styles.css")}}" rel="stylesheet" />
+        {{-- <link href="{{asset("/css/styles.css")}}" rel="stylesheet" /> --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <style>
             .-bg-primary{
@@ -171,5 +171,11 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script> --}}
         <script src="{{asset("/js/app.js")}}"></script>
         <script src="{{asset("/js/scripts.js")}}"></script>
+        @yield('script-tags')
+        <script>
+            $(document).ready(()=>{
+                @yield('script')
+            });
+        </script>
     </body>
 </html>

@@ -160,10 +160,16 @@
         <script src="{{asset('js/app.js')}}"></script>
         <script src="{{asset('js/scripts.js')}}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="{{asset('assets/demo/chart-area-demo.js')}}"></script>
-        <script src="{{asset('assets/demo/chart-bar-demo.js')}}"></script>
+        {{-- <script src="{{asset('assets/demo/chart-area-demo.js')}}"></script>
+        <script src="{{asset('assets/demo/chart-bar-demo.js')}}"></script> --}}
         <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
         <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
-        <script src="{{asset('assets/demo/datatables-demo.js')}}"></script>
+        {{-- <script src="{{asset('assets/demo/datatables-demo.js')}}"></script> --}}
+        @yield('script-tags')
+       <script>
+           $(document).ready(()=>{
+            @yield('script')
+           });
+       </script>
     </body>
 </html>

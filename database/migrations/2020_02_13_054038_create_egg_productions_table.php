@@ -17,11 +17,10 @@ class CreateEggProductionsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
             $table->string('layer_batch_id');
-            // $table->string('pen_id');
             $table->timestamp('date_collected');
             $table->integer('qunatity');
             $table->timestamps();
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('layer_batch_id')->references('batch_id')->on('birds')->onDelete('cascade');
         });

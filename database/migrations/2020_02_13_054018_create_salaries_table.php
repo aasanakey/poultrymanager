@@ -19,7 +19,7 @@ class CreateSalariesTable extends Migration
             $table->string('employee_id');
             $table->decimal('amount',9,2);
             $table->timestamps();
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('employee_id')->references('id')->on('employees')->onDelete('cascade');
         });

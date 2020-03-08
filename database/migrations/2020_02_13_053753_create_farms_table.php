@@ -20,7 +20,7 @@ class CreateFarmsTable extends Migration
             $table->string("farm_location");
             $table->string("farm_contact");
             $table->string("farm_manager");
-            // $table->string("password");
+            $table->boolean("is_setup")->default(false);
             $table->timestamps();
             $table->unique(['farm_name','farm_email']);
         });

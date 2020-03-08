@@ -17,6 +17,7 @@ class CreateBirdsTable extends Migration
             $table->string('batch_id')->unique();
             $table->unsignedBigInteger('farm_id');
             $table->string('bird_category');
+            $table->integer('number');
             $table->string('species');
             $table->string('type')->nullable();
             $table->decimal('unit_price',9,2);

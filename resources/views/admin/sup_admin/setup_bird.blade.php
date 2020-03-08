@@ -1,0 +1,219 @@
+@extends('layouts.app')
+@section('styles')
+@parent
+    <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
+@endsection
+@section('content')
+<div class="container-fluid mt-4">
+        <div class="mb-4">
+            <h3 class="card-title center">Please Add Pen House to get started</h3>
+        </div>
+        <ol class="breadcrumb mb-4">
+            <li class="breadcrumb-item">Pen House</li>
+            <li class="breadcrumb-item active">Birds</li>
+        </ol>
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    @if (session()->has('success'))
+                        <div class="alert alert-success col-md-12" role="alert">
+                            <span>{{ session()->get('success')}} </span>
+                        </div>
+                    @endif
+                    @if (session()->has('error'))
+                        <div class="alert alert-danger col-md-12" role="alert">
+                            <span>{{ session()->get('error')}} </span>
+                        </div>
+                    @endif
+                    <span>
+                        <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addBirdModal">
+                                Add Bird
+                            </button>
+                        </span>
+                </div>
+                {{-- modal --}}
+                <div class="modal fade" id="addBirdModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalCenterTitle">Enter Detials</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="birdForm" method="POST" action="{{ route('admin.add.bird','chicken')}}">
+                                    @csrf
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleFormControlSelect1">Species</label>
+                                            <select name="species" class="form-control" id="exampleFormControlSelect1">
+                                            <option value="Rhode Island Reds">Rhode Island Reds</option>
+                                            <option value="Sussex">Sussex</option>
+                                            <option value="Plymouth">Plymouth/Barred Rock</option>
+                                            <option value="Australorp">Australorp</option>
+                                            <option value="Wyandotte">Wyandotte</option>
+                                            <option value="Jersey Giant">Jersey Giant</option>
+                                            <option value="Leghorn">Leghorn</option>
+                                            <option value="Orpington">Orpington</option>
+                                            <option value="Barnevelder">Barnevelder</option>
+                                            <option value="Marans">Marans</option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="exampleFormControlSelect2">type</label>
+                                            <select name="type" class="form-control" id="exampleFormControlSelect2">
+                                                <option value="layer">Layer</option>
+                                                <option value="broiler">Broiler</option>
+                                            </select>
+                                            @error('type')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="pen">Pen House</label>
+                                            @if (isset($pen))
+                                                <select name="pen" class="form-control" id="pen">
+                                                @foreach ($pen as $item)
+                                                        <option value="{{$item->pen_id}}">{{$item->pen_id}}</option>
+                                                @endforeach
+                                                </select>
+                                            @else
+                                            <input type="text" name="pen"  class="form-control @error('pen') is-invalid @enderror" id="pen" value="{{ old('pen') }}">
+                                            @endif
+                                            @error('pen')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="price">Number of Birds</label>
+                                            <input type="number" name="number" min="0" class="form-control @error('number') is-invalid @enderror" id="price" value="{{ old('number') }}">
+                                            @error('number')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-6">
+                                            <label for="price">price</label>
+                                            <input type="number" name="price" min="0" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
+                                            @error('price')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                        <div class="form-group col-md-6">
+                                            <label for="date">Date</label>
+                                            <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                                <input type="text" name="date" class="form-control datetimepicker-input  @error('date') is-invalid @enderror"
+                                                data-target="#datetimepicker1" value="{{ old('date')}}"/>
+                                                <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                                    <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                </div>
+                                                @error('date')
+                                                    <span class="invalid-feedback" role="alert">
+                                                        <strong>{{ $message }}</strong>
+                                                    </span>
+                                                @enderror
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                <button type="button" onclick="document.getElementById('birdForm').submit()" class="btn btn-primary">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-4">
+            <div class="card-header"><i class="fas fa-table mr-1"></i>Birds</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>Batch</th>
+                                <th>Farm</th>
+                                <th>Pen</th>
+                                <th>Number of Birds</th>
+                                <th>Species</th>
+                                <th>Date</th>
+                                <th>Type</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                    <th>Batch</th>
+                                    <th>Farm</th>
+                                    <th>Pen</th>
+                                    <th>Number</th>
+                                    <th>Species</th>
+                                    <th>Date</th>
+                                    <th>Type</th>
+                                    <th>Action</th>
+                            </tr>
+                        </tfoot>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="row d-flex align-items-center mt-4" style="position:relative;">
+                <div class="col-sm-12" style="position:absolute;left:50%;">
+                    <ul class="pagination">
+                        <li class="page-item"><a class="btn btn-primary" href="{{url('/dashboard')}}">Previous</a></li>
+                        <li class="page-item"><a class="btn btn-primary" href="{{route('setup.finish')}}" class="btn btn-primary btn-sm">Next</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+</div>
+@endsection
+
+@section('script-tags')
+    @parent
+    <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment-with-locales.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
+ @endsection
+
+ @section('script')
+    @parent
+    $('#datetimepicker1').datetimepicker({
+        icons: {
+            time: "fa fa-clock",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
+    });
+    $('#dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('datatables.population','chicken') }}",
+        columns: [
+            {data: 'batch_id', name: 'batch_id'},
+            {data: 'farm_name', name: 'Farm'},
+            {data:'pen_id',name:'Pen'},
+            {data:'number',name:'Number'},
+            {data:'species',name:'Species'},
+            {data:'date',name:'Date'},
+            {data:'type',name:'Type'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+@endsection

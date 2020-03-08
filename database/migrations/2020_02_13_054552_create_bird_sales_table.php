@@ -21,7 +21,7 @@ class CreateBirdSalesTable extends Migration
             $table->decimal('weight');
             $table->decimal('price');
             $table->timestamps();
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('bird_batch_id')->references('batch_id')->on('birds')->onDelete('cascade');
         });

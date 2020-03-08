@@ -14,13 +14,13 @@ class CreatePenHousesTable extends Migration
     public function up()
     {
         Schema::create('pen_houses', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->string('pen_id')->unique();
             $table->unsignedBigInteger('farm_id');
-            $table->strng('location');
+            $table->string('location');
             $table->decimal('size',10,2);
             $table->integer('capacity');
             $table->timestamps();
-            $table->primary(['id','farm_id']);
+            $table->primary(['pen_id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
         });
     }

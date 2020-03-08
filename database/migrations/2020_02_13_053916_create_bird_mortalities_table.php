@@ -17,7 +17,7 @@ class CreateBirdMortalitiesTable extends Migration
             $table->bigIncrements('id');
             $table->string('batch_id')->unique();
             $table->unsignedBigInteger('farm_id');
-            $table->string('number');
+            $table->integer('number');
             $table->string('cause');
             $table->string('observation')->nullable();
             $table->decimal('unit_price',9,2);
@@ -25,7 +25,7 @@ class CreateBirdMortalitiesTable extends Migration
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('batch_id')->references('batch_id')->on('birds')->onDelete('cascade');
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
         });
     }
 

@@ -22,7 +22,7 @@ class CreateEquipmentTable extends Migration
             $table->string('description')->nullable();
             $table->string('supplier')->nullable();
             $table->decimal('price');
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->timestamps();
         });

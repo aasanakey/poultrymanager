@@ -19,7 +19,7 @@
     <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav">
             <a class="nav-link" href="{{route('admin.bird.population','chicken')}}">Population</a>
-            <a class="nav-link" href="layout-sidenav-light.html">Mortality</a>
+            <a class="nav-link" href="{{ route('admin.bird.mortality','chicken')}}">Mortality</a>
         </nav>
     </div>
     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
@@ -28,10 +28,8 @@
         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
     </a>
     <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                Production
-            </a>
+        <nav class="sb-sidenav-menu-nested nav" >
+            <a class="nav-link" href="{{route('admin.egg.production','chicken')}}">Production</a>
         </nav>
     </div>
     {{-- <div class="sb-sidenav-menu-heading">Addons</div> --}}

@@ -22,7 +22,7 @@ class CreateMeatProductionsTable extends Migration
             $table->decimal('bird_avg_weight');
             $table->decimal('cacass_avg_weight');
             $table->timestamps();
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('layer_batch_id')->references('batch_id')->on('birds')->onDelete('cascade');
         });

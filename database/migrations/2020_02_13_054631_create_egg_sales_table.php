@@ -21,7 +21,7 @@ class CreateEggSalesTable extends Migration
             $table->decimal('quantity');
             $table->decimal('price_per_dozen');
             $table->timestamps();
-            $table->primary(['id','farm_id']);
+            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
         });
     }
