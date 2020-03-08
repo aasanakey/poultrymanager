@@ -205,19 +205,20 @@
     {{-- @if ($errors)
         {{!!"$('#addBirdModal').modal('show');"!!}}
     @endif --}}
-    $('#datetimepicker1').datetimepicker(icons: {
+    $('#datetimepicker1').datetimepicker({
+        icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
-    });
+    }});
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.mortality','chicken') }}",
+        ajax: "{{ route('datatables.eggs','chicken') }}",
         columns: [
-            {data: 'batch_id', name: 'batch_id'},
-            {data: 'farm_name', name: 'Farm'},
+            {data: 'layer_bird_id', name: 'layer_bird_id'},
+            {data: 'farm_id', name: 'Farm'},
             {data:'pen_id',name:'Pen House'},
             {data:'number',name:'Number'},
             {data:'cause',name:'Cause'},

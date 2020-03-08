@@ -223,7 +223,7 @@ class FarmAdminController extends Controller
 
     public function addEggProduction($type,Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         $request->validate([
             "batch_id" => ['required','string'],
             "pen" => ['required','string'],
@@ -232,7 +232,7 @@ class FarmAdminController extends Controller
             "bad_eggs" => ['required','numeric','min:0'],
             ]);
 
-            \App\BirdMortality::create([
+            \App\EggProduction::create([
             "layer_batch_id" => $request->batch_id,
             "farm_id" => auth()->user()->farm_id,
             "pen_id" => $request->pen,
@@ -242,6 +242,6 @@ class FarmAdminController extends Controller
             "bird_category" => $type,
 
             ]);
-            return redirect()->back()->with('success','Mortality added successfully');
+            return redirect()->back()->with('success','Eggs record added successfully');
     }
 }

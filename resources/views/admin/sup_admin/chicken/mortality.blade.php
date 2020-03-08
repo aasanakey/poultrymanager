@@ -199,12 +199,12 @@
     {{-- @if ($errors)
         {{!!"$('#addBirdModal').modal('show');"!!}}
     @endif --}}
-    $('#datetimepicker1').datetimepicker(icons: {
+    $('#datetimepicker1').datetimepicker({icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
-    });
+    }});
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,

@@ -87,6 +87,11 @@ class ApiController extends Controller
     }
 
 
+    public function eggs($type)
+    {
+       return DataTables::of(\App\EggProduction::query())->make(true);
+    }
+
     public function exportEggs($type)
     {
         # code...
