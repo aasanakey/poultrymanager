@@ -65,5 +65,5 @@ Route::get('/birds/{type}/export/exel','ApiController@exportPopulation')->name('
 Route::get('/birds/{type}/mortality','ApiController@mortality')->name('datatables.mortality');
 Route::get('/mortality/{type}/export/exel','ApiController@exportMortality')->name('export.mortality');
 Route::get('/pen','ApiController@pen')->name('datatables.pen');
-Route::get('/birds/{type}/mortality','ApiController@eggs')->name('datatables.eggs');
+Route::get('/birds/{type}/eggs','ApiController@eggs')->name('datatables.eggs');
 Route::get('/eggs/{type}/export/exel','ApiController@exportEggs')->name('export.eggs');

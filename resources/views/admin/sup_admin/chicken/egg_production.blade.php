@@ -162,27 +162,24 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Batch</th>
                             <th>Farm</th>
                             <th>Pen House</th>
-                            <th>Number</th>
-                            <th>Cause</th>
-                            <th>Observation</th>
-                            <th>Price</th>
+                            <th>Bird Batch</th>
+                            <th>Number of Eggs</th>
+                            <th>Number of Bad Eggs</th>
+                            <th>Number of Good Eggs</th>
                             <th>Date</th>
-                            {{-- <th>Type</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Batch</th>
                             <th>Farm</th>
                             <th>Pen House</th>
-                            <th>Number</th>
-                            <th>Cause</th>
-                            <th>Observation</th>
-                            <th>Price</th>
+                            <th>Bird Batch</th>
+                            <th>Number of Eggs</th>
+                            <th>Number of Bad Eggs</th>
+                            <th>Number of Good Eggs</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
@@ -217,15 +214,15 @@
         serverSide: true,
         ajax: "{{ route('datatables.eggs','chicken') }}",
         columns: [
-            {data: 'layer_bird_id', name: 'layer_bird_id'},
-            {data: 'farm_id', name: 'Farm'},
-            {data:'pen_id',name:'Pen House'},
-            {data:'number',name:'Number'},
-            {data:'cause',name:'Cause'},
-            {data:'observation',name:'Observation'},
-            {data:'unit_price',name:'Price'},
-            {data:'dod',name:'Date'},
+            {data: 'farm_name', name: 'farm_name'},
+            {data: 'pen_id', name: 'Pen'},
+            {data:'layer_batch_id',name:'Batch'},
+            {data:'quantity',name:'Quantity'},
+            {data:'bad_eggs',name:'Bad Eggs'},
+            {data:'good_eggs',name:'Good Eggs'},
+            {data:'date_collected',name:'Date'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });
 @endsection
+

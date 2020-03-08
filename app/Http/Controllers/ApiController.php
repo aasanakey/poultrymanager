@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BirdsExport;
 use App\Exports\BirdMortalityExport;
+use App\Exports\EggProductionExport;
 use Yajra\DataTables\Facades\DataTables;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Carbon\Carbon;
@@ -89,11 +90,26 @@ class ApiController extends Controller
 
     public function eggs($type)
     {
-       return DataTables::of(\App\EggProduction::query())->make(true);
+        $data = \App\EggProduction::where('bird_category',$type)
+        ->join('farms','farms.id','=','egg_productions.farm_id')
+        ->select('farms.farm_name','egg_productions.*')
+        ->where('farms.id',auth()->user()->farm_id)->get();
+        //return response()->json($data);
+        return DataTables::of($data)
+        ->editColumn('date', function ($user) {
+            return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+        })
+        ->addColumn('good_eggs', function($row){
+           return $row->quantity - $row->bad_eggs;
+        })
+        ->addColumn('action', function($row){
+            $div = "<div><span><a href=\"$row->batch_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+             return $div;
+        })->make(true);
     }
 
     public function exportEggs($type)
     {
-        # code...
+        return Excel::download(new EggProductionExport(auth()->user()->farm_id,$type), "eggs_$type.xlsx");
     }
 }
