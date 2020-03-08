@@ -16,13 +16,15 @@ class CreateEggProductionsTable extends Migration
         Schema::create('egg_productions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
+            $table->string('pen_id');
             $table->string('layer_batch_id');
             $table->timestamp('date_collected');
-            $table->integer('qunatity');
+            $table->integer('quantity');
+            $table->integer('bad_eggs');
             $table->timestamps();
-            // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('layer_batch_id')->references('batch_id')->on('birds')->onDelete('cascade');
+            $table->foreign('pen_id')->references('pen_id')->on('pen_houses')->onDelete('cascade');
         });
     }
 

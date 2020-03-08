@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BirdsExport;
+use App\Exports\FeedExport;
 use App\Exports\BirdMortalityExport;
 use App\Exports\EggProductionExport;
 use Yajra\DataTables\Facades\DataTables;
@@ -111,5 +112,43 @@ class ApiController extends Controller
     public function exportEggs($type)
     {
         return Excel::download(new EggProductionExport(auth()->user()->farm_id,$type), "eggs_$type.xlsx");
+    }
+
+    public function feed()
+    {
+        $data = \App\Feed::join('farms','farms.id','=','feeds.farm_id')
+        ->select('farms.farm_name','feeds.*')
+        ->where('farm_id',auth()->user()->farm_id)->get();
+        return DataTables::of($data)
+        ->editColumn('date', function ($user) {
+            return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+        })
+        ->addColumn('action', function($row){
+            $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+             return $div;
+        })->make(true);
+    }
+
+    public function exportFeed()
+    {
+        return Excel::download(new FeedExport(auth()->user()->farm_id), "feed.xlsx");
+    }
+
+    public function feeding()
+    {
+        $data = \App\Feeding::join('farms','farms.id','=','feedings.farm_id')
+        ->select('farms.farm_name','feedings.*')
+        ->where('farm_id',auth()->user()->farm_id)->get();
+
+        return DataTables::of($data)
+        ->addColumn('action', function($row){
+            $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+             return $div;
+        })->make(true);
+    }
+
+    public function exportFeeding()
+    {
+        return Excel::download(new FeedExport(auth()->user()->farm_id), "feed.xlsx");
     }
 }

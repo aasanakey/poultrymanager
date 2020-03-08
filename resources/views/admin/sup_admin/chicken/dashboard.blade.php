@@ -39,13 +39,9 @@
         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
     </a>
     <div class="collapse" id="collapseFeed" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-                Stock
-            </a>
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
-               Feeding
-            </a>
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link collapsed" href="{{route('admin.feed.stock','chicken')}}">Stock</a>
+            <a class="nav-link collapsed" href="{{route('admin.feeding.record')}}">Feeding</a>
         </nav>
     </div>
     <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseMed" aria-expanded="false" aria-controls="collapseMed">
@@ -55,10 +51,10 @@
     </a>
     <div class="collapse" id="collapseMed" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+            <a class="nav-link collapsed" href="#">
                Medication
             </a>
-            <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#pagesCollapseAuth" aria-expanded="false" aria-controls="pagesCollapseAuth">
+            <a class="nav-link collapsed" href="#">
                 Vaccination
             </a>
         </nav>

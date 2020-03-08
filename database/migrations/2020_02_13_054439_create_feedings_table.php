@@ -22,7 +22,7 @@ class CreateFeedingsTable extends Migration
             $table->decimal('feed_quantity');
             $table->decimal('water_quantity');
             $table->timestamps();
-            // $table->primary(['id','farm_id']);
+            $table->foreign('pen_id')->references('pen_id')->on('pen_houses')->onDelete('cascade');
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
         });
     }

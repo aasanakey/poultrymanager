@@ -53,6 +53,10 @@ Route::group(['prefix'=>'dashboard'],function(){
     Route::post('bird/{type}/mortality/add','FarmAdminController@addMortality')->name('admin.add.mortality');
     Route::get('{type}/egg/production','FarmAdminController@eggProduction')->name('admin.egg.production');
     Route::post('/bird/{type}/egg/production','FarmAdminController@addEggProduction')->name('admin.add.production');
+    Route::get('{type}/feed/stock','FarmAdminController@feed')->name('admin.feed.stock');
+    Route::post('/feed/stock','FarmAdminController@addFeed')->name('admin.add.feed');
+    Route::get('/feeding/record','FarmAdminController@feeding')->name('admin.feeding.record');
+    Route::post('/feeding/record','FarmAdminController@addFeeding')->name('admin.add.feeding');
 
     Route::post('/pen/add','FarmAdminController@addPen')->name('admin.add.pen');
     Route::get('/setup/bird','FarmAdminController@setupBird')->name('setup.bird');
@@ -67,3 +71,8 @@ Route::get('/mortality/{type}/export/exel','ApiController@exportMortality')->nam
 Route::get('/pen','ApiController@pen')->name('datatables.pen');
 Route::get('/birds/{type}/eggs','ApiController@eggs')->name('datatables.eggs');
 Route::get('/eggs/{type}/export/exel','ApiController@exportEggs')->name('export.eggs');
+
+Route::get('/feed','ApiController@feed')->name('datatables.feed');
+Route::get('/feed/export/exel','ApiController@exportFeed')->name('export.feed');
+Route::get('/feeding','ApiController@feed')->name('datatables.feeding');
+Route::get('/feeding/export/exel','ApiController@exportFeeding')->name('export.feeding');

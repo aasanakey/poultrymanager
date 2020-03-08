@@ -18,7 +18,7 @@ class CreateMeatProductionsTable extends Migration
             $table->unsignedBigInteger('farm_id');
             $table->string('layer_batch_id');
             $table->timestamp('date_slaughtered');
-            $table->integer('qunatity');
+            $table->integer('quantity');
             $table->decimal('bird_avg_weight');
             $table->decimal('cacass_avg_weight');
             $table->timestamps();

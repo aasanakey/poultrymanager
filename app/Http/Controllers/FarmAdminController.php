@@ -244,4 +244,62 @@ class FarmAdminController extends Controller
             ]);
             return redirect()->back()->with('success','Eggs record added successfully');
     }
+
+    public function feed($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.feed');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+    public function addFeed(Request $request)
+    {
+        $request->validate([
+            "name" => ['required','string'],
+            "price" => ['required','numeric','min:0'],
+            "quantity" => ['required','numeric','min:0'],
+            "date" => ['required','date'],
+            "supplier" => ['required','string'],
+            "description" => ['required','string']
+        ]);
+        \App\Feed::create([
+            "farm_id" => auth()->user()->farm_id,
+            "name" =>$request->name,
+            "price"	=>$request->price,
+            "quantity" =>$request->quantity,
+            "description" =>$request->description,
+            "supplier"=>$request->supplier,
+        ]);
+        return redirect()->back()->with('success','Feed record added successfully');
+    }
+
+    public function feeding($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.feeding');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+    public function addFeeding(Request $request)
+    {
+        # code...
+    }
 }
