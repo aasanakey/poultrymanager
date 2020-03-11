@@ -284,9 +284,11 @@ class FarmAdminController extends Controller
 
     public function feeding($type)
     {
+        $pen = \App\PenHouse::select('pen_id')->where('farm_id',auth()->user()->farm_id)->get();
+        $feed = \App\Feed::select('name','id')->where('farm_id',auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.feeding');
+                return view('admin.sup_admin.chicken.feeding',compact('pen','feed'));
                 break;
 
             case 'turkey':
@@ -299,6 +301,65 @@ class FarmAdminController extends Controller
     }
 
     public function addFeeding(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            "feed_id" => ['required','not_in:-- select feed --'],
+            "pen" => ['required','string','not_in:-- select pen --'],
+            "feed_quantity" => ['required','numeric','min:0'],
+            "date" => ['required','date'],
+            "water_quantity" => ['required','numeric','min:0'],
+        ]);
+
+        \App\Feeding::create([
+            "farm_id" => auth()->user()->farm_id,
+            "pen_id" =>	$request->pen,
+            "date" => new \DateTime($request->date),
+            "feed_id" => $request->feed_id,
+            "feed_quantity" => $request->feed_quantity,
+            "water_quantity" => $request->water_quantity,
+        ]);
+        return redirect()->back()->with('success','Feed record added successfully');
+    }
+
+    public function medicine($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.medicine');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+    public function addMedicine(Request $request)
+    {
+        # code...
+    }
+
+    public function vaccine($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.vaccine');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+    public function addVaccine(Request $request)
     {
         # code...
     }

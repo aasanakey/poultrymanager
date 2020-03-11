@@ -6,7 +6,7 @@
 @section('dash_content')
 <div class="container mt-4">
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Feeding</li>
+        <li class="breadcrumb-item active">Medication</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
@@ -184,7 +184,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.feeding',) }}",
+        ajax: "{{ route('datatables.medicine',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
             {data: 'pen_id', name: 'Pen House'},

@@ -55,9 +55,12 @@ Route::group(['prefix'=>'dashboard'],function(){
     Route::post('/bird/{type}/egg/production','FarmAdminController@addEggProduction')->name('admin.add.production');
     Route::get('{type}/feed/stock','FarmAdminController@feed')->name('admin.feed.stock');
     Route::post('/feed/stock','FarmAdminController@addFeed')->name('admin.add.feed');
-    Route::get('/feeding/record','FarmAdminController@feeding')->name('admin.feeding.record');
+    Route::get('/{type}/feeding/record','FarmAdminController@feeding')->name('admin.feeding.record');
     Route::post('/feeding/record','FarmAdminController@addFeeding')->name('admin.add.feeding');
-
+    Route::get('/{type}/medicine','FarmAdminController@medicine')->name('admin.medicine');
+    Route::get('/medicine','FarmAdminController@addMedicine')->name('admin.add.medicine');
+    Route::get('/{type}/vaccine','FarmAdminController@vaccine')->name('admin.vaccine');
+    Route::get('/vaccine','FarmAdminController@addVaccine')->name('admin.add.vaccine');
     Route::post('/pen/add','FarmAdminController@addPen')->name('admin.add.pen');
     Route::get('/setup/bird','FarmAdminController@setupBird')->name('setup.bird');
     Route::get('/setup/finish','FarmAdminController@setupFinish')->name('setup.finish');
@@ -74,5 +77,10 @@ Route::get('/eggs/{type}/export/exel','ApiController@exportEggs')->name('export.
 
 Route::get('/feed','ApiController@feed')->name('datatables.feed');
 Route::get('/feed/export/exel','ApiController@exportFeed')->name('export.feed');
-Route::get('/feeding','ApiController@feed')->name('datatables.feeding');
+Route::get('/feeding','ApiController@feeding')->name('datatables.feeding');
 Route::get('/feeding/export/exel','ApiController@exportFeeding')->name('export.feeding');
+Route::get('/medicine','ApiController@medicine')->name('datatables.medicine');
+Route::get('/medicine/export/exel','ApiController@exportMedicine')->name('export.medicine');
+Route::get('/vaccine','ApiController@vaccine')->name('datatables.vaccine');
+Route::get('/vacine/export/exel','ApiController@exportVaccine')->name('export.vaccine');
+

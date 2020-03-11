@@ -41,7 +41,7 @@
     <div class="collapse" id="collapseFeed" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav">
             <a class="nav-link collapsed" href="{{route('admin.feed.stock','chicken')}}">Stock</a>
-            <a class="nav-link collapsed" href="{{route('admin.feeding.record')}}">Feeding</a>
+            <a class="nav-link collapsed" href="{{route('admin.feeding.record','chicken')}}">Feeding</a>
         </nav>
     </div>
     <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseMed" aria-expanded="false" aria-controls="collapseMed">
@@ -50,12 +50,30 @@
         <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
     </a>
     <div class="collapse" id="collapseMed" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
-        <nav class="sb-sidenav-menu-nested nav accordion" id="sidenavAccordionPages">
-            <a class="nav-link collapsed" href="#">
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link collapsed" href="{{route('admin.medicine','chicken')}}">
                Medication
             </a>
-            <a class="nav-link collapsed" href="#">
+            <a class="nav-link collapsed" href="{{route('admin.vaccine','chicken')}}">
                 Vaccination
+            </a>
+        </nav>
+    </div>
+    <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseSale" aria-expanded="false" aria-controls="collapseSale">
+        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Sales
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseSale" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link collapsed" href="{{route('admin.medicine','chicken')}}">
+                Bird Sale
+            </a>
+            <a class="nav-link collapsed" href="{{route('admin.vaccine','chicken')}}">
+                Egg Sale
+            </a>
+            <a class="nav-link collapsed" href="{{route('admin.vaccine','chicken')}}">
+                Meat Sale
             </a>
         </nav>
     </div>
