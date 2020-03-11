@@ -5,6 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Schema;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -24,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Schema::defaultStringLength(191);
         Validator::extend('uniqueFarmNameAndFarmEmail', function ($attribute, $value, $parameters, $validator) {
             $count = DB::table('farms')->where('farm_name', $value)
                                         ->where('farm_email', $parameters[0])
