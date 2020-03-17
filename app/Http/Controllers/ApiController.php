@@ -159,7 +159,19 @@ class ApiController extends Controller
 
     public function medicine()
     {
-        # code...
+        $data = \App\Medicine::join('farms', 'farms.id', '=', 'medicines.farm_id')
+        ->select('farms.farm_name', 'medicines.*')
+        ->where('medicines.farm_id', auth()->user()->farm_id)->get();
+
+    return DataTables::of($data)
+        ->editColumn('date', function ($user) {
+            return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+        })
+        ->addColumn('action', function ($row) {
+            $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+            return $div;
+        })->make(true);
+
     }
 
     public function exportMedicine()

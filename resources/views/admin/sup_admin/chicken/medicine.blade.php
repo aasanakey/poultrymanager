@@ -45,36 +45,18 @@
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="feed_id">Feed</label>
-                                    @if (isset($feed))
-                                        <select name="feed_id" class="form-control   @error('feed_id') is-invalid @enderror" id="feed_id">
-                                            <option>-- select feed --</option>
-                                            @foreach ($feed as $item)
-                                                <option value="{{$item->id}}">{{$item->name}}</option>
-                                            @endforeach
-                                         </select>
-                                    @else
-                                    <input type="text" name="feed_id" class="form-control  @error('feed_id') is-invalid @enderror" id="feed_id" value="{{old('feed_id')}}">
-                                    @endif
-                                    @error('feed_id')
+                                    <label for="name">Name</label>
+                                    <input type="text" name="name" class="form-control  @error('name') is-invalid @enderror" id="name" value="{{old('name')}}">
+                                    @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="pen">Pen House</label>
-                                    @if (isset($pen))
-                                        <select name="pen" class="form-control @error('pen') is-invalid @enderror" id="pen">
-                                            <option>-- select pen --</option>
-                                            @foreach ($pen as $item)
-                                                <option value="{{$item->pen_id}}">{{$item->pen_id}}</option>
-                                            @endforeach
-                                        </select>
-                                    @else
-                                    <input type="text" name="pen"  class="form-control @error('pen') is-invalid @enderror" id="pen" value="{{ old('pen') }}">
-                                    @endif
-                                    @error('pen')
+                                    <label for="price">Price (GHS)</label>
+                                    <input type="number" name="price" min="0" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
+                                    @error('price')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,9 +65,9 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="feed_quantity">Quantity per Serving (Kg)</label>
-                                    <input type="number" name="feed_quantity" min="0" class="form-control @error('feed_quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
-                                    @error('feed_quantity')
+                                    <label for="quantity">Quantity</label>
+                                    <input type="text" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
+                                    @error('quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -109,9 +91,9 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="water_quantity">Water Quantity (L)</label>
-                                    <input type="number" name="water_quantity" min="0" class="form-control @error('water_quantity') is-invalid @enderror" id="water_quantity" value="{{ old('water_quantity') }}">
-                                    @error('water_quantity')
+                                    <label for="description">Description</label>
+                                    <textarea name="description" min="0" class="form-control @error('description') is-invalid @enderror" id="description" value="{{ old('description') }}">
+                                    @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -187,11 +169,11 @@
         ajax: "{{ route('datatables.medicine',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
-            {data: 'pen_id', name: 'Pen House'},
+            {data: 'name', name: 'Name'},
             {data:'name',name:'Feed'},
             {data:'date',name:'Date'},
-            {data:'water_quantity',name:'Water'},
-            {data:'feed_quantity',name:'Feed Quantity'},
+            {data:'description',name:'Description'},
+            {data:'quantity',name:'Quantity'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

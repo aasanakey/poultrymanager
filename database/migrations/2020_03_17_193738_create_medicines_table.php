@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMedicinesTable extends Migration
 {
@@ -17,8 +17,8 @@ class CreateMedicinesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
             $table->string('name');
-            $table->decimal('price',9,2);
-            $table->decimal('quantity');
+            $table->decimal('price', 9, 2);
+            $table->string('quantity');
             $table->string('description');
             $table->string('supplier')->nullable();
             $table->timestamp('date');
