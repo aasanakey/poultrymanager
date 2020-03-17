@@ -18,6 +18,7 @@ class CreateEggProductionsTable extends Migration
             $table->unsignedBigInteger('farm_id');
             $table->string('pen_id');
             $table->string('layer_batch_id');
+            $table->string('bird_category');
             $table->timestamp('date_collected');
             $table->integer('quantity');
             $table->integer('bad_eggs');

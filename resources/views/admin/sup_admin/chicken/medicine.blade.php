@@ -23,7 +23,7 @@
                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
-                        Add Feeding Record
+                        Add Medicine
                     </button>
                 </span>
                 <span>
