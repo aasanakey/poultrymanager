@@ -58,7 +58,7 @@ Route::group(['prefix'=>'dashboard'],function(){
     Route::get('/{type}/feeding/record','FarmAdminController@feeding')->name('admin.feeding.record');
     Route::post('/feeding/record','FarmAdminController@addFeeding')->name('admin.add.feeding');
     Route::get('/{type}/medicine','FarmAdminController@medicine')->name('admin.medicine');
-    Route::get('/medicine','FarmAdminController@addMedicine')->name('admin.add.medicine');
+    Route::post('/medicine','FarmAdminController@addMedicine')->name('admin.add.medicine');
     Route::get('/{type}/vaccine','FarmAdminController@vaccine')->name('admin.vaccine');
     Route::get('/vaccine','FarmAdminController@addVaccine')->name('admin.add.vaccine');
     Route::post('/pen/add','FarmAdminController@addPen')->name('admin.add.pen');

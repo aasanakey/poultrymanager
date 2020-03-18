@@ -340,7 +340,26 @@ class FarmAdminController extends Controller
 
     public function addMedicine(Request $request)
     {
-        # code...
+        dd($request->all());
+        $request->validate([
+            "name" => ['required','string'],
+            "price" => ['required','numeric','min:0'],
+            "quantity" => ['required','string'],
+            "date" => ['required','date'],
+            "supplier" => ['sometimes','string','nullable'],
+            "description" =>  ['required','string'],
+        ]);
+        \App\Medicine::create([
+            "farm_id" => auth()->user()->farm_id,
+            "name" => $request->name,
+            "price" => $request->price,
+            "quantity" => $request->quantity,
+            "date" => new \DateTime($request->date),
+            "supplier" => $request->supplier,
+            "description" => $request->description,
+        ]);
+        return redirect()->back()->with('success', 'Medicine added successfully');
+
     }
 
     public function vaccine($type)
@@ -361,6 +380,21 @@ class FarmAdminController extends Controller
 
     public function addVaccine(Request $request)
     {
-        # code...
+        dd($request->all());
+        $request->validate([
+            "age" => ['required', 'string'],
+            "disease" => ['required', 'string',],
+            "mode" => ['required', 'string'],
+            "type" => ['required', 'string'],
+        ]);
+        \App\Vaccine::create([
+            "farm_id" => auth()->user()->farm_id,
+            "age" => $request->age, 
+            "disease" => $request->disease, 
+            "mode"=> $request->mode, 
+            "type"=> $request->type
+        ]);
+        return redirect()->back()->with('success', 'Vaccine record added successfully');
+
     }
 }

@@ -41,7 +41,7 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.feeding')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.medicine')}}">
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
@@ -66,8 +66,8 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="quantity">Quantity</label>
-                                    <input type="text" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
-                                    @error('quantity')
+                                    <input type="text" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
+                                    @error('feed_quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -91,8 +91,19 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="description">Description</label>
-                                    <textarea name="description" min="0" class="form-control @error('description') is-invalid @enderror" id="description" value="{{ old('description') }}">
+                                    <label for="supplier">Supplier</label>
+                                    <input type="text" name="supplier" min="0" class="form-control @error('supplier') is-invalid @enderror" id="supplier" value="{{ old('supplier') }}">
+                                    @error('supplier')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
+                                    <label for="description">description</label>
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="10">{{old('description')}}</textarea>
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -169,11 +180,11 @@
         ajax: "{{ route('datatables.medicine',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
-            {data: 'name', name: 'Name'},
+            {data: 'pen_id', name: 'Pen House'},
             {data:'name',name:'Feed'},
             {data:'date',name:'Date'},
-            {data:'description',name:'Description'},
-            {data:'quantity',name:'Quantity'},
+            {data:'water_quantity',name:'Water'},
+            {data:'feed_quantity',name:'Feed Quantity'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

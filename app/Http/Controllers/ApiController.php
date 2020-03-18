@@ -7,6 +7,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use App\Exports\BirdsExport;
 use App\Exports\FeedExport;
 use App\Exports\FeedingExport;
+use App\Exports\MedicineExport;
 use App\Exports\BirdMortalityExport;
 use App\Exports\EggProductionExport;
 use Yajra\DataTables\Facades\DataTables;
@@ -176,16 +177,25 @@ class ApiController extends Controller
 
     public function exportMedicine()
     {
-        return Excel::download(new FeedingExport(auth()->user()->farm_id), "feeding.xlsx");
+        return Excel::download(new MedicineExport(auth()->user()->farm_id), "medicine.xlsx");
     }
 
 
     public function vaccine()
     {
+        $data = \App\Medicine::join('farms', 'farms.id', '=', 'vaccines.farm_id')
+    ->select('farms.farm_name', 'vaccines.*')
+    ->where('vaccines.farm_id', auth()->user()->farm_id)->get();
+
+    return DataTables::of($data)
+    ->addColumn('action', function ($row) {
+        $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+        return $div;
+    })->make(true);
 
     }
     public function exportVaccine()
     {
-        return Excel::download(new FeedingExport(auth()->user()->farm_id), "feeding.xlsx");
+        return Excel::download(new VaccineExport(auth()->user()->farm_id), "vaccine.xlsx");
     }
 }
