@@ -27,7 +27,7 @@
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.feeding')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.medicine')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -66,8 +66,8 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="quantity">Quantity</label>
-                                    <input type="text" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
-                                    @error('feed_quantity')
+                                    <input type="text" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
+                                    @error('quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -102,8 +102,8 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="description">description</label>
-                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="10">{{old('description')}}</textarea>
+                                    <label for="description">Description</label>
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="5">{{old('description')}}</textarea>
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -130,22 +130,24 @@
                     <thead>
                         <tr>
                             <th>Farm</th>
-                            <th>Pen House</th>
-                            <th>Feed</th>
+                            <th>Medicine</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Description</th>
+                            <th>Supplier</th>
                             <th>Date</th>
-                            <th>Water (l)</th>
-                            <th>Feed Quantity (Kg)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Farm</th>
-                            <th>Pen House</th>
-                            <th>Feed</th>
+                            <th>Medicine</th>
+                            <th>Price</th>
+                            <th>Quantity</th>
+                            <th>Description</th>
+                            <th>Supplier</th>
                             <th>Date</th>
-                            <th>Water (l)</th>
-                            <th>Feed Quantity (Kg)</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -180,11 +182,12 @@
         ajax: "{{ route('datatables.medicine',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
-            {data: 'pen_id', name: 'Pen House'},
-            {data:'name',name:'Feed'},
+            {data: 'name', name: 'Medicine'},
+            {data:'price',name:'Price'},
+            {data:'quantity',name:'Quantity'},
+            {data:'description',name:'Description'},
+            {data:'supplier',name:'Supplier'},
             {data:'date',name:'Date'},
-            {data:'water_quantity',name:'Water'},
-            {data:'feed_quantity',name:'Feed Quantity'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

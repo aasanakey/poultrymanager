@@ -340,7 +340,6 @@ class FarmAdminController extends Controller
 
     public function addMedicine(Request $request)
     {
-        dd($request->all());
         $request->validate([
             "name" => ['required','string'],
             "price" => ['required','numeric','min:0'],
@@ -380,7 +379,7 @@ class FarmAdminController extends Controller
 
     public function addVaccine(Request $request)
     {
-        dd($request->all());
+        
         $request->validate([
             "age" => ['required', 'string'],
             "disease" => ['required', 'string',],

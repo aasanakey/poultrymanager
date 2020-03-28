@@ -23,11 +23,11 @@
                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
-                        Add Feeding Record
+                        Add Vaccine Record
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.feeding')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.vaccine')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -41,40 +41,22 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.feeding')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.vaccine')}}">
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="feed_id">Feed</label>
-                                    @if (isset($feed))
-                                        <select name="feed_id" class="form-control   @error('feed_id') is-invalid @enderror" id="feed_id">
-                                            <option>-- select feed --</option>
-                                            @foreach ($feed as $item)
-                                                <option value="{{$item->id}}">{{$item->name}}</option>
-                                            @endforeach
-                                         </select>
-                                    @else
-                                    <input type="text" name="feed_id" class="form-control  @error('feed_id') is-invalid @enderror" id="feed_id" value="{{old('feed_id')}}">
-                                    @endif
-                                    @error('feed_id')
+                                    <label for="age">Age</label>
+                                    <input type="text" name="age" class="form-control  @error('age') is-invalid @enderror" id="age" value="{{old('age')}}">
+                                    @error('age')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="pen">Pen House</label>
-                                    @if (isset($pen))
-                                        <select name="pen" class="form-control @error('pen') is-invalid @enderror" id="pen">
-                                            <option>-- select pen --</option>
-                                            @foreach ($pen as $item)
-                                                <option value="{{$item->pen_id}}">{{$item->pen_id}}</option>
-                                            @endforeach
-                                        </select>
-                                    @else
-                                    <input type="text" name="pen"  class="form-control @error('pen') is-invalid @enderror" id="pen" value="{{ old('pen') }}">
-                                    @endif
-                                    @error('pen')
+                                    <label for="disease">Disease</label>
+                                    <input type="text" name="disease"  class="form-control @error('disease') is-invalid @enderror" id="disease" value="{{ old('disease') }}">
+                                    @error('disease')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -83,42 +65,26 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="feed_quantity">Quantity per Serving (Kg)</label>
-                                    <input type="number" name="feed_quantity" min="0" class="form-control @error('feed_quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
-                                    @error('feed_quantity')
+                                    <label for="mode">Mode</label>
+                                    <input type="text" name="mode" class="form-control @error('mode') is-invalid @enderror" id="mode" value="{{ old('mode') }}">
+                                    @error('mode')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="date">Date</label>
-                                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                        <input type="text" name="date" class="form-control datetimepicker-input  @error('date') is-invalid @enderror"
-                                        data-target="#datetimepicker1" value="{{ old('date')}}"/>
-                                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                        @error('date')
+                                    <label for="type">Type</label>
+                                    <input type="text" name="type" class="form-control  @error('type') is-invalid @enderror" value="{{ old('type')}}"/>
+                                        @error('type')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="water_quantity">Water Quantity (L)</label>
-                                    <input type="number" name="water_quantity" min="0" class="form-control @error('water_quantity') is-invalid @enderror" id="water_quantity" value="{{ old('water_quantity') }}">
-                                    @error('water_quantity')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
                                 </div>
                             </div>
                         </form>
+
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -130,29 +96,27 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Egg</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>tables</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Farm</th>
-                            <th>Pen House</th>
-                            <th>Feed</th>
-                            <th>Date</th>
-                            <th>Water (l)</th>
-                            <th>Feed Quantity (Kg)</th>
+                            <th>Age</th>
+                            <th>Disease</th>
+                            <th>Mode</th>
+                            <th>Type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Farm</th>
-                            <th>Pen House</th>
-                            <th>Feed</th>
-                            <th>Date</th>
-                            <th>Water (l)</th>
-                            <th>Feed Quantity (Kg)</th>
+                            <th>Age</th>
+                            <th>Disease</th>
+                            <th>Mode</th>
+                            <th>Type</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -184,14 +148,13 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.medicine',) }}",
+        ajax: "{{ route('datatables.vaccine',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
-            {data: 'pen_id', name: 'Pen House'},
-            {data:'name',name:'Feed'},
-            {data:'date',name:'Date'},
-            {data:'water_quantity',name:'Water'},
-            {data:'feed_quantity',name:'Feed Quantity'},
+            {data: 'age', name: 'Age'},
+            {data:'disease',name:'Disease'},
+            {data:'mode',name:'Mode'},
+            {data:'type',name:'Type'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

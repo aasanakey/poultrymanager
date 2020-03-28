@@ -8,6 +8,7 @@ use App\Exports\BirdsExport;
 use App\Exports\FeedExport;
 use App\Exports\FeedingExport;
 use App\Exports\MedicineExport;
+use App\Exports\VaccineExport;
 use App\Exports\BirdMortalityExport;
 use App\Exports\EggProductionExport;
 use Yajra\DataTables\Facades\DataTables;
@@ -46,7 +47,7 @@ class ApiController extends Controller
 
     public function exportPopulation($type)
     {
-        return Excel::download(new BirdsExport(auth()->user()->farm_id,$type), "mortality.xlsx");
+        return Excel::download(new BirdsExport(auth()->user()->farm_id,$type), "birds_$type.xlsx");
     }
     /*** Fetch bird mortality
      *
@@ -72,7 +73,7 @@ class ApiController extends Controller
 
     public function exportMortality($type)
     {
-        return Excel::download(new BirdMortalityExport(auth()->user()->farm_id), "birds_$type.xlsx");
+        return Excel::download(new BirdMortalityExport(auth()->user()->farm_id), "mortality.xlsx");
     }
 
     /**
@@ -183,7 +184,7 @@ class ApiController extends Controller
 
     public function vaccine()
     {
-        $data = \App\Medicine::join('farms', 'farms.id', '=', 'vaccines.farm_id')
+        $data = \App\Vaccine::join('farms', 'farms.id', '=', 'vaccines.farm_id')
     ->select('farms.farm_name', 'vaccines.*')
     ->where('vaccines.farm_id', auth()->user()->farm_id)->get();
 
