@@ -9,6 +9,9 @@ use App\Exports\FeedExport;
 use App\Exports\FeedingExport;
 use App\Exports\MedicineExport;
 use App\Exports\VaccineExport;
+use App\Exports\EggSaleExport;
+use App\Exports\BirdSaleExport;
+use App\Exports\MeatSaleExport;
 use App\Exports\BirdMortalityExport;
 use App\Exports\EggProductionExport;
 use Yajra\DataTables\Facades\DataTables;
@@ -198,5 +201,65 @@ class ApiController extends Controller
     public function exportVaccine()
     {
         return Excel::download(new VaccineExport(auth()->user()->farm_id), "vaccine.xlsx");
+    }
+
+    public function birdSale($type)
+    {
+        
+        $data = \App\BirdSale::join('farms','farms.id','=','bird_sales.farm_id')
+        ->select('farms.farm_name','bird_sales.*')->where('bird_sales.farm_id',auth()->user()->farm_id)->where('bird_sales.bird_category',$type)->get();
+       return DataTables::of($data)
+         ->editColumn('date', function ($user) {
+            return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+        })
+        ->addColumn('action', function ($row) {
+            $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+            return $div;
+        })->make(true);
+    }
+    
+    public function exportBirdSale($type)
+    {
+        return Excel::download(new BirdSaleExport(auth()->user()->farm_id,$type),"$type sales.xlsx");
+    }
+
+    public function eggSale()
+    {
+        $data = \App\EggSale::join('farms','farms.id','=','egg_sales.farm_id')
+        ->select('farms.farm_name', 'egg_sales.*')
+        ->where('egg_sales.farm_id', auth()->user()->farm_id)->get();
+
+        return DataTables::of($data)
+         ->editColumn('date', function ($user) {
+            return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+        })
+        ->addColumn('action', function ($row) {
+            $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+            return $div;
+        })->make(true);
+    }
+
+    public function exportEggSale($type){
+        return Excel::download(new EggSaleExport(auth()->user()->farm_id,$type),'egg sales.xlsx');
+    }
+
+     public function meatSale()
+    {
+        $data = \App\MeatSale::join('farms','farms.id','=','meat_sales.farm_id')
+        ->select('farms.farm_name', 'meat_sales.*')
+        ->where('meat_sales.farm_id', auth()->user()->farm_id)->get();
+
+        return DataTables::of($data)
+         ->editColumn('date', function ($user) {
+            return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+        })
+        ->addColumn('action', function ($row) {
+            $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+            return $div;
+        })->make(true);
+    }
+
+    public function exportMeatSale($type){
+        return Excel::download(new MeatSaleExport(auth()->user()->farm_id,$type),'egg sales.xlsx');
     }
 }

@@ -119,7 +119,8 @@ class FarmAdminController extends Controller
     public function mortality($type)
     {
         $pen = \App\PenHouse::select('pen_id')->where('farm_id',auth()->user()->farm_id)->get();
-        $batch_id = \App\Birds::select('batch_id')->where('farm_id',auth()->user()->farm_id)->get();
+        $batch_id = \App\Birds::select('batch_id')->where('bird_category',$type)
+        ->where('farm_id',auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
                 return view('admin.sup_admin.chicken.mortality',compact('pen','batch_id'));
@@ -206,7 +207,8 @@ class FarmAdminController extends Controller
     public function eggProduction($type)
     {
         $pen = \App\PenHouse::select('pen_id')->where('farm_id',auth()->user()->farm_id)->get();
-        $batch_id = \App\Birds::select('batch_id')->where('farm_id',auth()->user()->farm_id)->get();
+        $batch_id = \App\Birds::select('batch_id')
+        ->where('bird_category',$type)->where('farm_id',auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
                 return view('admin.sup_admin.chicken.egg_production',compact('pen','batch_id'));
@@ -363,6 +365,8 @@ class FarmAdminController extends Controller
 
     public function vaccine($type)
     {
+        $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)->get();
+
         switch ($type) {
             case 'chicken':
                 return view('admin.sup_admin.chicken.vaccine');
@@ -395,5 +399,129 @@ class FarmAdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Vaccine record added successfully');
 
+    }
+
+    public function birdSale($type)
+    {
+        $batch_id = \App\Birds::select('batch_id')->where('bird_category',$type)
+        ->where('farm_id', auth()->user()->farm_id)->get();
+
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.birdsale',compact('batch_id'));
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+
+    public function addBirdSale($type,Request $request)
+    {
+       // dd($request->all());
+        $request->validate([
+            "batch_id" => ['required','string','not_in:--select batch id--','exists:birds,batch_id'],
+            "weight" => ['required','numeric','min:0'],
+            "price" => ['required','numeric','min:0'],
+            "date" => ['required','date'],
+            "number" => ['required','numeric','min:0'],
+        ]);
+
+        \App\BirdSale::create([
+            "farm_id" => auth()->user()->farm_id,
+            "bird_batch_id" => $request->batch_id,
+            "weight" => $request->weight,
+            "price" => $request->price,
+            "date" => new \DateTime($request->date),
+            "bird_category" => $type,
+            "number"=> $request->number,
+        ]);
+
+        return redirect()->back()->with('success', 'Bird sale added successfully');
+
+    }
+
+    public function eggSale($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.eggsale');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+    public function addEggSale($type,Request $request)
+    {
+
+        $request->validate([
+            "weight" => ['required','numeric','min:0'],
+            "price" => ['required','numeric','min:0'],
+            "quantity" => ['required','numeric','min:0'],
+            "date" => ['required','date'],
+        ]);
+
+        \App\EggSale::create([
+            "farm_id"=> auth()->user()->farm_id,
+            "weight_per_dozen" => $request->weight,
+            "price_per_dozen" => $request->price,
+            "quantity" => $request->quantity,
+            "date" => new \DateTime($request->date),
+            "egg_type" => $type,
+        ]);
+
+        return redirect()->back()->with('success', 'Egg sale added successfully');
+    }
+
+    public function meatSale($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.meatsale');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
+    }
+
+    public function addMeatSale($type,Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            "part" => ['required','string','not_in:--select--'],
+            "price" => ['required','numeric','min:0'],
+            "quantity" => ['required','numeric','min:0'],
+            "date" => ['required','date'],
+        ]);
+        \App\MeatSale::create([
+            "farm_id" => auth()->user()->id,
+            "type" => $type,
+            "part" => $request->part,
+            "price" => $request->price,
+            "quantity" => $request->quantity,
+            "date" => new \DateTime($request->date),
+        ]);
+        return redirect()->back()->with('success', 'Meat sale added successfully');
+    }
+
+    public function equipment()
+    {
+        # code...
     }
 }

@@ -66,15 +66,33 @@
     </a>
     <div class="collapse" id="collapseSale" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link collapsed" href="{{route('admin.medicine','chicken')}}">
+            <a class="nav-link collapsed" href="{{route('admin.sale.bird','chicken')}}">
                 Bird Sale
             </a>
-            <a class="nav-link collapsed" href="{{route('admin.vaccine','chicken')}}">
+            <a class="nav-link collapsed" href="{{route('admin.sale.egg','chicken')}}">
                 Egg Sale
             </a>
-            <a class="nav-link collapsed" href="{{route('admin.vaccine','chicken')}}">
+            <a class="nav-link collapsed" href="{{route('admin.sale.meat','chicken')}}">
                 Meat Sale
             </a>
+        </nav>
+    </div>
+    <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseLogicstic" aria-expanded="false" aria-controls="collapseLogicstic">
+        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Logistic
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseLogicstic" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link collapsed" href="{{route('admin.farm.equipment')}}">
+               Equipment
+            </a>
+            {{-- <a class="nav-link collapsed" href="{{route('admin.sale.egg','chicken')}}">
+                Egg Sale
+            </a>
+            <a class="nav-link collapsed" href="{{route('admin.sale.meat','chicken')}}">
+                Meat Sale
+            </a> --}}
         </nav>
     </div>
 
