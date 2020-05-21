@@ -62,7 +62,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::post('/pen/add', 'FarmAdminController@addPen')->name('admin.add.pen');
     Route::get('/setup/bird', 'FarmAdminController@setupBird')->name('setup.bird');
     Route::get('/setup/finish', 'FarmAdminController@setupFinish')->name('setup.finish');
-
+    Route::get('/penhouse/{type}', 'FarmAdminController@pen')->name('admin.bird.pen');
     Route::get('/sale/birds/{type}', 'FarmAdminController@birdSale')->name('admin.sale.bird');
     Route::post('/sale/birds/{type}', 'FarmAdminController@addBirdSale')->name('admin.add.sales.bird');
     Route::get('/sale/eggs/{type}', 'FarmAdminController@eggSale')->name('admin.sale.egg');
@@ -70,6 +70,8 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/sale/meat/{type}', 'FarmAdminController@meatSale')->name('admin.sale.meat');
     Route::post('/sale/meat/{type}', 'FarmAdminController@addMeatSale')->name('admin.add.sales.meat');
     Route::get('/logistics/equipment', 'FarmAdminController@equipment')->name('admin.farm.equipment');
+    Route::get('/employee', 'FarmAdminController@employee')->name('admin.employee');
+    Route::post('/employee', 'FarmAdminController@addemployee')->name('admin.add.employee');
 
 });
 

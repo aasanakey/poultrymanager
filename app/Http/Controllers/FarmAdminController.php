@@ -40,10 +40,10 @@ class FarmAdminController extends Controller
                 break;
 
             case 'turkey':
-                return view();
+                return view('admin.sup_admin.turkey.index');
                 break;
             case 'guinea_fowl':
-                return view();
+                return view('admin.sup_admin.guineafowl.index');
                 break;
         }
     }
@@ -159,6 +159,23 @@ class FarmAdminController extends Controller
             "observation" => $request->observation,
             ]);
             return redirect()->back()->with('success','Mortality added successfully');
+    }
+
+    public function pen($type)
+    {
+       
+        switch ($type) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.addpen');
+                break;
+
+            case 'turkey':
+                return view();
+                break;
+            case 'guinea_fowl':
+                return view();
+                break;
+        }
     }
 
     public function addPen(Request $request)
@@ -294,10 +311,12 @@ class FarmAdminController extends Controller
                 break;
 
             case 'turkey':
-                return view();
+                return view('admin.sup_admin.turkey.feeding', compact('pen', 'feed'));
+
                 break;
             case 'guinea_fowl':
-                return view();
+                return view('admin.sup_admin.guineafowl.feeding', compact('pen', 'feed'));
+
                 break;
         }
     }
@@ -522,6 +541,28 @@ class FarmAdminController extends Controller
 
     public function equipment()
     {
+        //  switch ($type) {
+        //     case 'chicken':
+        //         return view('admin.sup_admin.chicken.equipment');
+        //         break;
+
+        //     case 'turkey':
+        //         return view();
+        //         break;
+        //     case 'guinea_fowl':
+        //         return view();
+        //         break;
+        // }
+        return view('admin.sup_admin.chicken.equipment');
+
+    }
+
+    public function employee($type)
+    {
         # code...
+    }
+    public function addemployee($type)
+    {
+        
     }
 }
