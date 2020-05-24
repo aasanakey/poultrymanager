@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBirdsTable extends Migration
 {
@@ -21,10 +21,10 @@ class CreateBirdsTable extends Migration
             $table->integer('number');
             $table->string('species');
             $table->string('type')->nullable();
-            $table->decimal('unit_price',9,2);
+            $table->decimal('unit_price', 9, 2);
             $table->timestamp('date');
             $table->timestamps();
-            $table->primary(['batch_id','farm_id']);
+            $table->primary(['batch_id', 'farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('pen_id')->references('pen_id')->on('pen_houses')->onDelete('cascade');
         });

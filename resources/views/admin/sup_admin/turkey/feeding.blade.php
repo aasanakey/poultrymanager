@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.guineafowl.dashboard')
+@extends('admin.sup_admin.turkey.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -6,7 +6,7 @@
 @section('dash_content')
 <div class="container mt-4">
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Bird Sale</li>
+        <li class="breadcrumb-item active">Feeding</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
@@ -23,11 +23,11 @@
                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
-                        Add Sale
+                        Add Feeding Record
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.sales.birds','guinea_fowl')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.feeding')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -41,31 +41,40 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.sales.bird','guinea_fowl')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.feeding')}}">
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="batch_id">Batch id</label>
-                                    @if (isset($batch_id))
-                                    <select name="batch_id" class="form-control  @error('batch_id') is-invalid @enderror" id="batch_id">
-                                        <option>--select batch id--</option>
-                                        @foreach ($batch_id as $item)
-                                            <option value="{{$item->batch_id}}">{{$item->batch_id}}</option>
-                                    @endforeach
-                                    </select>
-                                @else
-                                <input type="text" name="batch_id" class="form-control  @error('batch_id') is-invalid @enderror" id="batch_id" value="{{old('batch_id')}}">
-                                @endif
-                                    @error('batch_id')
+                                    <label for="feed_id">Feed</label>
+                                    @if (isset($feed))
+                                        <select name="feed_id" class="form-control   @error('feed_id') is-invalid @enderror" id="feed_id">
+                                            <option>-- select feed --</option>
+                                            @foreach ($feed as $item)
+                                                <option value="{{$item->id}}">{{$item->name}}</option>
+                                            @endforeach
+                                         </select>
+                                    @else
+                                    <input type="text" name="feed_id" class="form-control  @error('feed_id') is-invalid @enderror" id="feed_id" value="{{old('feed_id')}}">
+                                    @endif
+                                    @error('feed_id')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="weight">Weight</label>
-                                    <input type="number" min="0" name="weight"  class="form-control @error('weight') is-invalid @enderror" id="weight" value="{{ old('weight') }}">
-                                    @error('weight')
+                                    <label for="pen">Pen House</label>
+                                    @if (isset($pen))
+                                        <select name="pen" class="form-control @error('pen') is-invalid @enderror" id="pen">
+                                            <option>-- select pen --</option>
+                                            @foreach ($pen as $item)
+                                                <option value="{{$item->pen_id}}">{{$item->pen_id}}</option>
+                                            @endforeach
+                                        </select>
+                                    @else
+                                    <input type="text" name="pen"  class="form-control @error('pen') is-invalid @enderror" id="pen" value="{{ old('pen') }}">
+                                    @endif
+                                    @error('pen')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -74,9 +83,9 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="price">Price</label>
-                                    <input type="number" name="price" min="0" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
-                                    @error('price')
+                                    <label for="feed_quantity">Quantity per Serving (Kg)</label>
+                                    <input type="number" name="feed_quantity" min="0" class="form-control @error('feed_quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
+                                    @error('feed_quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -100,9 +109,9 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="number">Number Sold</label>
-                                    <input type="number" name="number" class="form-control @error('number') is-invalid @enderror" id="number" value="{{ old('number') }}" >
-                                    @error('number')
+                                    <label for="water_quantity">Water Quantity (L)</label>
+                                    <input type="number" name="water_quantity" min="0" class="form-control @error('water_quantity') is-invalid @enderror" id="water_quantity" value="{{ old('water_quantity') }}">
+                                    @error('water_quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -121,29 +130,29 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Bird Sale</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Egg</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                           <th>Farm</th>
-                            <th>Bird Batch</th>
-                            <th>Number</th>
-                            <th>Weight</th>
-                            <th>Price</th>
+                            <th>Farm</th>
+                            <th>Pen House</th>
+                            <th>Feed</th>
                             <th>Date</th>
+                            <th>Water (l)</th>
+                            <th>Feed Quantity (Kg)</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                             <th>Farm</th>
-                            <th>Bird Batch</th>
-                            <th>Number</th>
-                            <th>Weight</th>
-                            <th>Price</th>
+                            <th>Pen House</th>
+                            <th>Feed</th>
                             <th>Date</th>
+                            <th>Water (l)</th>
+                            <th>Feed Quantity (Kg)</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -162,7 +171,9 @@
 @endsection
 @section('script')
     @parent
-
+    {{-- @if ($errors)
+        {{!!"$('#addBirdModal').modal('show');"!!}}
+    @endif --}}
     $('#datetimepicker1').datetimepicker({
         icons: {
         time: "fa fa-clock",
@@ -173,14 +184,14 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.sale.birds','chicken') }}",
+        ajax: "{{ route('datatables.feeding',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
-            {data: 'bird_batch_id', name: 'Batch'},
-            {data:'number',name:'Number'},
-            {data:'weight',name:'Weight'},
-            {data:'price',name:'Price'},
+            {data: 'pen_id', name: 'Pen House'},
+            {data:'name',name:'Feed'},
             {data:'date',name:'Date'},
+            {data:'water_quantity',name:'Water'},
+            {data:'feed_quantity',name:'Feed Quantity'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

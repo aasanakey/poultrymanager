@@ -1,4 +1,7 @@
 @extends('admin.sup_admin.dashboard')
+@section('side_dash_link')
+    {{route('admin.home','guinea_fowl')}}
+@endsection
 @section('profile')
 <a class="dropdown-item" href="{{route('admin.profile')}}">Profile</a>
     {{-- <a class="dropdown-item" href="#">Activity Log</a> --}}

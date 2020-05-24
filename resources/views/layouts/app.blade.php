@@ -10,9 +10,9 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'The Poultry Farm') }}</title>
         <link rel="canonical" href="{{config('app.url')}}" />
-        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         {{-- <link href="{{asset("/css/styles.css")}}" rel="stylesheet" /> --}}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+        <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <style>
             .-bg-primary{
                 background-color:lightgreen;

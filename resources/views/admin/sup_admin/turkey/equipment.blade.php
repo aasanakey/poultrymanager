@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.guinefowl.dashboard')
+@extends('admin.sup_admin.turkey.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -6,7 +6,7 @@
 @section('dash_content')
 <div class="container mt-4">
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Bird Sale</li>
+        <li class="breadcrumb-item active">Equipment</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
@@ -23,11 +23,11 @@
                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addPenModal">
-                        Add Pen House
+                        Add Equipment
                     </button>
                 </span>
                 {{-- <span>
-                    <a href="{{route('export.sales.birds','chicken')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.sales.birds','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span> --}}
            </div>
            {{-- modal --}}

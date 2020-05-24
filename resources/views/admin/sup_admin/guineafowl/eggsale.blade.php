@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.chicken.dashboard')
+@extends('admin.sup_admin.guineafowl.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -152,7 +152,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.sale.egg','chicken') }}",
+        ajax: "{{ route('datatables.sale.egg','guinea_fowl') }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
             {data:'quantity',name:'Number'},

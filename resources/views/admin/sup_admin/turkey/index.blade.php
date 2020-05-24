@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.guineafowl.dashboard')
+@extends('admin.sup_admin.turkey.dashboard')
 @section('styles')
     <style>
         .col-sm-3{
@@ -12,50 +12,50 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="{{route('admin.bird.population','guinea_fowl')}}" class="offer-img">
+                    <a href="{{route('admin.bird.population','turkey')}}" class="offer-img">
                         <i class="fas fa-crow fa-8x"></i>
                     </a>
-                    <h6><a href="{{route('admin.bird.population','guinea_fowl')}}">Population</a></h6>
+                    <h6><a href="{{route('admin.bird.population','turkey')}}">Population</a></h6>
                 </div>
             </div>
 
 
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="{{route('admin.egg.production','guinea_fowl')}}" class="offer-img">
+                    <a href="{{route('admin.egg.production','turkey')}}" class="offer-img">
                        <i class="fas fa-egg fa-8x"></i>
                     </a>
-                    <h6><a href="{{route('admin.egg.production','guinea_fowl')}}">Egg Production</a></h6>
+                    <h6><a href="{{route('admin.egg.production','turkey')}}">Egg Production</a></h6>
                 </div>
             </div>
 
 
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="{{route('admin.medicine','guinea_fowl')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{route('admin.medicine','turkey')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-tablets fa-8x"></i>
                     </a>
-                    <h6><a href="{{route('admin.medicine','guinea_fowl')}}">Medication</a></h6>
+                    <h6><a href="{{route('admin.medicine','turkey')}}">Medication</a></h6>
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="{{route('admin.feed.stock','guinea_fowl')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{route('admin.feed.stock','turkey')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                             <i class="fas fa-cookie-bite fa-8x"></i>
                     </a>
-                    <h6><a href="{{route('admin.feed.stock','guinea_fowl')}}">Feed</a></h6>
+                    <h6><a href="{{route('admin.feed.stock','turkey')}}">Feed</a></h6>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="{{route('admin.employee','guinea_fowl')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{route('admin.employee','turkey')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-user-friends fa-8x"></i>
                     </a>
                     <div class="">
                         <div class="">
-                            <h6><a href="{{route('admin.employee','guinea_fowl')}}">Employees</a></h6>
+                            <h6><a href="{{route('admin.employee','turkey')}}">Employees</a></h6>
                         </div>
                     </div>
                 </div>
@@ -63,12 +63,12 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="{{route('admin.sale.bird','guinea_fowl')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{route('admin.sale.bird','turkey')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-money-bill-alt fa-8x"></i>
                     </a>
                     <div class="">
                         <div class="">
-                            <h6><a href="{{route('admin.sale.bird','guinea_fowl')}}">Sales</a></h6>
+                            <h6><a href="{{route('admin.sale.bird','turkey')}}">Sales</a></h6>
                         </div>
                     </div>
                 </div>
@@ -94,7 +94,7 @@
                     </a>
                     <div class="mid-1">
                         <div class="women">
-                            <h6><a href="{{route('admin.bird.population','guinea_fowl')}}">Reports</a></h6>
+                            <h6><a href="{{route('admin.bird.population','turkey')}}">Reports</a></h6>
                         </div>
                     </div>
                 </div>

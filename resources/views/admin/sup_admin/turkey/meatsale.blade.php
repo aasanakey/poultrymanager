@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.guineafowl.dashboard')
+@extends('admin.sup_admin.turkey.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -6,7 +6,7 @@
 @section('dash_content')
 <div class="container mt-4">
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Bird Sale</li>
+        <li class="breadcrumb-item active">Meat Sale</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
@@ -27,7 +27,7 @@
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.sales.birds','guinea_fowl')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.sales.meat','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -41,31 +41,30 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.sales.bird','guinea_fowl')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.sales.meat','turkey')}}">
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="batch_id">Batch id</label>
-                                    @if (isset($batch_id))
-                                    <select name="batch_id" class="form-control  @error('batch_id') is-invalid @enderror" id="batch_id">
-                                        <option>--select batch id--</option>
-                                        @foreach ($batch_id as $item)
-                                            <option value="{{$item->batch_id}}">{{$item->batch_id}}</option>
-                                    @endforeach
+                                    <label for="part">Part</label>
+                                    <select name="part" class="form-control  @error('part') is-invalid @enderror" id="part" value="{{old('part')}}">
+                                        <option>--select--</option>
+                                        <option value="whole">Whole</option>
+                                        <option value="breast">Breast</option>
+                                        <option value="back">Back</option>
+                                        <option value="wings">Wings</option>
+                                        <option value="thigh">Thigh</option>
+                                        <option value="gizzard">Gizzard</option>
                                     </select>
-                                @else
-                                <input type="text" name="batch_id" class="form-control  @error('batch_id') is-invalid @enderror" id="batch_id" value="{{old('batch_id')}}">
-                                @endif
-                                    @error('batch_id')
+                                    @error('part')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="weight">Weight</label>
-                                    <input type="number" min="0" name="weight"  class="form-control @error('weight') is-invalid @enderror" id="weight" value="{{ old('weight') }}">
-                                    @error('weight')
+                                    <label for="price">Price</label>
+                                    <input type="number" min="0" name="price"  class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
+                                    @error('price')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -74,9 +73,9 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="price">Price</label>
-                                    <input type="number" name="price" min="0" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
-                                    @error('price')
+                                    <label for="quantity">Quantity (Kg)</label>
+                                    <input type="number" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
+                                    @error('quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
@@ -98,17 +97,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-12">
-                                    <label for="number">Number Sold</label>
-                                    <input type="number" name="number" class="form-control @error('number') is-invalid @enderror" id="number" value="{{ old('number') }}" >
-                                    @error('number')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                            </div>
+
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -127,11 +116,10 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                           <th>Farm</th>
-                            <th>Bird Batch</th>
-                            <th>Number</th>
-                            <th>Weight</th>
+                            <th>Farm</th>
+                            <th>Quantity </th>
                             <th>Price</th>
+                            <th>Part</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
@@ -139,10 +127,9 @@
                     <tfoot>
                         <tr>
                             <th>Farm</th>
-                            <th>Bird Batch</th>
-                            <th>Number</th>
-                            <th>Weight</th>
+                            <th>Quantity </th>
                             <th>Price</th>
+                            <th>Part</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
@@ -173,13 +160,12 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.sale.birds','chicken') }}",
+        ajax: "{{ route('datatables.sale.meat','turkey') }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
-            {data: 'bird_batch_id', name: 'Batch'},
-            {data:'number',name:'Number'},
-            {data:'weight',name:'Weight'},
+            {data:'quantity',name:'Quantity'},
             {data:'price',name:'Price'},
+            {data:'part',name:'Part'},
             {data:'date',name:'Date'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]

@@ -40,8 +40,8 @@ class BirdsExport implements FromCollection, WithHeadings, WithMapping
             'Category',
             "Number of Birds",
             'Price',
-            "Species",
-            "Type",
+            "Breed",
+            $this->bird_type == 'chicken' ? "Type" : '',
             "Date",
         ];
     }
@@ -56,7 +56,7 @@ class BirdsExport implements FromCollection, WithHeadings, WithMapping
             number_format($bird->number),
             number_format((float) $bird->unit_price, 2),
             $bird->species,
-            $bird->type,
+            $bird->type ?? "N/A",
             (new Carbon($bird->date))->format('l, d M Y H:i A'),
         ];
     }

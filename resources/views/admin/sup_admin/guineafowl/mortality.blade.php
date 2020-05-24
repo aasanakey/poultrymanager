@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.chicken.dashboard')
+@extends('admin.sup_admin.guineafowl.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -27,7 +27,7 @@
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.mortality','chicken')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.mortality','guinea_fowl')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -41,7 +41,7 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.mortality','chicken')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.mortality','guinea_fowl')}}">
                             @csrf
                             <div class="form-row">
                                 <div class="form-group col-md-6">
@@ -208,7 +208,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.mortality','chicken') }}",
+        ajax: "{{ route('datatables.mortality','guinea_fowl') }}",
         columns: [
             {data: 'batch_id', name: 'batch_id'},
             {data: 'farm_name', name: 'Farm'},

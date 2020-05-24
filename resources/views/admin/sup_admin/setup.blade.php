@@ -85,6 +85,22 @@
                                             @enderror
                                             </div>
                                     </div>
+                                    <div class="form-row">
+                                        <div class="form-group col-md-12">
+                                             <label for="bird_type">Bird Type</label>
+                                            <select name="bird_type" class="form-control @error('bird_type') is-invalid @enderror" id="bird_type">
+                                                <option value=""></option>
+                                                <option value="chicken">Chicken</option>
+                                                <option value="turkey">Turkey</option>
+                                                <option value="guinea_fowl">Guinea Fowl</option>
+                                            </select>
+                                            @error('bird_type')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                             <div class="modal-footer">
@@ -108,6 +124,7 @@
                                     <th>Location</th>
                                     <th>Size</th>
                                     <th>Capacity</th>
+                                    <th>Bird Type</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
@@ -118,6 +135,7 @@
                                     <th>Location</th>
                                     <th>Size</th>
                                     <th>Capacity</th>
+                                    <th>Bird Type</th>
                                     <th>Action</th>
                                 </tr>
                             </tfoot>
@@ -125,8 +143,9 @@
                         </table>
                     </div>
                 </div>
-                <div class="row d-flex align-items-center mt-4" style="position:relative;">
-                    <div class="col-sm-12" style="position:absolute;left:50%;">
+                <hr>
+                <div class="" style="display:flex; justify-content:center;">
+                    <div class="" >
                         <ul class="pagination">
                             {{-- <li class="page-item"><a class="btn btn-primary" href="{{url('/dashboard')}}">Previous</a></li> --}}
                             <li class="page-item"><a class="btn btn-primary" href="{{route('setup.bird')}}" class="btn btn-primary btn-sm">Next</a></li>
@@ -135,6 +154,7 @@
                 </div>
             </div>
     </div>
+
 @endsection
 
 @section('script-tags')
@@ -153,6 +173,7 @@
             {data:'location',name:'Location'},
             {data:'size',name:'Size'},
             {data:'capacity',name:'Capacity'},
+            {data:'bird_type',name:'Bird Type'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
