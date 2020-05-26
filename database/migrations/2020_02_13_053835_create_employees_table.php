@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateEmployeesTable extends Migration
 {
@@ -14,7 +14,7 @@ class CreateEmployeesTable extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
-            $table->string('id')->unique();
+            $table->string('employee_id')->unique();
             $table->unsignedBigInteger('farm_id');
             $table->string('full_name');
             $table->date('dob');
@@ -22,9 +22,10 @@ class CreateEmployeesTable extends Migration
             $table->string('contact');
             $table->date('hire_date');
             $table->string('jd')->nullable();
-            $table->string('photo');
+            $table->string('photo')->nullable();
+            $table->string('farm_category');
             $table->timestamps();
-            $table->primary('id');
+            $table->primary('employee_id');
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
         });
     }

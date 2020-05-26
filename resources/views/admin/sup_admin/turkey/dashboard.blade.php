@@ -91,12 +91,14 @@
             <a class="nav-link collapsed" href="{{route('admin.farm.equipment')}}">
                Equipment
             </a>
-            {{-- <a class="nav-link collapsed" href="{{route('admin.sale.egg','turkey')}}">
-                Egg Sale
+             @if (auth()->user()->hasRole('SUPER_ADMIN'))
+                <a class="nav-link collapsed" href="{{route('admin.employee','turkey')}}">
+                Employee
             </a>
+            @endif
             <a class="nav-link collapsed" href="{{route('admin.sale.meat','turkey')}}">
                 Meat Sale
-            </a> --}}
+            </a>
         </nav>
     </div>
 

@@ -17,6 +17,7 @@
         color:white;
         font-weight:bolder;
     }
+
 </style>
 @endsection
 @section('content')

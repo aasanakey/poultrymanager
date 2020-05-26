@@ -10,7 +10,7 @@
         <meta name="csrf-token" content="{{ csrf_token() }}">
         <title>{{ config('app.name', 'The Poultry Farm') }}</title>
         <link rel="canonical" href="{{config('app.url')}}" />
-        {{-- <link href="{{asset("/css/styles.css")}}" rel="stylesheet" /> --}}
+        <link href="{{asset("/css/styles.css")}}" rel="stylesheet" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
         <link href="{{ asset('css/app.css') }}" rel="stylesheet">
         <style>
@@ -22,8 +22,13 @@
             } */
             .logo{
                 text-align:center;
+                margin-top: 5vh;
             }
-            .logo h1{
+              .card-header{
+                background-color:#000;
+                color:white;
+            }
+            /* .logo h1{
                 font-family: 'Montserrat', sans-serif;
                 font-size: 3em;
                 color: #000;
@@ -53,13 +58,12 @@
                 left: -2px;
                 color: #fff;
                 line-height: 8px;
-                /* margin-right:10px !important; */
-            }
-
+                /* margin-right:10px !important; *
+            }*/
             .footer-bottom{
                 text-align:center;
             }
-            .footer-bottom h2 {
+            /*.footer-bottom h2 {
                 font-family: 'Montserrat', sans-serif;
                 font-size: 3.5em;
                 display: inline-block;
@@ -88,10 +92,7 @@
                 top: 12px;
                 left: -11px;
             }
-            .card-header{
-                background-color:#000;
-                color:white;
-            }
+
             @media (max-width: 460px) {
                 .footer-bottom h2 b{
                    left: 11px;
@@ -137,7 +138,7 @@
                 .footer-bottom h2 span{
                     font-size: 8px;
                 }
-             }
+             } */
         </style>
         @yield('styles')
     </head>
@@ -152,8 +153,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="footer-bottom">
-                            <h2 ><a href=""><b>T<br>H<br>E</b>Poultry Farm<span>The Best Poultry Manager</span></a></h2>
-                            <p class="fo-para"></p>
+                            <img src="{{asset('/images/logo.png')}}" alt="logo" >
                         </div>
                         <hr/>
                         <div class="d-flex align-items-center justify-content-between small">

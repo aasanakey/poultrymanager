@@ -7,6 +7,7 @@ use App\Exports\BirdSaleExport;
 use App\Exports\BirdsExport;
 use App\Exports\EggProductionExport;
 use App\Exports\EggSaleExport;
+use App\Exports\EmployeeExport;
 use App\Exports\FeedExport;
 use App\Exports\FeedingExport;
 use App\Exports\MeatSaleExport;
@@ -32,8 +33,7 @@ class ApiController extends Controller
     {
 
         $data = null;
-        
-         
+
         if ($type == 'all') {
 
             $data = \App\Birds::join('farms', 'farms.id', '=', 'birds.farm_id')
@@ -47,7 +47,7 @@ class ApiController extends Controller
                 ->where('farms.id', auth()->user()->farm_id)->get();
         }
         //return $data;
-        
+
         return DataTables::of($data)
             ->editColumn('date', function ($user) {
                 return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
@@ -92,11 +92,19 @@ class ApiController extends Controller
     /**
      * Fetch Pen houses
      */
-    public function pen()
+    public function pen($type)
     {
-        $data = \App\PenHouse::join('farms', 'farms.id', '=', 'pen_houses.farm_id')
-            ->select('farms.farm_name', 'pen_houses.*')
-            ->where('farms.id', auth()->user()->farm_id)->get();
+        $data = null;
+        if ($type == "all") {
+            $data = \App\PenHouse::join('farms', 'farms.id', '=', 'pen_houses.farm_id')
+                ->select('farms.farm_name', 'pen_houses.*')
+                ->where('farms.id', auth()->user()->farm_id)->get();
+        } else {
+            $data = \App\PenHouse::join('farms', 'farms.id', '=', 'pen_houses.farm_id')
+                ->select('farms.farm_name', 'pen_houses.*')->where('pen_houses.bird_type', $type)
+                ->where('farms.id', auth()->user()->farm_id)->get();
+
+        }
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
                 $div = "<div><span><a href=\"$row->batch_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
@@ -271,5 +279,38 @@ class ApiController extends Controller
     public function exportMeatSale($type)
     {
         return Excel::download(new MeatSaleExport(auth()->user()->farm_id, $type), 'egg sales.xlsx');
+    }
+
+    public function employee($type = null)
+    {
+        $data = null;
+        if ($type == 'all' || $type == null) {
+            $data = \App\Employee::where('farm_id',auth()->user()->farm_id)->get();
+        } else {
+            $data = \App\Employee::where('farm_category',$type)
+                ->where('farm_id', auth()->user()->farm_id)->get();
+
+        }
+        // $data->employee_id = $data->id;
+        return DataTables::of($data)
+            ->editColumn('dob', function ($employee) {
+                return $employee->dob ? with(new Carbon($employee->dob))->format('l, d M Y') : '';
+            })
+            ->editColumn('hire_date', function ($employee) {
+                return $employee->hire_date ? with(new Carbon($employee->hire_date))->format('l, d M Y') : '';
+            })
+            ->editColumn('photo',function($employee){
+                return $employee->photo ?? 'N/A';
+            })
+            ->addColumn('action', function ($row) {
+                $div = "<div><span><a href=\"$row->employee_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                return $div;
+            })->make(true);
+
+    }
+    public function exportEmployee($type = null)
+    {
+        return Excel::download(new EmployeeExport(auth()->user()->farm_id, $type), 'employees.xlsx');
+
     }
 }

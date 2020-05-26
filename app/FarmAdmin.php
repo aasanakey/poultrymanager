@@ -2,9 +2,9 @@
 
 namespace App;
 
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 class FarmAdmin extends Authenticatable implements MustVerifyEmail
 {
@@ -12,21 +12,21 @@ class FarmAdmin extends Authenticatable implements MustVerifyEmail
     use Notifiable;
     //
     protected $fillable = [
-        "farm_id" ,
-        "full_name" ,
+        "farm_id",
+        "full_name",
         "email",
         "contact",
-        "role" ,
-        "password"
+        "role",
+        "password",
     ];
 
-     /**
+    /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token','farm_id',
+        'password', 'remember_token', 'farm_id',
     ];
 
     /**
@@ -37,4 +37,14 @@ class FarmAdmin extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Check if model has a given role
+     * @var string
+     * @return bool
+     */
+    public function hasRole($role)
+    {
+        return $this->role == $role;
+    }
 }

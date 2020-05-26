@@ -70,7 +70,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/sale/meat/{type}', 'FarmAdminController@meatSale')->name('admin.sale.meat');
     Route::post('/sale/meat/{type}', 'FarmAdminController@addMeatSale')->name('admin.add.sales.meat');
     Route::get('/logistics/equipment', 'FarmAdminController@equipment')->name('admin.farm.equipment');
-    Route::get('/employee', 'FarmAdminController@employee')->name('admin.employee');
+    Route::get('/employee/{farm_type?}', 'FarmAdminController@employee')->name('admin.employee');
     Route::post('/employee', 'FarmAdminController@addemployee')->name('admin.add.employee');
 
 });
@@ -80,7 +80,7 @@ Route::get('/birds/population/{type}', 'ApiController@population')->name('datata
 Route::get('/birds/{type}/export/exel', 'ApiController@exportPopulation')->name('export.birds');
 Route::get('/birds/{type}/mortality', 'ApiController@mortality')->name('datatables.mortality');
 Route::get('/mortality/{type}/export/exel', 'ApiController@exportMortality')->name('export.mortality');
-Route::get('/pen', 'ApiController@pen')->name('datatables.pen');
+Route::get('/pen/{type}', 'ApiController@pen')->name('datatables.pen');
 Route::get('/birds/{type}/eggs', 'ApiController@eggs')->name('datatables.eggs');
 Route::get('/eggs/{type}/export/exel', 'ApiController@exportEggs')->name('export.eggs');
 
@@ -98,3 +98,5 @@ Route::get('/sale/eggs', 'ApiController@eggSale')->name('datatables.sale.egg');
 Route::get('/sale/eggs/{type}/export/excel', 'ApiController@exportEggSale')->name('export.sales.egg');
 Route::get('/sale/{type}/meat', 'ApiController@meatSale')->name('datatables.sale.meat');
 Route::get('/sale/{type}/meat/export/excel', 'ApiController@exportMeatSale')->name('export.sales.meat');
+Route::get('/employees/{type}','ApiController@employee')->name('datatables.employees');
+Route::get('/employees/{type}/export/excel', 'ApiController@exportEmployee')->name('export.employees');

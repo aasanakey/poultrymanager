@@ -145,7 +145,7 @@
     $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('datatables.pen') }}",
+            ajax: "{{ route('datatables.pen','turkey') }}",
             columns: [
                 {data:'pen_id',name:'pen_id'},
                 {data: 'farm_name', name: 'Farm'},

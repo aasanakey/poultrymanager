@@ -139,7 +139,7 @@
                 <footer class="py-4 bg-light mt-auto">
                     <div class="container-fluid">
                         <div class="footer-bottom">
-                            <h2 ><a href=""><b>T<br>H<br>E</b>Poultry Farm<span>The Best Poultry Manager</span></a></h2>
+                             <img src="{{asset('/images/logo.png')}}" alt="logo" >
                             <p class="fo-para"></p>
                         </div>
                         <hr/>
