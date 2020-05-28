@@ -22,40 +22,40 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="eggproduction.html" class="offer-img">
+                    <a href="{{route('admin.egg.production','chicken')}}" class="offer-img">
                        <i class="fas fa-egg fa-8x"></i>
                     </a>
-                    <h6><a href="eggproduction.html">Egg Production</a></h6>
+                    <h6><a href="{{route('admin.egg.production','chicken')}}">Egg Production</a></h6>
                 </div>
             </div>
 
 
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{ route('admin.medicine','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-tablets fa-8x"></i>
                     </a>
-                    <h6><a href="single.html">Medication</a></h6>
+                    <h6><a href="{{ route('admin.medicine','chicken')}}">Medication</a></h6>
                 </div>
             </div>
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{ route('admin.feed.stock','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                             <i class="fas fa-cookie-bite fa-8x"></i>
                     </a>
-                    <h6><a href="single.html">Feed</a></h6>
+                    <h6><a href="{{ route('admin.feed.stock','chicken')}}">Feed</a></h6>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{ route('admin.employee','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-user-friends fa-8x"></i>
                     </a>
                     <div class="">
                         <div class="">
-                            <h6><a href="single.html">Employees</a></h6>
+                            <h6><a href="{{ route('admin.employee','chicken')}}">Employees</a></h6>
                         </div>
                     </div>
                 </div>
@@ -63,12 +63,12 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                    <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                    <a href="{{ route('admin.sale.bird','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-money-bill-alt fa-8x"></i>
                     </a>
                     <div class="">
                         <div class="">
-                            <h6><a href="single.html">Sales</a></h6>
+                            <h6><a href="{{ route('admin.sale.bird','chicken')}}">Sales</a></h6>
                         </div>
                     </div>
                 </div>
@@ -76,12 +76,12 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                <a href="{{route('admin.farm.equipment','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-tools fa-8x"></i>
                     </a>
                     <div class="mid-1">
                         <div class="women">
-                            <h6><a href="single.html">Equipment</a></h6>
+                            <h6><a href="{{route('admin.farm.equipment','chicken')}}">Equipment</a></h6>
                         </div>
                     </div>
                 </div>
@@ -89,12 +89,12 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                <a href="{{route('admin.farm.equipment','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-poll fa-8x"></i>
                     </a>
                     <div class="mid-1">
                         <div class="women">
-                            <h6><a href="single.html">Reports</a></h6>
+                            <h6><a href="{{route('admin.farm.equipment','chicken')}}">Reports</a></h6>
                         </div>
                     </div>
                 </div>

@@ -3,7 +3,7 @@
     {{route('admin.home','chicken')}}
 @endsection
 @section('profile')
-<a class="dropdown-item" href="{{route('admin.profile')}}">Profile</a>
+<a class="dropdown-item" href="{{route('admin.profile','chicken')}}">Profile</a>
     {{-- <a class="dropdown-item" href="#">Activity Log</a> --}}
     <div class="dropdown-divider"></div>
     <a class="dropdown-item" href="{{ route('admin.logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> <i class="fa fa-logout"></i>logout</a>
@@ -88,18 +88,32 @@
     </a>
     <div class="collapse" id="collapseLogicstic" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
         <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link collapsed" href="{{route('admin.farm.equipment')}}">
+            <a class="nav-link collapsed" href="{{route('admin.farm.equipment','chicken')}}">
                Equipment
             </a>
-            @if (auth()->user()->hasRole('SUPER_ADMIN'))
-                <a class="nav-link collapsed" href="{{route('admin.employee','chicken')}}">
-                Employee
-            </a>
-            @endif
+
             {{-- <a class="nav-link collapsed" href="{{route('admin.sale.meat','chicken')}}">
                 Meat Sale
             </a> --}}
         </nav>
     </div>
+     @if (auth()->user()->hasRole('SUPER_ADMIN'))
+       <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseAdmin" aria-expanded="false" aria-controls="collapseAdmin">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                Staff
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseAdmin" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                <a class="nav-link collapsed" href="{{route('admin.employee','chicken')}}">
+                    Employees
+                </a>
+                <a class="nav-link collapsed" href="{{route('admin.users','chicken')}}">
+                    Users
+                </a>
+            </nav>
+        </div>
+    @endif
+
 
 @endsection

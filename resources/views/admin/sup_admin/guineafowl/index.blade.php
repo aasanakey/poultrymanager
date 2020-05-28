@@ -76,12 +76,12 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                <a href="{{route('admin.farm.equipment','guinea_fowl')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-tools fa-8x"></i>
                     </a>
                     <div class="mid-1">
                         <div class="women">
-                            <h6><a href="single.html">Equipment</a></h6>
+                            <h6><a href="{{route('admin.farm.equipment','guinea_fowl')}}">Equipment</a></h6>
                         </div>
                     </div>
                 </div>
@@ -89,7 +89,7 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                <a href="#" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                <a href="{{route('admin.bird.population','guinea_fowl')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-poll fa-8x"></i>
                     </a>
                     <div class="mid-1">

@@ -11,7 +11,7 @@
 @section('content')
 @include('layouts.logo')
     <div class="container">
-        <div class="row mt-4">
+        <div class="row mt-4" style="margin-bottom:10px;">
             <div class="card col-md-4">
                 <a href="{{route('admin.bird_type','chicken')}}">
                     <img src="{{asset('/images/chicken.jpg')}}" class="card-img-top" alt="chicken">

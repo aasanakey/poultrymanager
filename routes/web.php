@@ -43,7 +43,8 @@ Route::get('email/resend', 'Auth\FarmAdminVerificationController@resend')->name(
 Route::group(['prefix' => 'dashboard'], function () {
     Route::post('/logout', 'Auth\FarmManagerLoginController@logout')->name('admin.logout');
     Route::get('/', 'FarmAdminController@dashboard')->name('admin.dashboard');
-    Route::get('/profile', 'FarmAdminController@profile')->name('admin.profile');
+    Route::get('/profile/{view}-view', 'FarmAdminController@profile')->name('admin.profile');
+    Route::post('profile', 'FarmAdminController@editProfile')->name('admin.edit.profile');
     Route::get('{type}', 'FarmAdminController@index')->name('admin.home');
     Route::get('{type}/population', 'FarmAdminController@population')->name('admin.bird.population');
     Route::post('birds/add/{type?}', 'FarmAdminController@addBird')->name('admin.add.bird');
@@ -69,9 +70,11 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::post('/sale/eggs/{type}', 'FarmAdminController@addEggSale')->name('admin.add.sales.egg');
     Route::get('/sale/meat/{type}', 'FarmAdminController@meatSale')->name('admin.sale.meat');
     Route::post('/sale/meat/{type}', 'FarmAdminController@addMeatSale')->name('admin.add.sales.meat');
-    Route::get('/logistics/equipment', 'FarmAdminController@equipment')->name('admin.farm.equipment');
-    Route::get('/employee/{farm_type?}', 'FarmAdminController@employee')->name('admin.employee');
-    Route::post('/employee', 'FarmAdminController@addemployee')->name('admin.add.employee');
+    Route::get('/logistics/{$type}equipment', 'FarmAdminController@equipment')->name('admin.farm.equipment');
+    Route::get('/employee/{farm_type?}', 'FarmAdminController@employee')->middleware('role:SUPER_ADMIN')->name('admin.employee');
+    Route::post('/employee', 'FarmAdminController@addemployee')->middleware('role:SUPER_ADMIN')->name('admin.add.employee');
+    Route::get('/users/{view}', 'FarmAdminController@users')->middleware('role:SUPER_ADMIN')->name('admin.users');
+    Route::get('/users/', 'FarmAdminController@addUser')->middleware('role:SUPER_ADMIN')->name('admin.add.user');
 
 });
 
@@ -98,5 +101,5 @@ Route::get('/sale/eggs', 'ApiController@eggSale')->name('datatables.sale.egg');
 Route::get('/sale/eggs/{type}/export/excel', 'ApiController@exportEggSale')->name('export.sales.egg');
 Route::get('/sale/{type}/meat', 'ApiController@meatSale')->name('datatables.sale.meat');
 Route::get('/sale/{type}/meat/export/excel', 'ApiController@exportMeatSale')->name('export.sales.meat');
-Route::get('/employees/{type}','ApiController@employee')->name('datatables.employees');
+Route::get('/employees/{type}', 'ApiController@employee')->name('datatables.employees');
 Route::get('/employees/{type}/export/excel', 'ApiController@exportEmployee')->name('export.employees');

@@ -16,7 +16,7 @@ class FarmAdminController extends Controller
 
         $this->middleware('auth:managers');
         $this->middleware('verified');
-        $this->middleware('role:SUPER_ADMIN');
+        // $this->middleware('role:SUPER_ADMIN');
     }
 
     public function dashboard()
@@ -29,10 +29,22 @@ class FarmAdminController extends Controller
         return view('admin.sup_admin.index');
     }
 
-    public function profile()
+    public function profile($view)
     {
+        switch ($view) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.profile', ["user" => auth()->user()]);
+                break;
 
-        return view('admin.sup_admin.profile');
+            case 'turkey':
+                return view('admin.sup_admin.turkey.profile', ["user" => auth()->user()]);
+                break;
+            case 'guinea_fowl':
+                return view('admin.sup_admin.guineafowl.profile', ["user" => auth()->user()]);
+                break;
+            default:
+                return response()->view('errors.404');
+        }
     }
 
     public function index($type)
@@ -66,7 +78,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return redirect()->route('admin.home', $type);
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -89,7 +101,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.population', compact('pen'));
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -156,7 +168,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.mortality', compact('pen', 'batch_id'));
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -281,7 +293,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.egg_production', compact('pen', 'batch_id'));
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -323,7 +335,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.feed');
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -366,7 +378,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.feeding', compact('pen', 'feed'));
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -406,7 +418,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.medicine');
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -449,7 +461,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.vaccine');
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -490,7 +502,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.birdsale', compact('batch_id'));
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -573,7 +585,7 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.meatsale');
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
     }
@@ -598,7 +610,7 @@ class FarmAdminController extends Controller
         return redirect()->back()->with('success', 'Meat sale added successfully');
     }
 
-    public function equipment()
+    public function equipment($type)
     {
         switch ($type) {
             case 'chicken':
@@ -611,9 +623,14 @@ class FarmAdminController extends Controller
             case 'guinea_fowl':
                 return view('admin.sup_admin.guineafowl.equipment');
                 break;
-             default:
+            default:
                 return response()->view('errors.404');
         }
+    }
+
+    public function addEquipment(Request $request, string $type)
+    {
+        return redirect()->back()->with('success', 'Equipment added successfully');
     }
 
     public function employee($type)
@@ -638,15 +655,15 @@ class FarmAdminController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'id' => ['required','string','unique:employees'],
-            "full_name" => ['required','string'],
-            "dob" => ['required','date'],
-            "email" => ['required','email','unique:employees'],
-            "hire_date" => ['required','date'],
-            "contact" => ['required','phone:GH,fixed_line,mobile'],
-            "photo" => ['sometimes','image','mimes:jpeg,bmp,png','nullable'],
-            "jd" => ['sometimes','string','max:255', 'nullable'],
-            "category" => ['string']
+            'id' => ['required', 'string', 'unique:employees'],
+            "full_name" => ['required', 'string'],
+            "dob" => ['required', 'date'],
+            "email" => ['required', 'email', 'unique:employees'],
+            "hire_date" => ['required', 'date'],
+            "contact" => ['required', 'phone:GH,fixed_line,mobile'],
+            "photo" => ['sometimes', 'image', 'mimes:jpeg,bmp,png', 'nullable'],
+            "jd" => ['sometimes', 'string', 'max:255', 'nullable'],
+            "category" => ['string'],
         ]);
 
         \App\Employee::create([
@@ -665,5 +682,66 @@ class FarmAdminController extends Controller
         ]);
         return redirect()->back()->with('success', 'Employee added successfully');
 
+    }
+/**
+ * Edit admin detials
+ * @var Request $request
+ * @return response
+ */
+    public function editProfile(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            "full_name" => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255'],
+            "contact" => ['required', 'phone:GH,fixed_line,mobile'],
+            // "role" =>['required', 'string', 'max:255'],
+            // 'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], ['contact.phone' => 'The contact number is invalid']);
+        $user = auth()->user();
+        $user->full_name = $request->full_name;
+        //check to see email is a new email
+        if ($user->email != $request->email) {
+            //  dd($user,auth()->user());
+            $request->validate(["email" => ['unique:farm_admins']]);
+            $user->email = $request->email;
+        }
+        $user->contact = $request->contact;
+        $user->save();
+        return redirect()->back()->with('success', 'Account edited successfully');
+    }
+
+    /**
+     * Display view to add users
+     * @var string $view
+     * @return view
+     */
+    public function users($view)
+    {
+        switch ($view) {
+            case 'chicken':
+                return view('admin.sup_admin.chicken.users');
+                break;
+
+            case 'turkey':
+                return view('admin.sup_admin.turkey.users');
+                break;
+            case 'guinea_fowl':
+                return view('admin.sup_admin.guineafowl.users');
+                break;
+            default:
+                return response()->view('errors.404');
+        }
+
+    }
+
+    /**
+     * Add a new admin user
+     * @param Request $request
+     * @return response
+     */
+    public function addUser(Request $request)
+    {
+        dd($request->all());
     }
 }
