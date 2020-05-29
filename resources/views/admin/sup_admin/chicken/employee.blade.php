@@ -164,7 +164,7 @@
                             <th>Age</th>
                             <th>Appointment Date</th>
                             <th>Job Description</th>
-                            <th>Photo</th>
+                            {{-- <th>Photo</th> --}}
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -176,7 +176,7 @@
                             <th>Age</th>
                             <th>Appointment Date</th>
                             <th>Job Description</th>
-                            <th>Photo</th>
+                            {{-- <th>Photo</th> --}}
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -217,7 +217,7 @@
             {data: 'dob', name: 'Age'},
             {data:'hire_date',name:'Appointment Date'},
             {data:'jd',name:'Job Description'},
-            {data:'photo',name:'Photo'},
+            {{-- {data:'photo',name:'Photo'}, --}}
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

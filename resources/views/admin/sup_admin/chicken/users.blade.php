@@ -41,10 +41,10 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.employee')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.user')}}">
                             @csrf
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="name">Full name</label>
                                     <input type="text" name="full_name" class="form-control  @error('full_name') is-invalid @enderror" id="name" value="{{old('full_name')}}">
                                     @error('full_name')
@@ -53,33 +53,9 @@
                                             </span>
                                         @enderror
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="id">Employee ID/No</label>
-                                    <input type="text" name="id"  class="form-control @error('id') is-invalid @enderror" id="disease" value="{{ old('disease') ?? uniqid(true).'__'.auth()->user()->farm_id }}">
-                                    @error('id')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="date">Date of Birth</label>
-                                    <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
-                                        <input type="text" name="dob" class="form-control datetimepicker-input  @error('dob') is-invalid @enderror"
-                                        data-target="#datetimepicker1" value="{{ old('dob')}}"/>
-                                        <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                        @error('dob')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="email">Email</label>
                                     <input type="email" name="email" class="form-control  @error('email') is-invalid @enderror" value="{{ old('email')}}"/>
                                         @error('email')
@@ -90,31 +66,7 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="hire_date">Employment Date</label>
-                                    <div class="input-group date" id="hire_date_datetimepicker1" data-target-input="nearest">
-                                        <input type="text" name="hire_date" class="form-control datetimepicker-input  @error('hire_date') is-invalid @enderror"
-                                        data-target="#hire_date_datetimepicker1" value="{{ old('hire_date')}}"/>
-                                        <div class="input-group-append" data-target="#hire_date_datetimepicker1" data-toggle="datetimepicker">
-                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                        </div>
-                                        @error('hire_date')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                    </div>
-                                </div>
-                                {{-- <div class="form-group col-md-6">
-                                    <label for="photo">Picture</label>
-                                    <input type="file" name="photo" class="form-control  @error('photo') is-invalid @enderror" value="{{ old('email')}}"/>
-                                        @error('photo')
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $message }}</strong>
-                                            </span>
-                                        @enderror
-                                </div> --}}
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                         <label  for="contact">Contact</label>
                                         <input class="form-control @error('contact') is-invalid @enderror" id="contact"
                                         type="text"  name="contact" value="{{ old('contact') }}" placeholder="233 210 000 210" aria-describedby="contact_error"/>
@@ -129,16 +81,19 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="jd">Job Description</label>
-                                    <textarea name="jd" id="jd" class="form-control @error('jd') is-invalid @enderror" cols="30" rows="5">{{ old('jd')}}</textarea>
-                                    @error('jd')
+                                    <label for="role">Job Description</label>
+                                    <select name="role" id="role" class="form-control @error('role') is-invalid @enderror" value="{{ old('role')}}">
+                                        <option value="">select role</option>
+                                        <option value="SUPER_ADMIN">Admin</option>
+                                        <option value="ADMIN">Farm Hand</option>
+                                    </select>
+                                    @error('role')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-                            <input type="text" name="category" value="chicken" hidden>
                         </form>
 
                     </div>
@@ -158,25 +113,19 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Age</th>
-                            <th>Appointment Date</th>
-                            <th>Job Description</th>
-                            <th>Photo</th>
+                            <th>Contact</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>ID</th>
                             <th>Name</th>
                             <th>Email</th>
-                            <th>Age</th>
-                            <th>Appointment Date</th>
-                            <th>Job Description</th>
-                            <th>Photo</th>
+                            <th>Contact</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -210,14 +159,10 @@
         serverSide: true,
         ajax: "{{ route('datatables.admins','chicken') }}",
         columns: [
-            {data: 'id', name: 'ID'},
-            {{-- {data: 'employee_id', name: 'ID'}, --}}
-            {data:'full_name',name:'Name'},
-            {data:'email',name:'Email'},
-            {data: 'dob', name: 'Age'},
-            {data:'hire_date',name:'Appointment Date'},
-            {data:'jd',name:'Job Description'},
-            {data:'photo',name:'Photo'},
+            {data:"full_name",name:"full_name"},
+            {data:"email",name: "email"},
+            {data:"contact",name: "contact"},
+            {data:"role",name:"role"},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

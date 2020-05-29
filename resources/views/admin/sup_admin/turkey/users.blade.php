@@ -41,10 +41,10 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.employee')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.user')}}">
                             @csrf
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="name">Full name</label>
                                     <input type="text" name="full_name" class="form-control  @error('full_name') is-invalid @enderror" id="name" value="{{old('full_name')}}">
                                     @error('full_name')
@@ -53,18 +53,9 @@
                                             </span>
                                         @enderror
                                 </div>
-                                {{-- <div class="form-group col-md-6">
-                                    <label for="id">Employee ID/No</label>
-                                    <input type="text" name="id"  class="form-control @error('id') is-invalid @enderror" id="disease" value="{{ old('disease') ?? uniqid(true).'__'.auth()->user()->farm_id }}">
-                                    @error('id')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div> --}}
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                     <label for="email">Email</label>
                                     <input type="email" name="email" class="form-control  @error('email') is-invalid @enderror" value="{{ old('email')}}"/>
                                         @error('email')
@@ -75,7 +66,7 @@
                                 </div>
                             </div>
                             <div class="form-row">
-                                <div class="form-group col-md-6">
+                                <div class="form-group col-md-12">
                                         <label  for="contact">Contact</label>
                                         <input class="form-control @error('contact') is-invalid @enderror" id="contact"
                                         type="text"  name="contact" value="{{ old('contact') }}" placeholder="233 210 000 210" aria-describedby="contact_error"/>
@@ -90,16 +81,19 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="jd">Job Description</label>
-                                    <textarea name="jd" id="jd" class="form-control @error('jd') is-invalid @enderror" cols="30" rows="5">{{ old('jd')}}</textarea>
-                                    @error('jd')
+                                    <label for="role">Job Description</label>
+                                    <select name="role" id="role" class="form-control @error('role') is-invalid @enderror" value="{{ old('role')}}">
+                                        <option value="">select role</option>
+                                        <option value="SUPER_ADMIN">Admin</option>
+                                        <option value="ADMIN">Farm Hand</option>
+                                    </select>
+                                    @error('role')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
                             </div>
-                            <input type="text" name="category" value="turkey" hidden>
                         </form>
 
                     </div>
@@ -163,12 +157,12 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.employees','users') }}",
+        ajax: "{{ route('datatables.admins','turkey') }}",
         columns: [
-            {data:'full_name',name:'Name'},
-            {data:'email',name:'Email'},
-            {data: 'contact', name: 'Contact'},
-            {data:'role',name:'Role'},
+            {data:"full_name",name:"full_name"},
+            {data:"email",name: "email"},
+            {data:"contact",name: "contact"},
+            {data:"role",name:"role"},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateFarmAdminsTable extends Migration
 {
@@ -21,7 +21,7 @@ class CreateFarmAdminsTable extends Migration
             $table->string('contact');
             $table->string('role');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->default(\Hash::make('password'));
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');

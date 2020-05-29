@@ -742,6 +742,22 @@ class FarmAdminController extends Controller
      */
     public function addUser(Request $request)
     {
-        dd($request->all());
+        $request->validate([
+            "full_name" => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:farm_admins'],
+            "contact" => ['required', 'phone:GH,fixed_line,mobile'],
+            "role" =>['required', 'string', 'max:15'],
+        ]);
+        $farm = \App\Farm::find(auth()->user()->farm_id);
+        $user = \App\FarmAdmin::create([
+            "farm_id" =>  $farm->id,//auth()->user()->farm_id,
+            "full_name" => $request->full_name,
+            "email" => $request->email,
+            "contact" => $request->contact,
+            "role" => $request->role
+        ]);
+        $user->notify(new \App\Notifications\NewUserNotification(route('farm.manager.password.request'),$farm->farm_name));
+        return redirect()->back()->with('success', 'User added successfully. Email sent to user to create password');
+
     }
 }

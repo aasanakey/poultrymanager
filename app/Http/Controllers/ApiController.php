@@ -280,14 +280,16 @@ class ApiController extends Controller
     {
         return Excel::download(new MeatSaleExport(auth()->user()->farm_id, $type), 'egg sales.xlsx');
     }
-
+/**
+ * Fetch employee data as DataTables object
+ */
     public function employee($type = null)
     {
         $data = null;
         if ($type == 'all' || $type == null) {
-            $data = \App\Employee::where('farm_id',auth()->user()->farm_id)->get();
+            $data = \App\Employee::where('farm_id', auth()->user()->farm_id)->get();
         } else {
-            $data = \App\Employee::where('farm_category',$type)
+            $data = \App\Employee::where('farm_category', $type)
                 ->where('farm_id', auth()->user()->farm_id)->get();
 
         }
@@ -299,7 +301,7 @@ class ApiController extends Controller
             ->editColumn('hire_date', function ($employee) {
                 return $employee->hire_date ? with(new Carbon($employee->hire_date))->format('l, d M Y') : '';
             })
-            ->editColumn('photo',function($employee){
+            ->editColumn('photo', function ($employee) {
                 return $employee->photo ?? 'N/A';
             })
             ->addColumn('action', function ($row) {
@@ -308,9 +310,25 @@ class ApiController extends Controller
             })->make(true);
 
     }
+    /**
+     * export employees data as excel
+     */
     public function exportEmployee($type = null)
     {
         return Excel::download(new EmployeeExport(auth()->user()->farm_id, $type), 'employees.xlsx');
 
+    }
+
+    public function admins()
+    {
+        $data = \App\FarmAdmin::where('farm_id', auth()->user()->farm_id)->get();
+        return DataTables::of($data)
+            ->editColumn('role', function ($admin) {
+                return $admin->role == "SUPER_ADMIN" ? "Admin" : 'Farm hand';
+            })
+            ->addColumn('action', function ($row) {
+                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                return $div;
+            })->make(true);
     }
 }
