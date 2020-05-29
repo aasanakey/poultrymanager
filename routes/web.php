@@ -78,6 +78,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/users/{view}', 'FarmAdminController@users')->middleware('role:SUPER_ADMIN')->name('admin.users');
     Route::post('/users/', 'FarmAdminController@addUser')->middleware('role:SUPER_ADMIN')->name('admin.add.user');
 
+    Route::get('/reports/{type?}','FarmAdminController@report')->name('admin.report');
 });
 
 /**

@@ -23,24 +23,24 @@ class FarmAdminController extends Controller
     {
         $is_setup = \App\Farm::where('is_setup', false)->find(auth()->user()->farm_id);
         if ($is_setup) {
-            return view('admin.sup_admin.setup');
+            return view('admin.setup');
         }
 
-        return view('admin.sup_admin.index');
+        return view('admin.index');
     }
 
     public function profile($view)
     {
         switch ($view) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.profile', ["user" => auth()->user()]);
+                return view('admin.chicken.profile', ["user" => auth()->user()]);
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.profile', ["user" => auth()->user()]);
+                return view('admin.turkey.profile', ["user" => auth()->user()]);
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.profile', ["user" => auth()->user()]);
+                return view('admin.guineafowl.profile', ["user" => auth()->user()]);
                 break;
             default:
                 return response()->view('errors.404');
@@ -51,14 +51,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.index');
+                return view('admin.chicken.index');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.index');
+                return view('admin.turkey.index');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.index');
+                return view('admin.guineafowl.index');
                 break;
             default:
                 return response()->view('errors.404');
@@ -92,14 +92,14 @@ class FarmAdminController extends Controller
             ->where('bird_type', $type)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.population', compact('pen'));
+                return view('admin.chicken.population', compact('pen'));
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.population', compact('pen'));
+                return view('admin.turkey.population', compact('pen'));
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.population', compact('pen'));
+                return view('admin.guineafowl.population', compact('pen'));
                 break;
             default:
                 return response()->view('errors.404');
@@ -158,15 +158,15 @@ class FarmAdminController extends Controller
             ->where('farm_id', auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.mortality', compact('pen', 'batch_id'));
+                return view('admin.chicken.mortality', compact('pen', 'batch_id'));
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.mortality', compact('pen', 'batch_id'));
+                return view('admin.turkey.mortality', compact('pen', 'batch_id'));
 
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.mortality', compact('pen', 'batch_id'));
+                return view('admin.guineafowl.mortality', compact('pen', 'batch_id'));
                 break;
             default:
                 return response()->view('errors.404');
@@ -204,15 +204,15 @@ class FarmAdminController extends Controller
 
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.addpen');
+                return view('admin.chicken.addpen');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.addpen');
+                return view('admin.turkey.addpen');
 
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.addpen');
+                return view('admin.guineafowl.addpen');
                 break;
             default:
                 return response()->view('errors.404');
@@ -260,7 +260,7 @@ class FarmAdminController extends Controller
         // $is_setup = \App\Farm::where('is_setup',false)->find(auth()->user()->farm_id);
         // if( $is_setup)
         // $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)->get();
-        return view('admin.sup_admin.setup_bird');
+        return view('admin.setup_bird');
     }
 
     public function setupFinish()
@@ -284,14 +284,14 @@ class FarmAdminController extends Controller
             ->where('bird_category', $type)->where('farm_id', auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.egg_production', compact('pen', 'batch_id'));
+                return view('admin.chicken.egg_production', compact('pen', 'batch_id'));
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.egg_production', compact('pen', 'batch_id'));
+                return view('admin.turkey.egg_production', compact('pen', 'batch_id'));
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.egg_production', compact('pen', 'batch_id'));
+                return view('admin.guineafowl.egg_production', compact('pen', 'batch_id'));
                 break;
             default:
                 return response()->view('errors.404');
@@ -326,14 +326,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.feed');
+                return view('admin.chicken.feed');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.feed');
+                return view('admin.turkey.feed');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.feed');
+                return view('admin.guineafowl.feed');
                 break;
             default:
                 return response()->view('errors.404');
@@ -368,15 +368,15 @@ class FarmAdminController extends Controller
         $feed = \App\Feed::select('name', 'id')->where('farm_id', auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.feeding', compact('pen', 'feed'));
+                return view('admin.chicken.feeding', compact('pen', 'feed'));
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.feeding', compact('pen', 'feed'));
+                return view('admin.turkey.feeding', compact('pen', 'feed'));
 
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.feeding', compact('pen', 'feed'));
+                return view('admin.guineafowl.feeding', compact('pen', 'feed'));
                 break;
             default:
                 return response()->view('errors.404');
@@ -409,14 +409,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.medicine');
+                return view('admin.chicken.medicine');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.medicine');
+                return view('admin.turkey.medicine');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.medicine');
+                return view('admin.guineafowl.medicine');
                 break;
             default:
                 return response()->view('errors.404');
@@ -452,14 +452,14 @@ class FarmAdminController extends Controller
 
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.vaccine');
+                return view('admin.chicken.vaccine');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.vaccine');
+                return view('admin.turkey.vaccine');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.vaccine');
+                return view('admin.guineafowl.vaccine');
                 break;
             default:
                 return response()->view('errors.404');
@@ -493,14 +493,14 @@ class FarmAdminController extends Controller
 
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.birdsale', compact('batch_id'));
+                return view('admin.chicken.birdsale', compact('batch_id'));
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.birdsale', compact('batch_id'));
+                return view('admin.turkey.birdsale', compact('batch_id'));
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.birdsale', compact('batch_id'));
+                return view('admin.guineafowl.birdsale', compact('batch_id'));
                 break;
             default:
                 return response()->view('errors.404');
@@ -536,14 +536,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.eggsale');
+                return view('admin.chicken.eggsale');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.eggsale');
+                return view('admin.turkey.eggsale');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.eggsale');
+                return view('admin.guineafowl.eggsale');
                 break;
             default:
                 return response()->view('errors.404');
@@ -576,14 +576,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.meatsale');
+                return view('admin.chicken.meatsale');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.meatsale');
+                return view('admin.turkey.meatsale');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.meatsale');
+                return view('admin.guineafowl.meatsale');
                 break;
             default:
                 return response()->view('errors.404');
@@ -614,14 +614,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.equipment');
+                return view('admin.chicken.equipment');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.equipment');
+                return view('admin.turkey.equipment');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.equipment');
+                return view('admin.guineafowl.equipment');
                 break;
             default:
                 return response()->view('errors.404');
@@ -637,14 +637,14 @@ class FarmAdminController extends Controller
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.employee');
+                return view('admin.chicken.employee');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.employee');
+                return view('admin.turkey.employee');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.employee');
+                return view('admin.guineafowl.employee');
                 break;
             default:
                 return response()->view('errors.404');
@@ -720,14 +720,14 @@ class FarmAdminController extends Controller
     {
         switch ($view) {
             case 'chicken':
-                return view('admin.sup_admin.chicken.users');
+                return view('admin.chicken.users');
                 break;
 
             case 'turkey':
-                return view('admin.sup_admin.turkey.users');
+                return view('admin.turkey.users');
                 break;
             case 'guinea_fowl':
-                return view('admin.sup_admin.guineafowl.users');
+                return view('admin.guineafowl.users');
                 break;
             default:
                 return response()->view('errors.404');
@@ -759,5 +759,28 @@ class FarmAdminController extends Controller
         $user->notify(new \App\Notifications\NewUserNotification(route('farm.manager.password.request'),$farm->farm_name));
         return redirect()->back()->with('success', 'User added successfully. Email sent to user to create password');
 
+    }
+
+    /**
+     * Display report view
+     * @param string $type
+     * @return view
+     */
+    public function report($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.chicken.report');
+                break;
+             case 'guinea_fowl':
+                return view('admin.turkey.report');
+                break;
+             case 'chicken':
+                return view('admin.guineafowl.report');
+                break;
+            default:
+                return view('error.404');
+                break;
+        }
     }
 }
