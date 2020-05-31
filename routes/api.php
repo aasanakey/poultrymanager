@@ -22,3 +22,5 @@ Route::post('/pen', function (Request $request) {
         ->where('bird_type', $request->json('bird'))->get();
     return $pen;
 })->name('api.pen');
+
+// Route::get('/sales', 'SalesController@test')->name('test.sales');

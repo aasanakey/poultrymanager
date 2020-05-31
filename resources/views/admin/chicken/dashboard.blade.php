@@ -97,6 +97,22 @@
             </a> --}}
         </nav>
     </div>
+
+     <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseFin" aria-expanded="false" aria-controls="collapseFin">
+            <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+                Finance
+            <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+        </a>
+        <div class="collapse" id="collapseFin" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+            <nav class="sb-sidenav-menu-nested nav">
+                {{-- <a class="nav-link collapsed" href="{{route('admin.report.sales','chicken')}}">
+                    Sales
+                </a>
+                <a class="nav-link collapsed" href="{{route('admin.report.expenses','chicken')}}">
+                    Expenses
+                </a> --}}
+            </nav>
+        </div>
      @if (auth()->user()->hasRole('SUPER_ADMIN'))
        <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseAdmin" aria-expanded="false" aria-controls="collapseAdmin">
             <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>

@@ -768,18 +768,19 @@ class FarmAdminController extends Controller
      */
     public function report($type)
     {
+       
         switch ($type) {
             case 'chicken':
                 return view('admin.chicken.report');
                 break;
-             case 'guinea_fowl':
+             case 'turkey':
                 return view('admin.turkey.report');
                 break;
              case 'chicken':
                 return view('admin.guineafowl.report');
                 break;
             default:
-                return view('error.404');
+                return response()->view('errors.404');
                 break;
         }
     }

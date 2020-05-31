@@ -78,7 +78,7 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/users/{view}', 'FarmAdminController@users')->middleware('role:SUPER_ADMIN')->name('admin.users');
     Route::post('/users/', 'FarmAdminController@addUser')->middleware('role:SUPER_ADMIN')->name('admin.add.user');
 
-    Route::get('/reports/{type?}','FarmAdminController@report')->name('admin.report');
+    Route::get('/reports/{type?}', 'FarmAdminController@report')->name('admin.report');
 });
 
 /**
@@ -112,3 +112,5 @@ Route::get('/sale/birds/{type}/export/excel', 'ApiController@exportBirdSale')->n
 Route::get('/sale/eggs/{type}/export/excel', 'ApiController@exportEggSale')->name('export.sales.egg');
 Route::get('/sale/{type}/meat/export/excel', 'ApiController@exportMeatSale')->name('export.sales.meat');
 Route::get('/employees/{type}/export/excel', 'ApiController@exportEmployee')->middleware('role:SUPER_ADMIN')->name('export.employees');
+
+Route::get('/sales', 'SalesController@getSales')->name('test.sales');
