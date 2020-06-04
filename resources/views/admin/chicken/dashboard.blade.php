@@ -79,6 +79,9 @@
             <a class="nav-link collapsed" href="{{route('admin.sale.meat','chicken')}}">
                 Meat Sale
             </a>
+             <a class="nav-link collapsed" href="{{ route('admin.sale.all','chicken')}}">
+                Summary
+            </a>
         </nav>
     </div>
     <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseLogicstic" aria-expanded="false" aria-controls="collapseLogicstic">
@@ -105,12 +108,12 @@
         </a>
         <div class="collapse" id="collapseFin" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-                {{-- <a class="nav-link collapsed" href="{{route('admin.report.sales','chicken')}}">
-                    Sales
-                </a>
-                <a class="nav-link collapsed" href="{{route('admin.report.expenses','chicken')}}">
+                <a class="nav-link collapsed" href="{{route('admin.expenses','chicken')}}">
                     Expenses
-                </a> --}}
+                </a>
+                <a class="nav-link collapsed" href="{{route('admin.statement','chicken')}}">
+                    Statement
+                </a>
             </nav>
         </div>
      @if (auth()->user()->hasRole('SUPER_ADMIN'))

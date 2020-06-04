@@ -17,18 +17,27 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
-               <span>
-                   <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addPenModal">
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <span>
+                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addPenModal">
                         Add Equipment
                     </button>
                 </span>
-                {{-- <span>
-                    <a href="{{route('export.sales.birds','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
-                </span> --}}
+                <span>
+                    <a href="{{route('export.equipment','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                </span>
            </div>
            {{-- modal --}}
             <div class="modal fade" id="addPenModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -41,22 +50,49 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form id="penForm" method="POST" action="{{ route('admin.add.pen')}}">
+                            <form id="penForm" method="POST" action="{{ route('admin.add.equipment','turkey')}}">
                                 @csrf
+                                {{-- id, farm_id, equipment, date_acquired, status, description, supplier, price, c_depreciation, created_at, updated_at --}}
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="exampleFormControlSelect2">ID</label>
-                                        <input type="text"  name="id" id="id" class="form-control @error('id') is-invalid @enderror" value="{{old('id') ? old('id'): generate_pen_id()}}">
-                                        @error('id')
+                                        <label for="name">Equipment</label>
+                                        <input type="text"  name="name" id="name" class="form-control @error('name') is-invalid @enderror" value="{{old('name')}}">
+                                        @error('name')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="location">Location</label>
-                                        <input type="text" name="location" id="location" class="form-control @error('location') is-invalid @enderror" value="{{old('location')}}">
-                                        @error('location')
+                                        <label for="date_acquired">Date Acquired</label>
+                                        <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
+                                            <input type="text" name="date_acquired" class="form-control datetimepicker-input  @error('date_acquired') is-invalid @enderror"
+                                            data-target="#datetimepicker1" value="{{ old('date_acquired')}}"/>
+                                            <div class="input-group-append" data-target="#datetimepicker1" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                            @error('date_acquired')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="price">Price</label>
+                                        <input type="number" min="0" step="0.01" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{old('price')}}">
+                                        @error('price')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="supplier">Supplier</label>
+                                        <input type="text" name="supplier"  class="form-control @error('supplier') is-invalid @enderror" id="supplier" value="{{ old('supplier') }}">
+                                        @error('supplier')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -65,23 +101,39 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="exampleFormControlSelect2">Size (sq ft)</label>
-                                        <input type="number" min="0" name="size" id="size" class="form-control @error('size') is-invalid @enderror" value="{{old('size')}}">
-                                        @error('size')
+                                        <label for="type">Type</label>
+                                        <input type="text" name="type" id="type" class="form-control @error('type') is-invalid @enderror" value="{{old('type')}}">
+                                        @error('type')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="price">Bird Capacity</label>
-                                        <input type="number" name="capacity" min="0" class="form-control @error('capacity') is-invalid @enderror" id="capacity" value="{{ old('capacity') }}">
-                                        @error('capacity')
+                                        <label for="status">State</label>
+                                        <select name="status"  class="form-control @error('status') is-invalid @enderror" id="status" value="{{ old('status') }}">
+                                            <option value="">select state</option>
+                                            <option value="Functioning">Functioning</option>
+                                            <option value="Maintenance">Maintenance/Repair</option>
+                                            <option value="Non Functioning">Non Functioning</option>
+                                        </select>
+                                        @error('supplier')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
                                         @enderror
-                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="description">Description</label>
+                                        <textarea name="description" id="description" cols="10" rows="5" class="form-control @error('description') is-invalid @enderror" value="{{ old('description') }}"></textarea>
+                                         @error('description')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -95,27 +147,33 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-home mr-1"></i>Pen Houses</div>
+        <div class="card-header"><i class="fas fa-home mr-1"></i>Equipment</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Pen ID</th>
                             <th>Farm</th>
-                            <th>Location</th>
-                            <th>Size</th>
-                            <th>Capacity</th>
+                            <th>Equipment</th>
+                            <th>Type</th>
+                            <th>Purchase Date</th>
+                            <th>State</th>
+                            <th>Price (GHS &#162)</th>
+                            <th>Supplier</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Pen ID</th>
-                            <th>Farm</th>
-                            <th>Location</th>
-                            <th>Size</th>
-                            <th>Capacity</th>
+                           <th>Farm</th>
+                            <th>Equipment</th>
+                            <th>Type</th>
+                            <th>Purchase Date</th>
+                            <th>State</th>
+                            <th>Price (GHS &#162)</th>
+                            <th>Supplier</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -136,6 +194,7 @@
     @parent
 
     $('#datetimepicker1').datetimepicker({
+        format: 'L',
         icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",
@@ -145,13 +204,16 @@
     $('#dataTable').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{ route('datatables.pen') }}",
+            ajax: "{{ route('datatables.equipment','turkey') }}",
             columns: [
-                {data:'pen_id',name:'pen_id'},
                 {data: 'farm_name', name: 'Farm'},
-                {data:'location',name:'Location'},
-                {data:'size',name:'Size'},
-                {data:'capacity',name:'Capacity'},
+                {data:'equipment',name:'Equipment'},
+                {data:'type',name:'Type'},
+                {data:'date_acquired',name:'Purchase Date'},
+                {data:'status',name:'State'},
+                {data:'price',name:'Price'},
+                {data:'supplier',name:'Supplier'},
+                {data:'description',name:'Description'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });

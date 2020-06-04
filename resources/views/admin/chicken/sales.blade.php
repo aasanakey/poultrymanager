@@ -4,7 +4,13 @@
 @endsection
 @section('dash_content')
 <div class="">
-     <div class="row">
+    <div class="row mt-4">
+        <a href="{{route('admin.sale.bird','chicken')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Bird Sale</a>
+        <a href="{{route('admin.sale.meat','chicken')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Meat Sale</a>
+        <a href="{{route('admin.sale.egg','chicken')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Egg Sale</a>
+    </div>
+     <div class="row mt-5">
+          <h5 id="msg" class="col-md-12" style="text-align:center;color:red;">Loading data ...</h5>
         <div class="col-lg-6">
             <div class="card mb-4">
                 <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Sales</div>
@@ -145,7 +151,7 @@
                 $('.total').html((table_data.BirdSale+table_data.MeatSale+table_data.EggSale).toFixed(2))
             }
 
-            console.log(table_data);
+            $('#msg').remove();
             salesChart.update();
 
         },

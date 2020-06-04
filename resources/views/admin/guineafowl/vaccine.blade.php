@@ -17,17 +17,26 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
                         Add Vaccine Record
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.vaccine')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.vaccine','guinea_fowl')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -83,6 +92,7 @@
                                         @enderror
                                 </div>
                             </div>
+                             <input type="text" name="animal" value="guinea_fowl" hidden>
                         </form>
 
                     </div>
@@ -148,7 +158,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.vaccine',) }}",
+        ajax: "{{ route('datatables.vaccine','guinea_fowl') }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
             {data: 'age', name: 'Age'},

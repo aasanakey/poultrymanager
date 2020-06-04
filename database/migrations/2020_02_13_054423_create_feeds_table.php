@@ -22,6 +22,7 @@ class CreateFeedsTable extends Migration
             $table->string('description');
             $table->string('supplier')->nullable();
             $table->timestamp('date');
+            $table->string('feed_type');
             $table->timestamps();
             // $table->primary(['id','farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');

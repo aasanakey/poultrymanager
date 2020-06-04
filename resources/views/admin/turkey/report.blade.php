@@ -99,7 +99,7 @@
 
     $.ajax({
         method:"GET",
-        url:"{{ route('sales.all','chicken')}}",
+        url:"{{ route('sales.all','turkey')}}",
         success: (res)=>{
            let colors = {
                 BirdSale:{

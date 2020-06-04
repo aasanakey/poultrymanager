@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateEquipmentTable extends Migration
 {
@@ -22,7 +22,8 @@ class CreateEquipmentTable extends Migration
             $table->string('description')->nullable();
             $table->string('supplier')->nullable();
             $table->decimal('price');
-            $table->decimal('c_depreciation');
+            $table->string('type');
+            $table->string('farm_category');
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->timestamps();
         });

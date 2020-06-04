@@ -1,4 +1,4 @@
-@extends('admin.sup_admin.chicken.dashboard')
+@extends('admin.chicken.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -11,16 +11,25 @@
     <div class="card mb-4">
         <div class="card-body">
            <div class="row">
-               @if (session()->has('success'))
+                @if (session()->has('success'))
                 <div class="alert alert-success col-md-12" role="alert">
                     <span>{{ session()->get('success')}} </span>
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
                         Add Mortality

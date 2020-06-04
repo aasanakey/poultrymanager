@@ -68,7 +68,7 @@
                     </a>
                     <div class="">
                         <div class="">
-                            <h6><a href="{{ route('admin.sale.bird','chicken')}}">Sales</a></h6>
+                            <h6><a href="{{ route('admin.sale.all','chicken')}}">Sales</a></h6>
                         </div>
                     </div>
                 </div>

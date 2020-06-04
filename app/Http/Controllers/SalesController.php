@@ -41,11 +41,30 @@ class SalesController extends Controller
      * @param string $field
      * @return Collection
      */
-    public function getMonthlySales($model, $field = "date", $product = null,$price_field='price', $month)
+    public function getMonthlySales($model, $field = "date", $category = null, $price_field = 'price', $month)
     {
+        if (is_null($category)) {
+            $model = "\\App\\$model";
+            $monthly_sales = $model::whereMonth("$field", $month)->get()->sum($price_field);
+            return $monthly_sales;
+        }
+        $product = '';
+        switch ($model) {
+            case 'BirdSale':
+                $product = 'bird_category';
+                break;
+            case 'MeatSale':
+                $product = 'type';
+                break;
+            case 'EggSale':
+                $product = 'egg_type';
+                break;
+        }
         $model = "\\App\\$model";
-        $monthly_sales = $model::whereMonth("$field", $month)->get()->sum($price_field);
+        $monthly_sales = $model::whereMonth("$field", $month)->where($product, $category)
+            ->where('farm_id', auth()->user()->farm_id)->get()->sum($price_field);
         return $monthly_sales;
+
     }
 
     /**
@@ -56,7 +75,7 @@ class SalesController extends Controller
      * @return array $monthly_sales_data_array
      */
 
-    public function getMonthlySalesData($model, $field = "date", $product=null,$price_field='price')
+    public function getMonthlySalesData($model, $field = "date", $product = null, $price_field = 'price')
     {
 
         $monthly_sales_array = array();
@@ -99,11 +118,10 @@ class SalesController extends Controller
     {
         $models = ['BirdSale', 'MeatSale', 'EggSale'];
         $field = 'date';
-        $product = $type;
         $final_max = 0;
         $sales_array = ['BirdSale' => [], 'MeatSale' => [], 'EggSale' => []];
         foreach ($models as $key => $model) {
-            $sales = ($model == "EggSale") ? $this->getMonthlySalesData($model, $field, $product,'price_per_dozen') :$this->getMonthlySalesData($model, $field, $product);
+            $sales = ($model == "EggSale") ? $this->getMonthlySalesData($model, $field, $type, 'price_per_dozen') : $this->getMonthlySalesData($model, $field, $type);
             array_push($sales_array[$model], $sales);
             $final_max = max($final_max, $sales['max']);
         }

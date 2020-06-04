@@ -17,17 +17,26 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
                         Add Feeding Record
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.feeding')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.feeding','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -84,7 +93,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="feed_quantity">Quantity per Serving (Kg)</label>
-                                    <input type="number" name="feed_quantity" min="0" class="form-control @error('feed_quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
+                                    <input type="number" name="feed_quantity" min="0" step="0.01" class="form-control @error('feed_quantity') is-invalid @enderror" id="feed_quantity" value="{{ old('feed_quantity') }}">
                                     @error('feed_quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -110,7 +119,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-12">
                                     <label for="water_quantity">Water Quantity (L)</label>
-                                    <input type="number" name="water_quantity" min="0" class="form-control @error('water_quantity') is-invalid @enderror" id="water_quantity" value="{{ old('water_quantity') }}">
+                                    <input type="number" name="water_quantity" min="0" step="0.01" class="form-control @error('water_quantity') is-invalid @enderror" id="water_quantity" value="{{ old('water_quantity') }}">
                                     @error('water_quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -184,7 +193,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.feeding',) }}",
+        ajax: "{{ route('datatables.feeding','turkey',) }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
             {data: 'pen_id', name: 'Pen House'},

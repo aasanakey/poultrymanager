@@ -17,17 +17,26 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
                         Add Medicine
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.medicine')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.medicine','guinea_fowl')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -111,6 +120,7 @@
                                     @enderror
                                 </div>
                             </div>
+                            <input type="text" name="animal" value="guinea_fowl" hidden>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -123,7 +133,7 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Egg</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Medicine</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -179,7 +189,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.medicine',) }}",
+        ajax: "{{ route('datatables.medicine','guinea_fowl') }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
             {data: 'name', name: 'Medicine'},

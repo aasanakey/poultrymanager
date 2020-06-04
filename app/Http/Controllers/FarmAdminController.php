@@ -342,6 +342,7 @@ class FarmAdminController extends Controller
 
     public function addFeed(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             "name" => ['required', 'string'],
             "price" => ['required', 'numeric', 'min:0'],
@@ -349,6 +350,7 @@ class FarmAdminController extends Controller
             "date" => ['required', 'date'],
             "supplier" => ['required', 'string'],
             "description" => ['required', 'string'],
+            "feed_type" => ['required', 'string'],
         ]);
         \App\Feed::create([
             "farm_id" => auth()->user()->farm_id,
@@ -357,6 +359,7 @@ class FarmAdminController extends Controller
             "quantity" => $request->quantity,
             "description" => $request->description,
             "supplier" => $request->supplier,
+            "feed_type" => $request->feed_type,
         ]);
         return redirect()->back()->with('success', 'Feed record added successfully');
     }
@@ -365,7 +368,8 @@ class FarmAdminController extends Controller
     {
         $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)
             ->where('bird_type', $type)->get();
-        $feed = \App\Feed::select('name', 'id')->where('farm_id', auth()->user()->farm_id)->get();
+        $feed = \App\Feed::select('name', 'id')->where('feed_type', $type)
+            ->where('farm_id', auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
                 return view('admin.chicken.feeding', compact('pen', 'feed'));
@@ -425,6 +429,7 @@ class FarmAdminController extends Controller
 
     public function addMedicine(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             "name" => ['required', 'string'],
             "price" => ['required', 'numeric', 'min:0'],
@@ -432,6 +437,7 @@ class FarmAdminController extends Controller
             "date" => ['required', 'date'],
             "supplier" => ['sometimes', 'string', 'nullable'],
             "description" => ['required', 'string'],
+            "animal" => ["required", 'string'],
         ]);
         \App\Medicine::create([
             "farm_id" => auth()->user()->farm_id,
@@ -441,6 +447,7 @@ class FarmAdminController extends Controller
             "date" => new \DateTime($request->date),
             "supplier" => $request->supplier,
             "description" => $request->description,
+            "animal" => $request->animal,
         ]);
         return redirect()->back()->with('success', 'Medicine added successfully');
 
@@ -468,12 +475,14 @@ class FarmAdminController extends Controller
 
     public function addVaccine(Request $request)
     {
+        // dd($request->all());
 
         $request->validate([
             "age" => ['required', 'string'],
             "disease" => ['required', 'string'],
             "mode" => ['required', 'string'],
             "type" => ['required', 'string'],
+            "animal" => ['required', 'string'],
         ]);
         \App\Vaccine::create([
             "farm_id" => auth()->user()->farm_id,
@@ -481,6 +490,7 @@ class FarmAdminController extends Controller
             "disease" => $request->disease,
             "mode" => $request->mode,
             "type" => $request->type,
+            "animal" => $request->animal,
         ]);
         return redirect()->back()->with('success', 'Vaccine record added successfully');
 
@@ -630,6 +640,28 @@ class FarmAdminController extends Controller
 
     public function addEquipment(Request $request, string $type)
     {
+        // dd($request->all());
+       $request->validate([
+            "name" => 'required|string',
+            "date_acquired" => 'required|date',
+            "price" => 'required|numeric|min:0',
+            "supplier" => 'required|string',
+            "type" => 'required|string',
+            "status" => 'required|string',
+            "description" => 'required|string',
+        ]);
+
+        \App\Equipment::create([
+            "farm_id" => auth()->user()->farm_id,
+            "equipment" => $request->name,
+            "date_acquired" => new \DateTime($request->date_aquired),
+            "price" => $request->price,
+            "supplier" =>$request->supplier,
+            "type" => $request->type,
+            "status" => $request->status,
+            "description" => $request->description,
+            "farm_category" => $type,
+        ]);
         return redirect()->back()->with('success', 'Equipment added successfully');
     }
 
@@ -746,17 +778,17 @@ class FarmAdminController extends Controller
             "full_name" => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:farm_admins'],
             "contact" => ['required', 'phone:GH,fixed_line,mobile'],
-            "role" =>['required', 'string', 'max:15'],
+            "role" => ['required', 'string', 'max:15'],
         ]);
         $farm = \App\Farm::find(auth()->user()->farm_id);
         $user = \App\FarmAdmin::create([
-            "farm_id" =>  $farm->id,//auth()->user()->farm_id,
+            "farm_id" => $farm->id, //auth()->user()->farm_id,
             "full_name" => $request->full_name,
             "email" => $request->email,
             "contact" => $request->contact,
-            "role" => $request->role
+            "role" => $request->role,
         ]);
-        $user->notify(new \App\Notifications\NewUserNotification(route('farm.manager.password.request'),$farm->farm_name));
+        $user->notify(new \App\Notifications\NewUserNotification(route('farm.manager.password.request'), $farm->farm_name));
         return redirect()->back()->with('success', 'User added successfully. Email sent to user to create password');
 
     }
@@ -768,16 +800,76 @@ class FarmAdminController extends Controller
      */
     public function report($type)
     {
-       
+
         switch ($type) {
             case 'chicken':
                 return view('admin.chicken.report');
                 break;
-             case 'turkey':
+            case 'turkey':
                 return view('admin.turkey.report');
                 break;
-             case 'chicken':
+            case 'chicken':
                 return view('admin.guineafowl.report');
+                break;
+            default:
+                return response()->view('errors.404');
+                break;
+        }
+    }
+
+    public function allSales($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.chicken.sales');
+                break;
+            case 'turkey':
+                return view('admin.turkey.sales');
+                break;
+            case 'guinea_fowl':
+                return view('admin.guineafowl.sales');
+                break;
+            default:
+                return response()->view('errors.404');
+                break;
+        }
+
+    }
+
+    public function expenses($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.chicken.expenses');
+                break;
+            case 'turkey':
+                return view('admin.turkey.expenses');
+                break;
+            case 'guinea_fowl':
+                return view('admin.guineafowl.expenses');
+                break;
+            default:
+                return response()->view('errors.404');
+                break;
+        }
+    }
+
+    public function addExpenses(Request $request, $type)
+    {
+        dd($request->all());
+    }
+
+    public function statement($type)
+    {
+        switch ($type) {
+            case 'chicken':
+                return view('admin.chicken.statement');
+                break;
+            case 'turkey':
+                return view('admin.turkey.statement');
+                break;
+            case 'guinea_fowl':
+                return view('admin.guineafowl.statement');
                 break;
             default:
                 return response()->view('errors.404');

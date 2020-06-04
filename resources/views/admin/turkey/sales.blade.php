@@ -4,7 +4,13 @@
 @endsection
 @section('dash_content')
 <div class="">
-     <div class="row">
+    <div class="row mt-4">
+        <a href="{{route('admin.sale.bird','turkey')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Bird Sale</a>
+        <a href="{{route('admin.sale.meat','turkey')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Meat Sale</a>
+        <a href="{{route('admin.sale.egg','turkey')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Egg Sale</a>
+    </div>
+     <div class="row mt-5">
+          <h5 id="msg" class="col-md-12" style="text-align:center;color:red;">Loading data ...</h5>
         <div class="col-lg-6">
             <div class="card mb-4">
                 <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Sales</div>
@@ -99,7 +105,7 @@
 
     $.ajax({
         method:"GET",
-        url:"{{ route('sales.all','chicken')}}",
+        url:"{{ route('sales.all','turkey')}}",
         success: (res)=>{
            let colors = {
                 BirdSale:{
@@ -128,7 +134,6 @@
                    let obj = res[key][i];
                    {{-- updating chart --}}
                    salesChart.data.labels = [ ...obj.months]
-                   {{-- table_data = { ...obj.months} --}}
                    salesChart.data.datasets.push({
                         label: key,
                         backgroundColor: colors[key].backgroundColor,
@@ -145,7 +150,7 @@
                 $('.total').html((table_data.BirdSale+table_data.MeatSale+table_data.EggSale).toFixed(2))
             }
 
-            console.log(table_data);
+            $('#msg').remove();
             salesChart.update();
 
         },

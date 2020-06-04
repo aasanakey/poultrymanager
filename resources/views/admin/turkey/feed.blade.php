@@ -17,17 +17,26 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
                         Add Feed
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.feed')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.feed','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -55,7 +64,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="price">Price</label>
-                                    <input type="number" name="price" min="0" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
+                                    <input type="number" name="price" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
 
                                     @error('price')
                                         <span class="invalid-feedback" role="alert">
@@ -68,7 +77,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="quantity">Quantity (Kg)</label>
-                                    <input type="number" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
+                                    <input type="number" name="quantity" min="0" step="0.01" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
                                     @error('quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -94,7 +103,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="supplier">Supplier</label>
-                                    <input type="text" name="supplier" min="0" class="form-control @error('supplier') is-invalid @enderror" id="supplier" value="{{ old('supplier') }}">
+                                    <input type="text" name="supplier"  class="form-control @error('supplier') is-invalid @enderror" id="supplier" value="{{ old('supplier') }}">
                                     @error('supplier')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -103,9 +112,7 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="description">Description</label>
-                                    <textarea  name="description"  rows="4" class="form-control @error('description') is-invalid @enderror" id="description">
-                                        {{ old('description') }}
-                                    </textarea>
+                                    <textarea  name="description"  rows="4" class="form-control @error('description') is-invalid @enderror" id="description">{{ old('description') }}</textarea>
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -113,6 +120,7 @@
                                     @enderror
                                 </div>
                             </div>
+                            <input type="text" name="feed_type" value="turkey" hidden>
                         </form>
                     </div>
                     <div class="modal-footer">
@@ -125,7 +133,7 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Egg</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Feeding</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -178,7 +186,7 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.feed') }}",
+        ajax: "{{ route('datatables.feed','turkey') }}",
         columns: [
             {data: 'farm_name', name: 'farm_name'},
             {data: 'name', name: 'Name'},

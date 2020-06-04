@@ -6,7 +6,7 @@
 @section('dash_content')
 <div class="container mt-4">
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Bird Sale</li>
+        <li class="breadcrumb-item active">Pen</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
@@ -17,13 +17,22 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error" role="alert">
+                <div class="alert alert-error col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
+               @if ($errors->any())
+                    <div class="alert alert-danger col-md-12" >
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addPenModal">
-                        Add Pen House
+                        Add Pen
                     </button>
                 </span>
                 {{-- <span>
@@ -104,8 +113,8 @@
                             <th>Pen ID</th>
                             <th>Farm</th>
                             <th>Location</th>
-                            <th>Size</th>
-                            <th>Capacity</th>
+                            <th>Size (sq ft)</th>
+                            <th>Bird Capacity</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -114,8 +123,8 @@
                             <th>Pen ID</th>
                             <th>Farm</th>
                             <th>Location</th>
-                            <th>Size</th>
-                            <th>Capacity</th>
+                            <th>Size (sq ft)</th>
+                            <th> Bird Capacity</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>

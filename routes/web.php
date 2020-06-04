@@ -72,13 +72,19 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::post('/sale/eggs/{type}', 'FarmAdminController@addEggSale')->name('admin.add.sales.egg');
     Route::get('/sale/meat/{type}', 'FarmAdminController@meatSale')->name('admin.sale.meat');
     Route::post('/sale/meat/{type}', 'FarmAdminController@addMeatSale')->name('admin.add.sales.meat');
-    Route::get('/logistics/{type}equipment', 'FarmAdminController@equipment')->name('admin.farm.equipment');
+    Route::get('/{type}/logistics/equipment', 'FarmAdminController@equipment')->name('admin.farm.equipment');
+    Route::post('/logistics/{type}/equipment', 'FarmAdminController@addEquipment')->name('admin.add.equipment');
     Route::get('/employee/{farm_type?}', 'FarmAdminController@employee')->middleware('role:SUPER_ADMIN')->name('admin.employee');
     Route::post('/employee', 'FarmAdminController@addemployee')->middleware('role:SUPER_ADMIN')->name('admin.add.employee');
     Route::get('/users/{view}', 'FarmAdminController@users')->middleware('role:SUPER_ADMIN')->name('admin.users');
     Route::post('/users/', 'FarmAdminController@addUser')->middleware('role:SUPER_ADMIN')->name('admin.add.user');
-
+    Route::get('/sales/{type}', 'FarmAdminController@allSales')->name('admin.sale.all');
     Route::get('/reports/{type?}', 'FarmAdminController@report')->name('admin.report');
+
+    Route::get('/expenses/{type}', 'FarmAdminController@expenses')->name('admin.expenses');
+    Route::get('/statement/{type}', 'FarmAdminController@statement')->name('admin.statement');
+    Route::post('/expenses/{type}', 'FarmAdminController@addExpenses')->name('admin.add.expenses');
+
 });
 
 /**
@@ -88,29 +94,30 @@ Route::get('/birds/population/{type}', 'ApiController@population')->name('datata
 Route::get('/birds/{type}/mortality', 'ApiController@mortality')->name('datatables.mortality');
 Route::get('/pen/{type}', 'ApiController@pen')->name('datatables.pen');
 Route::get('/birds/{type}/eggs', 'ApiController@eggs')->name('datatables.eggs');
-Route::get('/feed', 'ApiController@feed')->name('datatables.feed');
-Route::get('/feeding', 'ApiController@feeding')->name('datatables.feeding');
-Route::get('/medicine', 'ApiController@medicine')->name('datatables.medicine');
-Route::get('/vaccine', 'ApiController@vaccine')->name('datatables.vaccine');
+Route::get('/feed/{type}', 'ApiController@feed')->name('datatables.feed');
+Route::get('/{type}/feeding', 'ApiController@feeding')->name('datatables.feeding');
+Route::get('/medicine/{type}', 'ApiController@medicine')->name('datatables.medicine');
+Route::get('/vaccine{type}', 'ApiController@vaccine')->name('datatables.vaccine');
 Route::get('/sale/birds/{type}/', 'ApiController@birdSale')->name('datatables.sale.birds');
 Route::get('/sale/eggs', 'ApiController@eggSale')->name('datatables.sale.egg');
 Route::get('/sale/{type}/meat', 'ApiController@meatSale')->name('datatables.sale.meat');
 Route::get('/employees/{type}', 'ApiController@employee')->middleware('role:SUPER_ADMIN')->name('datatables.employees');
 Route::get('/admins', 'ApiController@admins')->middleware('role:SUPER_ADMIN')->name('datatables.admins');
-
+Route::get('/{type}/equipment', 'ApiController@equipment')->name('datatables.equipment');
 /**
  * Export Excel routes
  */
 Route::get('/birds/{type}/export/exel', 'ApiController@exportPopulation')->name('export.birds');
 Route::get('/mortality/{type}/export/exel', 'ApiController@exportMortality')->name('export.mortality');
 Route::get('/eggs/{type}/export/exel', 'ApiController@exportEggs')->name('export.eggs');
-Route::get('/feed/export/exel', 'ApiController@exportFeed')->name('export.feed');
-Route::get('/feeding/export/exel', 'ApiController@exportFeeding')->name('export.feeding');
-Route::get('/medicine/export/exel', 'ApiController@exportMedicine')->name('export.medicine');
-Route::get('/vacine/export/exel', 'ApiController@exportVaccine')->name('export.vaccine');
+Route::get('/feed/{type}/export/exel', 'ApiController@exportFeed')->name('export.feed');
+Route::get('/{type}feeding/export/exel', 'ApiController@exportFeeding')->name('export.feeding');
+Route::get('/medicine/{type}/export/exel', 'ApiController@exportMedicine')->name('export.medicine');
+Route::get('/vacine/{type}/export/exel', 'ApiController@exportVaccine')->name('export.vaccine');
 Route::get('/sale/birds/{type}/export/excel', 'ApiController@exportBirdSale')->name('export.sales.birds');
 Route::get('/sale/eggs/{type}/export/excel', 'ApiController@exportEggSale')->name('export.sales.egg');
 Route::get('/sale/{type}/meat/export/excel', 'ApiController@exportMeatSale')->name('export.sales.meat');
 Route::get('/employees/{type}/export/excel', 'ApiController@exportEmployee')->middleware('role:SUPER_ADMIN')->name('export.employees');
-
-Route::get('/sales', 'SalesController@getSales')->name('test.sales');
+Route::get('/equipment/{type}/export/excel', 'ApiController@exportEquipment')->name('export.equipment');
+// Report routes
+Route::get('/sales/{type?}', 'SalesController@getSales')->name('sales.all');

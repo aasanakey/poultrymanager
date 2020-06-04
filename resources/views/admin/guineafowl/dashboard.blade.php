@@ -79,6 +79,9 @@
             <a class="nav-link collapsed" href="{{route('admin.sale.meat','guinea_fowl')}}">
                 Meat Sale
             </a>
+             <a class="nav-link collapsed" href="{{ route('admin.sale.all','guinea_fowl')}}">
+                Summary
+            </a>
         </nav>
     </div>
     <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseLogicstic" aria-expanded="false" aria-controls="collapseLogicstic">
