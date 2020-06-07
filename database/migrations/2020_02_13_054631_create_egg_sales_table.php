@@ -16,9 +16,9 @@ class CreateEggSalesTable extends Migration
         Schema::create('egg_sales', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
-            $table->timestamp('date');
+            $table->date('date');
             $table->decimal('weight_per_dozen');
-            $table->decimal('quantity');
+            $table->integer('quantity');
             $table->decimal('price_per_dozen');
             $table->timestamps();
             // $table->primary(['id','farm_id']);

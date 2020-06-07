@@ -94,10 +94,6 @@
             <a class="nav-link collapsed" href="{{route('admin.farm.equipment','chicken')}}">
                Equipment
             </a>
-
-            {{-- <a class="nav-link collapsed" href="{{route('admin.sale.meat','chicken')}}">
-                Meat Sale
-            </a> --}}
         </nav>
     </div>
 
@@ -108,8 +104,8 @@
         </a>
         <div class="collapse" id="collapseFin" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
             <nav class="sb-sidenav-menu-nested nav">
-                <a class="nav-link collapsed" href="{{route('admin.expenses','chicken')}}">
-                    Expenses
+                <a class="nav-link collapsed" href="{{route('admin.transaction','chicken')}}">
+                    Transaction
                 </a>
                 <a class="nav-link collapsed" href="{{route('admin.statement','chicken')}}">
                     Statement

@@ -81,9 +81,9 @@ Route::group(['prefix' => 'dashboard'], function () {
     Route::get('/sales/{type}', 'FarmAdminController@allSales')->name('admin.sale.all');
     Route::get('/reports/{type?}', 'FarmAdminController@report')->name('admin.report');
 
-    Route::get('/expenses/{type}', 'FarmAdminController@expenses')->name('admin.expenses');
+    Route::get('/transaction/{type}', 'FarmAdminController@transaction')->name('admin.transaction');
     Route::get('/statement/{type}', 'FarmAdminController@statement')->name('admin.statement');
-    Route::post('/expenses/{type}', 'FarmAdminController@addExpenses')->name('admin.add.expenses');
+    Route::post('/transaction/{type}', 'FarmAdminController@addTransaction')->name('admin.add.transaction');
 
 });
 
@@ -104,6 +104,7 @@ Route::get('/sale/{type}/meat', 'ApiController@meatSale')->name('datatables.sale
 Route::get('/employees/{type}', 'ApiController@employee')->middleware('role:SUPER_ADMIN')->name('datatables.employees');
 Route::get('/admins', 'ApiController@admins')->middleware('role:SUPER_ADMIN')->name('datatables.admins');
 Route::get('/{type}/equipment', 'ApiController@equipment')->name('datatables.equipment');
+Route::get('/{type}/transactions', 'ApiController@transactions')->name('datatables.transactions');
 /**
  * Export Excel routes
  */
@@ -119,5 +120,8 @@ Route::get('/sale/eggs/{type}/export/excel', 'ApiController@exportEggSale')->nam
 Route::get('/sale/{type}/meat/export/excel', 'ApiController@exportMeatSale')->name('export.sales.meat');
 Route::get('/employees/{type}/export/excel', 'ApiController@exportEmployee')->middleware('role:SUPER_ADMIN')->name('export.employees');
 Route::get('/equipment/{type}/export/excel', 'ApiController@exportEquipment')->name('export.equipment');
+Route::get('/{type}/transactions/export/excel', 'ApiController@exportTransactions')->name('export.transactions');
+
 // Report routes
 Route::get('/sales/{type?}', 'SalesController@getSales')->name('sales.all');
+Route::get('/sales/test', 'SalesController@test')->name('sales.test');

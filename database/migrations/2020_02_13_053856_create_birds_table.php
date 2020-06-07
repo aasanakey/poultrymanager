@@ -22,7 +22,7 @@ class CreateBirdsTable extends Migration
             $table->string('species');
             $table->string('type')->nullable();
             $table->decimal('unit_price', 9, 2);
-            $table->timestamp('date');
+            $table->date('date');
             $table->timestamps();
             $table->primary(['batch_id', 'farm_id']);
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');

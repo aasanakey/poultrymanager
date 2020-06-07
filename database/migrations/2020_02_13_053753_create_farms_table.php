@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateFarmsTable extends Migration
 {
@@ -15,14 +15,14 @@ class CreateFarmsTable extends Migration
     {
         Schema::create('farms', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string("farm_name" );
+            $table->string("farm_name");
             $table->string("farm_email");
             $table->string("farm_location");
             $table->string("farm_contact");
             $table->string("farm_manager");
             $table->boolean("is_setup")->default(false);
             $table->timestamps();
-            $table->unique(['farm_name','farm_email']);
+            $table->unique(['farm_name', 'farm_email']);
         });
     }
 

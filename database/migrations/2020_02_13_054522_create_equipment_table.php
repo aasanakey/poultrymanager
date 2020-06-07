@@ -17,7 +17,7 @@ class CreateEquipmentTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
             $table->string('equipment');
-            $table->timestamp('date_acquired');
+            $table->date('date_acquired');
             $table->string('status');
             $table->string('description')->nullable();
             $table->string('supplier')->nullable();

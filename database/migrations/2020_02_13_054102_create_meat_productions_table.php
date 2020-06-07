@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateMeatProductionsTable extends Migration
 {
@@ -17,7 +17,7 @@ class CreateMeatProductionsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
             $table->string('layer_batch_id');
-            $table->timestamp('date_slaughtered');
+            $table->date('date_slaughtered');
             $table->integer('quantity');
             $table->decimal('bird_avg_weight');
             $table->decimal('cacass_avg_weight');

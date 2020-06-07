@@ -641,7 +641,7 @@ class FarmAdminController extends Controller
     public function addEquipment(Request $request, string $type)
     {
         // dd($request->all());
-       $request->validate([
+        $request->validate([
             "name" => 'required|string',
             "date_acquired" => 'required|date',
             "price" => 'required|numeric|min:0',
@@ -656,7 +656,7 @@ class FarmAdminController extends Controller
             "equipment" => $request->name,
             "date_acquired" => new \DateTime($request->date_aquired),
             "price" => $request->price,
-            "supplier" =>$request->supplier,
+            "supplier" => $request->supplier,
             "type" => $request->type,
             "status" => $request->status,
             "description" => $request->description,
@@ -836,17 +836,17 @@ class FarmAdminController extends Controller
 
     }
 
-    public function expenses($type)
+    public function transaction($type)
     {
         switch ($type) {
             case 'chicken':
-                return view('admin.chicken.expenses');
+                return view('admin.chicken.transaction');
                 break;
             case 'turkey':
-                return view('admin.turkey.expenses');
+                return view('admin.turkey.transaction');
                 break;
             case 'guinea_fowl':
-                return view('admin.guineafowl.expenses');
+                return view('admin.guineafowl.transaction');
                 break;
             default:
                 return response()->view('errors.404');
@@ -854,9 +854,30 @@ class FarmAdminController extends Controller
         }
     }
 
-    public function addExpenses(Request $request, $type)
+    public function addTransaction(Request $request, $type = null)
     {
         dd($request->all());
+        $request->validate([
+            "type" => 'requird|string',
+            "date" => 'required|date',
+            "amount" => 'required|numeric|min:0',
+            "category" => 'required|string',
+            "account" => 'required|string',
+            "description" => 'required|string',
+            "farm_category" => 'required|string',
+        ]);
+
+        \App\Transaction::create([
+            "farm_id" => auth()->user()->farm_id,
+            "type" => $request->type,
+            "date" => new \DateTime($request->date),
+            "amount" => $request->amount,
+            "category" => $request->category,
+            "account" => $request->account,
+            "description" => $request->description,
+            "farm_category" => $request->farm_category,
+        ]);
+        return redirect()->back()->with('success', 'Transaction added succesfully');
     }
 
     public function statement($type)

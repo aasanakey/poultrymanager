@@ -160,6 +160,7 @@
     @parent
 
     $('#datetimepicker1').datetimepicker({
+        format: 'L',
         icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",

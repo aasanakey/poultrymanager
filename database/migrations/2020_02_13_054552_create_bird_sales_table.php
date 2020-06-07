@@ -17,7 +17,7 @@ class CreateBirdSalesTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
             $table->string('bird_batch_id');
-            $table->timestamp('date');
+            $table->date('date');
             $table->decimal('weight');
             $table->decimal('price');
             $table->timestamps();

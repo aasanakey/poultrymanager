@@ -14,6 +14,7 @@
         <div class="col-lg-6">
             <div class="card mb-4">
                 <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Sales</div>
+                 <select class="custom-select custom-select-sm" id="years" name="year"></select>
                 <div class="card-body"><canvas id="salesBarChart" width="100%" height="50"></canvas></div>
                 <div class="card-footer small text-muted">Currency : Ghana Cedis &#162;</div>
             </div>
@@ -62,6 +63,7 @@
 @endsection
 @section('script')
     @parent
+    createDropdown();
     var ctx = document.getElementById("salesBarChart");
     var salesChart = new Chart(ctx, {
         type: 'bar',
@@ -86,11 +88,8 @@
             yAxes: [{
                 ticks: {
                 min: 0,
-                max: 100,
+                max: 10,
                 maxTicksLimit: 5,
-                 {{-- callback: function(value, index, values) {
-                        return 'GHS ' + value;
-                    } --}}
                 },
                 gridLines: {
                 display: true
@@ -103,60 +102,98 @@
         }
     });
 
-    $.ajax({
-        method:"GET",
-        url:"{{ route('sales.all','chicken')}}",
-        success: (res)=>{
-           let colors = {
-                BirdSale:{
-                    backgroundColor: "rgba(2,117,216,1)",
-                    borderColor: "rgba(2,117,216,1)"
-                },
-                MeatSale:{
-                    backgroundColor: "rgba(2,117,216,0.5)",
-                    borderColor: "rgba(120,117,216,1)",
-                },
-                EggSale:{
-                    backgroundColor: "rgba(117,120,216,0.8)",
-                    borderColor: "rgba(2,117,216,0.5)"
-                }
-            }
-
-
-            table_data = {
-                BirdSale:0,
-                MeatSale:0,
-                EggSale:0,
-            };
-            for( let key of Object.keys(res)){
-                {{-- console.log(key,colors[key]); --}}
-                for (let i = 0; i < res[key].length; i++) {
-                   let obj = res[key][i];
-                   {{-- updating chart --}}
-                   salesChart.data.labels = [ ...obj.months]
-                   {{-- table_data = { ...obj.months} --}}
-                   salesChart.data.datasets.push({
-                        label: key,
-                        backgroundColor: colors[key].backgroundColor,
-                        borderColor: colors[key].borderColor,
-                        data: [ ...obj.sales],
-                    });
-                    {{-- calculating sales total --}}
-                    table_data[key] += obj.sales[i];
-                }
-                salesChart.options.scales.yAxes[0].ticks.max =   res.final_max
-                $('.bs_total').html(table_data.BirdSale.toFixed(2));
-                $('.ms_total').html(table_data.MeatSale.toFixed(2));
-                $('.es_total').html(table_data.EggSale.toFixed(2));
-                $('.total').html((table_data.BirdSale+table_data.MeatSale+table_data.EggSale).toFixed(2))
-            }
-
-            $('#msg').remove();
-            salesChart.update();
-
-        },
-        error: (error)=>{
-            console.log(error);
-        }
+   loadSales(new Date().getFullYear());
+    $('#years').change(e=>{
+        let year = e.target.value;
+        salesChart.clear();
+        $('#msg').removeAttr('hidden');
+        loadSales(year);
     });
+    function createDropdown(){
+        var max = new Date().getFullYear(),
+        min = max - 5,
+        select = $('#years');
+
+        for (var i = min; i<=max; i++){
+            if(i == max){
+                select.append(`<option selected value="${i}">${i}</option>`);
+            }else{
+                select.append(`<option value="${i}">${i}</option>`);
+            }
+        }
+    }
+
+    function loadSales(y){
+          $.ajax({
+            method:"GET",
+            url:"{{ route('sales.all','chicken')}}",
+            "Content-Type":"application/json",
+            headers: {
+                'X-CSRF-TOKEN': "{{ csrf_token() }}",
+            },
+            data: {
+                    year: y,
+                    type:"chicken",
+                    _token: "{{ csrf_token()}}",
+                },
+            success: (res)=>{
+            let colors = {
+                    BirdSale:{
+                        backgroundColor: "rgba(2,117,216,1)",
+                        borderColor: "rgba(2,117,216,1)"
+                    },
+                    MeatSale:{
+                        backgroundColor: "rgba(2,117,216,0.5)",
+                        borderColor: "rgba(120,117,216,1)",
+                    },
+                    EggSale:{
+                        backgroundColor: "rgba(117,120,216,0.8)",
+                        borderColor: "rgba(2,117,216,0.5)"
+                    }
+                }
+
+
+                table_data = {
+                    BirdSale:0,
+                    MeatSale:0,
+                    EggSale:0,
+                };
+                labels = [];
+                datasets = []
+                for( let key of Object.keys(res)){
+                    for (let i = 0; i < res[key].length; i++) {
+                        let obj = res[key][i];
+                    {{-- updating chart --}}
+                    labels = [...labels,...obj.months].unique();
+                    {{-- table_data = { ...obj.months} --}}
+                    datasets.push({
+                            label: key,
+                            backgroundColor: colors[key].backgroundColor,
+                            borderColor: colors[key].borderColor,
+                            data: [ ...obj.sales],
+                        });
+                        {{-- calculating sales total --}}
+                        for(k = 0; k < res[key][i].sales.length; k++){
+                            table_data[key] += obj.sales[k];
+                        }
+
+                    }
+
+                    salesChart.options.scales.yAxes[0].ticks.max =   res.final_max
+                    $('.bs_total').html(table_data.BirdSale.toFixed(2));
+                    $('.ms_total').html(table_data.MeatSale.toFixed(2));
+                    $('.es_total').html(table_data.EggSale.toFixed(2));
+                    $('.total').html((table_data.BirdSale+table_data.MeatSale+table_data.EggSale).toFixed(2))
+                }
+                salesChart.data.labels = labels;
+                 salesChart.data.datasets = datasets
+                $('#msg').attr('hidden',true);
+                salesChart.update();
+
+            },
+            error: (error)=>{
+                console.log(error);
+            }
+        });
+    };
     @endsection

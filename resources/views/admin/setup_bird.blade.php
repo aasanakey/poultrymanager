@@ -440,6 +440,7 @@
        form.submit();
     })
     $('#chicken_datetimepicker,#fowl_datetimepicker,#turkey_datetimepicker').datetimepicker({
+        format: 'L',
         icons: {
             time: "fa fa-clock",
             date: "fa fa-calendar",

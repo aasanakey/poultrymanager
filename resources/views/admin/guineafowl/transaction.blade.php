@@ -1,4 +1,4 @@
-@extends('admin.chicken.dashboard')
+@extends('admin.guineafowl.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -6,7 +6,7 @@
 @section('dash_content')
 <div class="container mt-4">
     <ol class="breadcrumb mb-4">
-        <li class="breadcrumb-item active">Feed Stock</li>
+        <li class="breadcrumb-item active">Transaction</li>
     </ol>
     <div class="card mb-4">
         <div class="card-body">
@@ -32,11 +32,11 @@
                 @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
-                        Add Feed
+                        Record Transaction
                     </button>
                 </span>
                 <span>
-                    <a href="{{route('export.feed','chicken')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.transactions','guinea_fowl')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span>
            </div>
            {{-- modal --}}
@@ -50,42 +50,29 @@
                       </button>
                     </div>
                     <div class="modal-body">
-                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.feed')}}">
+                        <form id="mortalityForm" method="POST" action="{{ route('admin.add.transaction','guinea_fowl')}}">
                             @csrf
                             <div class="form-row">
-                                <div class="form-group col-md-6">
-                                    <label for="name">Name</label>
-                                    <input type="text" name="name" class="form-control  @error('name') is-invalid @enderror" id="name" value="{{old('name')}}">
-                                    @error('name')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                <div class="col-md-4">
+                                    <label for="">Type</label>
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="price">Price</label>
-                                    <input type="number" name="price" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
-
-                                    @error('price')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
+                                <div class="form-check form-check-inline" style="margin-right:55px;">
+                                    <input class="form-check-input @error('type') is-invalid @enderror" type="radio" name="type" id="expense" value="expense" {{ old('type')? 'checked' : 'checked'}}>
+                                    <label class="form-check-label" for="expense">Expense</label>
                                 </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input @error('type') is-invalid @enderror" type="radio" name="type" id="income" value="income" {{ old('type')? 'checked' : ''}}>
+                                    <label class="form-check-label" for="income">Income</label>
+                                </div>
+                                 @error('type')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
                             </div>
-
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="quantity">Quantity (Kg)</label>
-                                    <input type="number" name="quantity" min="0" step="0.01" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
-                                    @error('quantity')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                    @enderror
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="date">Date</label>
+                                    <label for="date">Transaction Date</label>
                                     <div class="input-group date" id="datetimepicker1" data-target-input="nearest">
                                         <input type="text" name="date" class="form-control datetimepicker-input  @error('date') is-invalid @enderror"
                                         data-target="#datetimepicker1" value="{{ old('date')}}"/>
@@ -99,20 +86,42 @@
                                         @enderror
                                     </div>
                                 </div>
+                                <div class="form-group col-md-6">
+                                    <label for="amount">Amount (GHS &#162;) </label>
+                                    <input type="number" name="amount" min="0" step="0.01" placeholder="0.00" class="form-control  @error('amount') is-invalid @enderror" value="{{ old('amount')}}"/>
+                                        @error('amount')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="supplier">Supplier</label>
-                                    <input type="text" name="supplier" class="form-control @error('supplier') is-invalid @enderror" id="supplier" value="{{ old('supplier') }}">
-                                    @error('supplier')
-                                        <span class="invalid-feedback" role="alert">
+                                    <label for="category">Category</label>
+                                    <input type="text" name="category" id="category" placeholder="eg rent,insurance" class="form-control  @error('category') is-invalid @enderror" value="{{ old('category')}}"/>
+                                        @error('category')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                </div>
+                                <div class="form-group col-md-6" >
+                                        <label  for="account" id="account-label">Account Name</label>
+                                        <input class="form-control @error('account') is-invalid @enderror" id="account"
+                                        type="text"  name="account" value="{{ old('account') }}" placeholder="eg Darko Farms"/>
+
+                                    @error('account')
+                                        <span id="farm_contact_error" class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
                                         </span>
                                     @enderror
                                 </div>
-                                <div class="form-group col-md-6">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-12">
                                     <label for="description">Description</label>
-                                    <textarea  name="description"  rows="4" class="form-control @error('description') is-invalid @enderror" id="description">{{ old('description') }}</textarea>
+                                    <textarea name="description" id="description" class="form-control @error('description') is-invalid @enderror" cols="30" rows="5">{{ old('description')}}</textarea>
                                     @error('description')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -120,8 +129,9 @@
                                     @enderror
                                 </div>
                             </div>
-                            <input type="text" name="feed_type" value="chicken" hidden>
+                            <input type="text" name="farm_category" value="guinea_fowl" hidden>
                         </form>
+
                     </div>
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -133,31 +143,29 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Feed</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>tables</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Farm</th>
-                            <th>Name</th>
-                            <th>Price (GHS)</th>
-                            <th>Quantity (Kg)</th>
-                            <th>Description</th>
-                            <th>Supplier</th>
+                            <th>Type</th>
                             <th>Date</th>
+                            <th>Amount (GHS &#162;)</th>
+                            <th>Category</th>
+                            <th>Account Name</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Farm</th>
-                            <th>Name</th>
-                            <th>Price (GHS)</th>
-                            <th>Quantity (Kg)</th>
-                            <th>Description</th>
-                            <th>Supplier</th>
+                           <th>Type</th>
                             <th>Date</th>
+                            <th>Amount</th>
+                            <th>Category</th>
+                            <th>Account Name</th>
+                            <th>Description</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
@@ -176,8 +184,19 @@
 @endsection
 @section('script')
     @parent
-    $('#datetimepicker1').datetimepicker({
-        format: 'L',
+    $('input:radio[name=type]').change((e)=>{
+        label = $('#account-label');
+        switch(e.target.value){
+            case 'income':
+                label.html("Customer")
+                break
+            case 'expense':
+                label.html("Payee")
+                break;
+        }
+    });
+    $('#datetimepicker1,#hire_date_datetimepicker1').datetimepicker({
+        'format':'L',
         icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",
@@ -187,16 +206,17 @@
     $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
-        ajax: "{{ route('datatables.feed','chicken') }}",
+        ajax: "{{ route('datatables.transactions','guinea_fowl') }}",
         columns: [
-            {data: 'farm_name', name: 'farm_name'},
-            {data: 'name', name: 'Name'},
-            {data:'price',name:'Price'},
-            {data:'quantity',name:'Quantity'},
-            {data:'description',name:'Description'},
-            {data:'supplier',name:'Suplier'},
-            {data:'date',name:'Date'},
+            {data:"type", name:"type"},
+            {data:"date", name:"date"},
+            {data:"amount", name:"amount"},
+            {data:"category", name:"category"},
+            {data:"account", name:"account"},
+            {data:"description", name:"description"},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });
+
 @endsection
+

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBirdMortalitiesTable extends Migration
 {
@@ -21,8 +21,8 @@ class CreateBirdMortalitiesTable extends Migration
             $table->integer('number');
             $table->string('cause');
             $table->string('observation')->nullable();
-            $table->decimal('unit_price',9,2);
-            $table->timestamp('dod');
+            $table->decimal('unit_price', 9, 2);
+            $table->date('dod');
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
             $table->foreign('batch_id')->references('batch_id')->on('birds')->onDelete('cascade');

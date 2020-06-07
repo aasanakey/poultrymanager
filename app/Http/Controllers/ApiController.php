@@ -9,12 +9,14 @@ use App\Exports\BirdsExport;
 use App\Exports\EggProductionExport;
 use App\Exports\EggSaleExport;
 use App\Exports\EmployeeExport;
+use App\Exports\EquipmentExport;
 use App\Exports\FeedExport;
 use App\Exports\FeedingExport;
 use App\Exports\MeatSaleExport;
 use App\Exports\MedicineExport;
 use App\Exports\VaccineExport;
-use App\Exports\EquipmentExport;
+use App\Exports\TransactionsExport;
+
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -373,10 +375,10 @@ class ApiController extends Controller
     }
 
     /**
- * Create excel sheet for bird sales
- * @param string $type
- * @return Maatwebsite\Excel\Facades\Excel
- */
+     * Create excel sheet for bird sales
+     * @param string $type
+     * @return Maatwebsite\Excel\Facades\Excel
+     */
 
     public function exportBirdSale($type)
     {
@@ -406,10 +408,10 @@ class ApiController extends Controller
     }
 
     /**
- * Create excel sheet for egg sales
- * @param string $type
- * @return Maatwebsite\Excel\Facades\Excel
- */
+     * Create excel sheet for egg sales
+     * @param string $type
+     * @return Maatwebsite\Excel\Facades\Excel
+     */
 
     public function exportEggSale($type)
     {
@@ -439,10 +441,10 @@ class ApiController extends Controller
     }
 
     /**
- * Create excel sheet for meat sales
- * @param string $type
- * @return Maatwebsite\Excel\Facades\Excel
- */
+     * Create excel sheet for meat sales
+     * @param string $type
+     * @return Maatwebsite\Excel\Facades\Excel
+     */
 
     public function exportMeatSale($type)
     {
@@ -483,9 +485,9 @@ class ApiController extends Controller
     }
     /**
      * export employees data as excel
- * @param string $type
- * @return Maatwebsite\Excel\Facades\Excel
- */
+     * @param string $type
+     * @return Maatwebsite\Excel\Facades\Excel
+     */
 
     public function exportEmployee($type = null)
     {
@@ -522,16 +524,16 @@ class ApiController extends Controller
         $data = null;
         if ($type == 'all' || is_null($type)) {
             $data = \App\Equipment::join('farms', 'farms.id', '=', 'equipment.farm_id')
-            ->select('farms.farm_name','equipment.*')
-            ->where('equipment.farm_id',auth()->user()->farm_id)->get();
+                ->select('farms.farm_name', 'equipment.*')
+                ->where('equipment.farm_id', auth()->user()->farm_id)->get();
         } else {
             $data = \App\Equipment::join('farms', 'farms.id', '=', 'equipment.farm_id')
-            ->select('farms.farm_name', 'equipment.*')
-            ->where('farm_category', $type)->where('equipment.farm_id',auth()->user()->farm_id)->get();
+                ->select('farms.farm_name', 'equipment.*')
+                ->where('farm_category', $type)->where('equipment.farm_id', auth()->user()->farm_id)->get();
 
         }
         return DataTables::of($data)
-             ->editColumn('date_acquired', function ($row) {
+            ->editColumn('date_acquired', function ($row) {
                 return $row->date_acquired ? with(new Carbon($row->date_acquired))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
@@ -542,13 +544,57 @@ class ApiController extends Controller
     }
 
     /**
- * Create excel sheet for equipment 
- * @param string $type
- * @return Maatwebsite\Excel\Facades\Excel
- */
+     * Create excel sheet for equipment
+     * @param string $type
+     * @return Maatwebsite\Excel\Facades\Excel
+     */
     public function exportEquipment($type)
     {
         return Excel::download(new EquipmentExport(auth()->user()->farm_id, $type), "$type equipment.xlsx");
+    }
+
+    /**
+     * Fetch equipment transactions
+     *@param string $type
+     *@return Yajra\DataTables\Facades\DataTables
+     */
+
+    public function transactions($type)
+    {
+        $data = null;
+        if ($type == 'all' || is_null($type)) {
+            $data = \App\Transation::join('farms', 'farms.id', '=', 'transactions.farm_id')
+                ->select('farms.farm_name', 'transactions.*')
+                ->where('transactions.farm_id', auth()->user()->farm_id)->get();
+        } else {
+            $data = \App\Transaction::join('farms', 'farms.id', '=', 'transactions.farm_id')
+                ->select('farms.farm_name', 'transactions.*')
+                ->where('transactions.farm_category', $type)->where('transactions.farm_id', auth()->user()->farm_id)->get();
+
+        }
+        return DataTables::of($data)
+            ->editColumn('date', function ($row) {
+                return $row->date ? with(new Carbon($row->date))->format('l, d M Y') : '';
+            })
+            ->editColumn('type', function ($row) {
+                return $row->type ? ucfirst($row->type) : $row->type;
+            })
+            ->addColumn('action', function ($row) {
+                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                return $div;
+            })->make(true);
+    }
+
+
+    /**
+ * Create excel sheet for transactions
+ * @param string $type
+ * @return Maatwebsite\Excel\Facades\Excel
+ */
+
+    public function exportTransactions($type=null)
+    {
+        return Excel::download(new TransactionsExport(auth()->user()->farm_id, $type), "transactions_$type.xlsx");
     }
 
 }

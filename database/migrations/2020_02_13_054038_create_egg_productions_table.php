@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateEggProductionsTable extends Migration
 {
@@ -19,7 +19,7 @@ class CreateEggProductionsTable extends Migration
             $table->string('pen_id');
             $table->string('layer_batch_id');
             $table->string('bird_category');
-            $table->timestamp('date_collected');
+            $table->date('date_collected');
             $table->integer('quantity');
             $table->integer('bad_eggs');
             $table->timestamps();

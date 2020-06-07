@@ -22,7 +22,7 @@ class CreateMedicinesTable extends Migration
             $table->string('description');
             $table->string('bird_type');
             $table->string('supplier')->nullable();
-            $table->timestamp('date');
+            $table->date('date');
             $type->string('animal');
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');

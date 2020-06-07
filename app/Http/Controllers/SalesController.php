@@ -12,23 +12,26 @@ class SalesController extends Controller
     }
 
     /**
-     * Fetch the months sales where made
+     * Fetch the months sales where made for current user
      * @param Illuminate\Database\Eloquent\Model $model
-     * @param string $field
+     * @param string $model
+     * @param string $year
      * @return array $month_array
      */
-    public function getAllMonths($model, $field)
+    public function getAllMonths($model, $year = null)
     {
         $model = "\\App\\$model";
+        $year = $year ?? date('Y');
         $month_array = array();
-        $sales_dates = $model::orderBy("$field", 'ASC')->pluck("$field");
+        $sales_dates = $model::orderBy('date', 'ASC')->whereYear("date", $year)
+            ->where('farm_id', auth()->user()->farm_id)->pluck("date");
         $sales_dates = json_decode($sales_dates);
 
         if (!empty($sales_dates)) {
             foreach ($sales_dates as $unformatted_date) {
                 $date = new \DateTime($unformatted_date);
                 $month_no = $date->format('m');
-                $month_name = $date->format('M');
+                $month_name = $date->format('F');
                 $month_array[$month_no] = $month_name;
             }
         }
@@ -38,90 +41,104 @@ class SalesController extends Controller
     /**
      * Get monthly sales
      * @param Illuminate\Database\Eloquent\Model $model
-     * @param string $field
-     * @return Collection
+     * @param string $month
+     * @param string $year
+     * @param string $category
+     * @return Illuminate\Database\Eloquent\Collection $monthly_sales
      */
-    public function getMonthlySales($model, $field = "date", $category = null, $price_field = 'price', $month)
+    public function getMonthlySales($model, $month, $year = null, $category = chicken)
     {
-        if (is_null($category)) {
-            $model = "\\App\\$model";
-            $monthly_sales = $model::whereMonth("$field", $month)->get()->sum($price_field);
-            return $monthly_sales;
-        }
-        $product = '';
+        // set default value of year to current year if not provided
+        $year = $year ?? date("Y");
+        $monthly_sales_collection = null;
+
         switch ($model) {
             case 'BirdSale':
-                $product = 'bird_category';
+                $model = "\\App\\$model";
+                $monthly_sales_collection = $model::selectRaw("sum(number * price) as total_sales ")->where("farm_id", auth()->user()->farm_id)
+                    ->where("bird_category", $category)->whereMonth("date", $month)->whereYear("date", $year)->pluck('total_sales');
                 break;
             case 'MeatSale':
-                $product = 'type';
+                $model = "\\App\\$model";
+                $monthly_sales_collection = $model::selectRaw("sum(price) as total_sales")->where('farm_id', auth()->user()->farm_id)
+                    ->where("type", $category)->whereMonth("date", $month)->whereYear("date", $year)->pluck('total_sales');
                 break;
             case 'EggSale':
-                $product = 'egg_type';
+                $model = "\\App\\$model";
+                $monthly_sales_collection = $model::selectRaw("sum(quantity * price_per_dozen) as total_sales")->where('farm_id', auth()->user()->farm_id)
+                    ->where("egg_type", $category)->whereMonth("date", $month)->whereYear("date", $year)->pluck('total_sales');
                 break;
         }
-        $model = "\\App\\$model";
-        $monthly_sales = $model::whereMonth("$field", $month)->where($product, $category)
-            ->where('farm_id', auth()->user()->farm_id)->get()->sum($price_field);
-        return $monthly_sales;
-
+        $monthly_sales_collection = json_decode($monthly_sales_collection);
+        $month_sales = null;
+        if (!empty($monthly_sales_collection)) {
+            foreach ($monthly_sales_collection as $sales) {
+                $sales = $sales ?? 0; //set null values to 0;
+                $month_sales = (float)$sales;
+            }
+        }
+        return $month_sales;
     }
 
     /**
      * Get monthly sales data for chart js
      * @param Illuminate\Database\Eloquent\Model $model
-     * @param string $field
-     * @param string $product
+     * @param string $year
+     * @param string $category
      * @return array $monthly_sales_data_array
      */
 
-    public function getMonthlySalesData($model, $field = "date", $product = null, $price_field = 'price')
+    public function getMonthlySalesData($model, $year = null, $category = null)
     {
 
+        $year = $year ?? date("Y");
         $monthly_sales_array = array();
-        $month_array = $this->getAllMonths($model, $field);
+        $month_array = $this->getAllMonths($model, $year);
         $month_name_array = array();
         if (!empty($month_array)) {
             foreach ($month_array as $month_no => $month_name) {
-                $monthly_sales = $this->getMonthlySales($model, $field, $product, $price_field, $month_no);
+                $monthly_sales = $this->getMonthlySales($model, $month_no, $year, $category);
                 array_push($monthly_sales_array, $monthly_sales);
                 array_push($month_name_array, $month_name);
             }
         }
 
-        $max_no = max($monthly_sales_array);
+        // find the maximum sales
+        $max_no = !empty($monthly_sales_array) ? max($monthly_sales_array) : 0;
         $max = round(($max_no + 10 / 2) / 10) * 10;
         $monthly_sales_data_array = array(
             'months' => $month_name_array,
-            'sales' => $monthly_sales_array,
+            'sales' => !empty($monthly_sales_array) ? $monthly_sales_array : [0],
             'max' => $max,
         );
-
         return $monthly_sales_data_array;
-
     }
+
     public function test(Request $request)
     {
-        $model = 'BirdSale';
-        $field = "date";
-        // $months = $this->getAllMonths($model, $field);
-        // $ms = [];
-        // foreach ($months as $no => $name) {
-        //     $sale = $this->getMonthlySales($model, $field, $no);
-        //     array_push($ms, [$name => $sale]);
-        // }
-        // dd($ms);
-        return $this->getMonthlySalesData($model, $field);
+        $models = ['BirdSale', 'EggSale', 'MeatSale'];
+        $sales_array = ['BirdSale' => [], 'MeatSale' => [], 'EggSale' => []];
+        // $sales_array = [];
+        foreach ($models as $key => $model) {
+            // $model, $month, $year = null, $category = null, $price_field
+            $sales = $this->getMonthlySalesData($model, '2019', 'chicken');
+            array_push($sales_array[$model], $sales);
+            // array_push($sales_array, $sales);
 
+            // $final_max = max($final_max, $sales['max']);
+        }
+        dd($sales_array);
     }
-    public function getSales($type = null)
+    public function getSales(Request $request,$type = null)
     {
+
         $models = ['BirdSale', 'MeatSale', 'EggSale'];
-        $field = 'date';
+        $type =  $request->type ?? $type;
+        $year = $request->year ?? date('Y');
         $final_max = 0;
         $sales_array = ['BirdSale' => [], 'MeatSale' => [], 'EggSale' => []];
         foreach ($models as $key => $model) {
-            $sales = ($model == "EggSale") ? $this->getMonthlySalesData($model, $field, $type, 'price_per_dozen') : $this->getMonthlySalesData($model, $field, $type);
+            $sales = $this->getMonthlySalesData($model, $year, $type);
             array_push($sales_array[$model], $sales);
             $final_max = max($final_max, $sales['max']);
         }

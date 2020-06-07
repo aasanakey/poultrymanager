@@ -208,7 +208,9 @@
     {{-- @if ($errors)
         {{!!"$('#addBirdModal').modal('show');"!!}}
     @endif --}}
-    $('#datetimepicker1').datetimepicker({icons: {
+    $('#datetimepicker1').datetimepicker({
+        format: 'L',
+        icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",
         up: "fa fa-arrow-up",
