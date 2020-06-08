@@ -114,26 +114,11 @@ class SalesController extends Controller
         return $monthly_sales_data_array;
     }
 
-    public function test(Request $request)
-    {
-        $models = ['BirdSale', 'EggSale', 'MeatSale'];
-        $sales_array = ['BirdSale' => [], 'MeatSale' => [], 'EggSale' => []];
-        // $sales_array = [];
-        foreach ($models as $key => $model) {
-            // $model, $month, $year = null, $category = null, $price_field
-            $sales = $this->getMonthlySalesData($model, '2019', 'chicken');
-            array_push($sales_array[$model], $sales);
-            // array_push($sales_array, $sales);
-
-            // $final_max = max($final_max, $sales['max']);
-        }
-        dd($sales_array);
-    }
     public function getSales(Request $request,$type = null)
     {
 
         $models = ['BirdSale', 'MeatSale', 'EggSale'];
-        $type =  $request->type ?? $type;
+        $type =  $request->type ?? 'chicken' ;
         $year = $request->year ?? date('Y');
         $final_max = 0;
         $sales_array = ['BirdSale' => [], 'MeatSale' => [], 'EggSale' => []];

@@ -856,9 +856,8 @@ class FarmAdminController extends Controller
 
     public function addTransaction(Request $request, $type = null)
     {
-        dd($request->all());
         $request->validate([
-            "type" => 'requird|string',
+            "type" => 'required|string',
             "date" => 'required|date',
             "amount" => 'required|numeric|min:0',
             "category" => 'required|string',

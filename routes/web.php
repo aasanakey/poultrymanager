@@ -123,5 +123,6 @@ Route::get('/equipment/{type}/export/excel', 'ApiController@exportEquipment')->n
 Route::get('/{type}/transactions/export/excel', 'ApiController@exportTransactions')->name('export.transactions');
 
 // Report routes
-Route::get('/sales/{type?}', 'SalesController@getSales')->name('sales.all');
-Route::get('/sales/test', 'SalesController@test')->name('sales.test');
+Route::get('/sales', 'SalesController@getSales')->name('sales.all');
+Route::get('/statement', 'StatementController@test')->name('statement.test');
+Route::get('/statement/all', 'StatementController@getAllExpenses')->name('statement.all');
