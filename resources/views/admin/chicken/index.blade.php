@@ -89,12 +89,12 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                <a href="{{route('admin.report','chciken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                <a href="{{route('aadmin.statement','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-poll fa-8x"></i>
                     </a>
                     <div class="mid-1">
                         <div class="women">
-                            <h6><a href="{{route('admin.report','chicken')}}">Reports</a></h6>
+                            <h6><a href="{{route('admin.statement','chicken')}}">Reports</a></h6>
                         </div>
                     </div>
                 </div>

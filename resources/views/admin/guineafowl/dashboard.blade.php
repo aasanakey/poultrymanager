@@ -94,9 +94,22 @@
             <a class="nav-link collapsed" href="{{route('admin.farm.equipment','guinea_fowl')}}">
                Equipment
             </a>
-            {{-- <a class="nav-link collapsed" href="{{route('admin.sale.meat','guinea_fowl')}}">
-                Meat Sale
-            </a> --}}
+        </nav>
+    </div>
+
+    <a class="nav-link collapse" href="#" data-toggle="collapse" data-target="#collapseFin" aria-expanded="false" aria-controls="collapseFin">
+        <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
+            Finance
+        <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+    </a>
+    <div class="collapse" id="collapseFin" aria-labelledby="headingTwo" data-parent="#sidenavAccordion">
+        <nav class="sb-sidenav-menu-nested nav">
+            <a class="nav-link collapsed" href="{{route('admin.transaction','guinea_fowl')}}">
+                Transaction
+            </a>
+            <a class="nav-link collapsed" href="{{route('admin.statement','guinea_fowl')}}">
+                Statement
+            </a>
         </nav>
     </div>
      @if (auth()->user()->hasRole('SUPER_ADMIN'))

@@ -1,4 +1,4 @@
-@extends('admin.chicken.dashboard')
+@extends('admin.guineafowl.dashboard')
 
 @section('dash_content')
 <div class="container mt-4">
@@ -52,7 +52,7 @@
             },
             data: {
                     year: year,
-                    type:"chicken",
+                    type:"guinea_fowl",
                     _token: "{{ csrf_token()}}",
             },
             success:(res)=>{

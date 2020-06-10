@@ -124,5 +124,5 @@ Route::get('/{type}/transactions/export/excel', 'ApiController@exportTransaction
 
 // Report routes
 Route::get('/sales', 'SalesController@getSales')->name('sales.all');
-Route::get('/statement', 'StatementController@test')->name('statement.test');
-Route::get('/statement/all', 'StatementController@getAllExpenses')->name('statement.all');
+// Route::get('/statement', 'StatementController@test')->name('statement.test');
+Route::get('/statement/all', 'StatementController@getStatement')->name('statement.all');
