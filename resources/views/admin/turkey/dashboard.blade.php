@@ -6,7 +6,7 @@
 <a class="dropdown-item" href="{{route('admin.profile','turkey')}}">Profile</a>
     {{-- <a class="dropdown-item" href="#">Activity Log</a> --}}
     <div class="dropdown-divider"></div>
-    <a class="dropdown-item" href="{{ route('admin.logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> <i class="fa fa-logout"></i>logout</a>
+    <a class="dropdown-item" href="{{ route('admin.logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-sign-out-alt"></i>logout</a>
         <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
             @csrf
         </form>

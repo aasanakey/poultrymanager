@@ -16,4 +16,12 @@ class Transaction extends Model
         "description",
         "farm_category",
     ];
+
+    /**
+     * Get the farm that owns the transaction.
+     */
+    public function farm()
+    {
+        return $this->belongsTo('App\Farm', 'farm_id');
+    }
 }

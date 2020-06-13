@@ -47,4 +47,12 @@ class FarmAdmin extends Authenticatable implements MustVerifyEmail
     {
         return $this->role == $role;
     }
+
+    /**
+     * Get the farm that owns the admin.
+     */
+    public function farm()
+    {
+        return $this->belongsTo('App\Farm', 'farm_id');
+    }
 }

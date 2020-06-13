@@ -1,11 +1,56 @@
 @extends('admin.chicken.dashboard')
+@section('styles')
+    @parent
+    <style>
+     @media print{
+        footer,.no-print{
+            display:none;
+        }
+        select,custom-select ,custom-select custom-select-sm{
+            border: none !important;
+        }
+    }
+    #msg {
+        /* font-size: 88px; */
+        font-weight: normal;
+        letter-spacing: 4px;
+        text-transform: uppercase;
+        text-align:center;
+        color: #ff0000;
+        position: fixed;
+        top: 40%;
+        left: 10%;
+         z-index: 5;
+        animation-name: bounce;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+    @keyframes bounce {
+        0% {
+            transform: translateY(0px);
+            color: #ff4c00;
+        }
+        40% {
+            transform: translateY(-40px);
+            color:#ff4c1d;
+        }
 
+        80%{ color: #ff001d;}
+        100% {
+            transform: translateY(0px);
+            color: ##ff0000;
+        }
+    }
+    </style>
+@endsection
 @section('dash_content')
 <div class="container mt-4">
-    <div>
+    <div >
         <select class="custom-select custom-select-sm" id="years" style="width:100px;" name="year"></select>
+        <button type="button" class="btn btn-sm no-print" title="print" onclick="window.print()"><i class="fas fa-print" aria-hidden="true"></i></i></button>
+        <h5 id="msg" class="col-md-12 no-print" >Loading data ...</h5>
     </div>
-    <h3>Income</h3>
+    <h3 class="mt-5">Income</h3>
     <table class="table table-condensed pl-table" id="income_table">
         <tbody></tbody>
         <tfoot class="summary">
@@ -40,6 +85,7 @@
     createDropdown();
     getSatatement(new Date().getFullYear());
     $('#years').change(e=>{
+        $('#msg').removeAttr('hidden');
         getSatatement(e.target.value);
     });
     function getSatatement(year){
@@ -76,7 +122,7 @@
                             <th class="text-right text-dark">&#162; ${profit.toFixed(2)}</th>`
                             );
                     }
-
+                     $('#msg').attr('hidden',true);
             },
             error: (error)=>{
                 console.log(error);
@@ -122,7 +168,7 @@
                                 $("#income_table tbody").append(
                                 `<tr>
                                     <td>
-                                        Sale of ${key}
+                                        Sale of ${key.replace("Sale","")}
                                     </td>
                                     <td class="text-right">
                                     &#162; ${v[k].toFixed(2)}

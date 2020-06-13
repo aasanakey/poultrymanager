@@ -20,12 +20,11 @@ class CreateMedicinesTable extends Migration
             $table->decimal('price', 9, 2);
             $table->string('quantity');
             $table->string('description');
-            $table->string('bird_type');
+            $table->string('animal');
             $table->string('supplier')->nullable();
             $table->date('date');
-            $type->string('animal');
             $table->timestamps();
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

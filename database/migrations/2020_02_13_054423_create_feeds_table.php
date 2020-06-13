@@ -24,8 +24,7 @@ class CreateFeedsTable extends Migration
             $table->date('date');
             $table->string('feed_type');
             $table->timestamps();
-            // $table->primary(['id','farm_id']);
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

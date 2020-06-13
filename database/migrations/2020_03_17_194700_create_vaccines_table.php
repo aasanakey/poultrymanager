@@ -16,13 +16,13 @@ class CreateVaccinesTable extends Migration
         Schema::create('vaccines', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
-            $table->string('age', 20);
+            $table->string('age');
             $table->string('disease');
             $table->string('mode');
             $table->string('type')->nullable();
             $table->string('animal');
             $table->timestamps();
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

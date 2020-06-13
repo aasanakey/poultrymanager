@@ -55,7 +55,7 @@
                                 <div class="form-group">
                                         <label class="small mb-1" for="inputFarmContact">Contact</label>
                                         <input class="form-control py-4 @error('contact') is-invalid @enderror" id="inputFarmContact"
-                                        type="text"  name="contact" value="{{ old('contact') }}" placeholder="eg 233-2000-66655" aria-describedby="contact_error"/>
+                                        type="text"  name="contact" value="{{ old('contact') }}" placeholder="eg 233 200 066 655" aria-describedby="contact_error"/>
 
                                     @error('contact')
                                         <span id="contact_error" class="invalid-feedback" role="alert">

@@ -55,9 +55,9 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="batch_id">Batch id</label>
-                                    @if (isset($batch_id))
+                                    @if (isset($birds))
                                     <select name="batch_id" class="form-control" id="batch_id">
-                                    @foreach ($batch_id as $item)
+                                    @foreach ($birds as $item)
                                             <option value="{{$item->batch_id}}">{{$item->batch_id}}</option>
                                     @endforeach
                                     </select>
@@ -72,9 +72,9 @@
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="pen">Pen House</label>
-                                    @if (isset($pen))
+                                    @if (isset($birds))
                                         <select name="pen" class="form-control" id="pen">
-                                        @foreach ($pen as $item)
+                                        @foreach ($birds as $item)
                                                 <option value="{{$item->pen_id}}">{{$item->pen_id}}</option>
                                         @endforeach
                                         </select>

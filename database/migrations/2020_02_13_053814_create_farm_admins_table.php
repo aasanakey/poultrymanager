@@ -24,7 +24,7 @@ class CreateFarmAdminsTable extends Migration
             $table->string('password')->default(\Hash::make('password'));
             $table->rememberToken();
             $table->timestamps();
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

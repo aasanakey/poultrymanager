@@ -24,7 +24,7 @@ class CreateTransactionsTable extends Migration
             $table->string('description');
             $table->string('farm_category');
             $table->timestamps();
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
 
         });
     }

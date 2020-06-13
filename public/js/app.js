@@ -37137,6 +37137,19 @@ Array.prototype.unique = function () {
   return a;
 };
 
+Date.prototype.format = function () {
+  var format = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "mm/dd/yyyy";
+  var separator = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '/';
+  format = format.toLowerCase();
+  var dd = this.getDate() < 10 ? '0' + this.getDate() : this.getDate();
+  var mm = this.getMonth() + 1 < 10 ? '0' + (this.getMonth() + 1) : this.getMonth() + 1;
+  var yy = this.getFullYear();
+  var date = format.replace('dd', dd);
+  date = date.replace('mm', mm);
+  date = date.replace('yyyy', yy);
+  return date;
+};
+
 /***/ }),
 
 /***/ "./resources/sass/app.scss":

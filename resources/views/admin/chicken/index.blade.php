@@ -89,7 +89,7 @@
 
             <div class="col-sm-3">
                 <div class="center">
-                <a href="{{route('aadmin.statement','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
+                <a href="{{route('admin.statement','chicken')}}" data-toggle="modal" data-target="#myModal1" class="offer-img">
                         <i class="fas fa-poll fa-8x"></i>
                     </a>
                     <div class="mid-1">

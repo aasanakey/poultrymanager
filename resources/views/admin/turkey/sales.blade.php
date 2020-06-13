@@ -1,20 +1,66 @@
 @extends('admin.turkey.dashboard')
 @section('styles')
     @parent
+    <style>
+            @media print{
+            footer,.no-print{
+                display:none;
+            }
+             .card{
+                width: 100vw !important;
+            }
+            #salesBarChart{
+                widows: 100% !important;
+            }
+        }
+        #msg {
+            /* font-size: 88px; */
+            font-weight: normal;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            text-align:center;
+            color: #ff0000;
+            position: fixed;
+            top: 40%;
+            left: 10%;
+            z-index: 5;
+            animation-name: bounce;
+            animation-duration: 2s;
+            animation-iteration-count: infinite;
+        }
+        @keyframes bounce {
+            0% {
+                transform: translateY(0px);
+                color: #ff4c00;
+            }
+            40% {
+                transform: translateY(-40px);
+                color:#ff4c1d;
+            }
+
+            80%{ color: #ff001d;}
+            100% {
+                transform: translateY(0px);
+                color: ##ff0000;
+            }
+        }
+    </style>
 @endsection
 @section('dash_content')
 <div class="">
-    <div class="row mt-4">
+    <div class="row mt-4 no-print">
         <a href="{{route('admin.sale.bird','turkey')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Bird Sale</a>
         <a href="{{route('admin.sale.meat','turkey')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Meat Sale</a>
         <a href="{{route('admin.sale.egg','turkey')}}" class="btn btn-sm btn-primary" style="margin-left:5px;margin-right:5px;">Add Egg Sale</a>
+        <button type="button" class="btn btn-sm" title="print" onclick="window.print()"><i class="fas fa-print" aria-hidden="true"></i></i></button>
     </div>
      <div class="row mt-5">
-          <h5 id="msg" class="col-md-12" style="text-align:center;color:red;">Loading data ...</h5>
+          <h5 id="msg" class="col-md-12 no-print" >Loading data ...</h5>
+          <h2 class="col-md-12" style="text-align:center;">Sales for <span id="heading-year"></span></h2>
         <div class="col-lg-6">
             <div class="card mb-4">
                 <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Sales</div>
-                 <select class="custom-select custom-select-sm" id="years" name="year"></select>
+                 <select class="custom-select custom-select-sm no-print" style="width:100px;" id="years" name="year"></select>
                 <div class="card-body"><canvas id="salesBarChart" width="100%" height="50"></canvas></div>
                 <div class="card-footer small text-muted">Currency : Ghana Cedis &#162;</div>
             </div>
@@ -102,11 +148,14 @@
         }
     });
 
-   loadSales(new Date().getFullYear());
+    let y = new Date().getFullYear();
+    loadSales(y);
+    $("#heading-year").html(y);
     $('#years').change(e=>{
         let year = e.target.value;
         salesChart.clear();
         $('#msg').removeAttr('hidden');
+        $("#heading-year").html(year);
         loadSales(year);
     });
     function createDropdown(){

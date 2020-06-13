@@ -16,7 +16,7 @@ use App\Exports\MeatSaleExport;
 use App\Exports\MedicineExport;
 use App\Exports\VaccineExport;
 use App\Exports\TransactionsExport;
-
+use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -53,10 +53,22 @@ class ApiController extends Controller
 
         return DataTables::of($data)
             ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+                return $user->date ? with(new Carbon($user->date))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->batch_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.bird', $row->batch_id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
+
                 return $div;
             })->make(true);
     }
@@ -96,13 +108,24 @@ class ApiController extends Controller
                 return $user->observation == null ? "N/A" : $user->observation;
             })
             ->editColumn('dod', function ($user) {
-                return $user->dod ? with(new Carbon($user->dod))->format('l, d M Y H:i A') : '';
+                return $user->dod ? with(new Carbon($user->dod))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->batch_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.mortality', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
+
                 return $div;
-            })
-            ->removeColumn('id')->make(true);
+            })->make(true);
     }
 
     /**
@@ -136,7 +159,18 @@ class ApiController extends Controller
         }
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->batch_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="'.route('admin.delete.pen',$row->pen_id).'" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="'.csrf_token().'">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }

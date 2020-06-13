@@ -29,6 +29,29 @@ class FarmAdminController extends Controller
         return view('admin.index');
     }
 
+    public function setupBird()
+    {
+        $has_pen = auth()->user()->farm->pen;
+        if (isset($has_pen) && count($has_pen) == 0) {
+            return redirect()->back()->with('error', 'Please add pen');
+        }
+
+        return view('admin.setup_bird');
+    }
+
+    public function setupFinish()
+    {
+        $has_bird = \App\Birds::where('farm_id', auth()->user()->id)->get();
+
+        if (isset($has_bird) && count($has_bird) > 0) {
+            $farm = \App\Farm::where('id', auth()->user()->farm_id)->find(auth()->user()->farm_id);
+            $farm->is_setup = true;
+            $farm->save();
+            return redirect('/dashboard');
+        }
+        return back()->with('error', 'Please Add Birds to proceed');
+    }
+
     public function profile($view)
     {
         switch ($view) {
@@ -111,12 +134,13 @@ class FarmAdminController extends Controller
      */
     public function addBird(Request $request, $type = null)
     {
+        // dd($request->all());
         if ($request->has('bird')) {
             $request->validate([
-                "bird" => ['required', 'string'],
+                "bird" => ['required', 'string','unique:birds,batch_id'],
                 "species" => ['required'],
                 "type" => ['sometimes', 'nullable', 'string'],
-                "pen" => ['required', 'string'],
+                "pen" => ['required', 'string','exists:pen_houses,pen_id'],
                 "number" => ['required', 'numeric', 'min:0'],
                 "price" => ['required', 'numeric', 'min:0'],
                 "date" => ['required', 'date'],
@@ -126,7 +150,7 @@ class FarmAdminController extends Controller
             $request->validate([
                 "species" => ['required'],
                 "type" => ['sometimes', 'nullable', 'string'],
-                "pen" => ['required', 'string'],
+                "pen" => ['required', 'string','exists:pen_houses,pen_id'],
                 "number" => ['required', 'numeric', 'min:0'],
                 "price" => ['required', 'numeric', 'min:0'],
                 "date" => ['required', 'date'],
@@ -134,10 +158,10 @@ class FarmAdminController extends Controller
 
         }
 
-        $farm = \App\Farm::find(auth()->user()->farm_id);
+        $farm = auth()->user()->farm;
 
         \App\Birds::create([
-            "batch_id" => generate_batch_id($farm->farm_name),
+            "batch_id" => generate_batch_id($farm->farm_name, $type),
             "farm_id" => auth()->user()->farm_id,
             "bird_category" => $type,
             'pen_id' => $request->pen,
@@ -145,32 +169,122 @@ class FarmAdminController extends Controller
             "species" => $request->species,
             "type" => $request->type,
             "unit_price" => $request->price,
-            "date" => date($request->date),
+            "date" => new \DateTime($request->date),
         ]);
         return redirect()->back()->with('success', 'Bird added successfully!');
     }
 
+     /**
+     * Update the pen resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function editBird(Request $request, $id)
+    {
+        // dd($request->all());
+        $request->validate([
+            // "bird" => ['required', 'string','unique:birds,batch_id'],
+            "bird_species" => ['required'],
+            "bird_type" => ['sometimes', 'nullable', 'string'],
+            "bird_pen" => ['required', 'string'],
+            "bird_number" => ['required', 'numeric', 'min:0'],
+            "bird_price" => ['required', 'numeric', 'min:0'],
+            "bird_date" => ['required', 'date'],
+        ]);
+        $bird = \App\Birds::where('batch_id', $id)->first();
+        $bird->species = $request->bird_species;
+        $bird->type = $request->bird_type;
+        if( $bird->pen_id !== $request->bird_pen){
+            $request->validate(["bird_pen" => ['exists:pen_houses,pen_id']]);
+            $bird->pen_id = $request->bird_pen;
+        }
+        $bird->number = $request->bird_number;
+        $bird->unit_price = $request->bird_price;
+        $bird->date = new \DateTime($request->bird_date);
+        $bird->save();
+        return redirect()->back()->with('success', 'Bird record updated');
+    }
+
+    /**
+     * Remove the birds resource from storage.
+     *
+     * @param  string  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteBird($id)
+    {
+        $bird = \App\Birds::where('batch_id',$id);
+        $bird->delete();
+        return redirect()->back()->with('success',"Bird batch $id deleted successfully");
+    }
     public function mortality($type)
     {
-        $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)->
-            where('bird_type', $type)->get();
-        $batch_id = \App\Birds::select('batch_id')->where('bird_category', $type)
+        // $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)->
+        //     where('bird_type', $type)->get();
+        $birds = \App\Birds::select('batch_id')->where('bird_category', $type)
             ->where('farm_id', auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.chicken.mortality', compact('pen', 'batch_id'));
+                return view('admin.chicken.mortality', compact('birds'));
                 break;
 
             case 'turkey':
-                return view('admin.turkey.mortality', compact('pen', 'batch_id'));
+                return view('admin.turkey.mortality', compact('birds'));
 
                 break;
             case 'guinea_fowl':
-                return view('admin.guineafowl.mortality', compact('pen', 'batch_id'));
+                return view('admin.guineafowl.mortality', compact('birds'));
                 break;
             default:
                 return response()->view('errors.404');
         }
+    }
+
+     /**
+     * Update the mortality resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+
+    public function editMortality(Request $request, $id)
+    {
+        $request->validate([
+            "_batch_id" =>['required', 'string','exists:birds,batch_id'],
+            "_number" => ['required', 'numeric', 'min:0'],
+            "_pen" => ['required', 'string','exists:pen_houses,pen_id'],
+            "_unit_price" => ['required', 'numeric', 'min:0'],
+            "_cause" => ['required', 'string'],
+            "_date" => ['required', 'date'],
+            "_observation" => ['required', 'string'], 
+        ]);
+        $mortality = \App\BirdMortality::find($id);
+        $mortality->batch_id = $request->_batch_id;
+        $mortality->number = $request->_number;
+        $mortality->pen_id = $request->_pen;
+        $mortality->cause = $request->_cause;
+        $mortality->unit_price = $request->_unit_price;
+        $mortality->dod = new \DateTime($request->_date);
+        $mortality->observation = $request->_observation;
+        $mortality->save();
+        return redirect()->back()->with('success', 'Bird record updated');
+    }
+
+    /**
+     * Remove the bird mortality resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deleteMortality($id)
+    {
+        $mortality = \App\BirdMortality::find($id);
+        $mortality->delete();
+        return redirect()->back()->with('success',"Bird mortaliy deleted successfully");
     }
 
     public function addMortality($type, Request $request)
@@ -251,47 +365,67 @@ class FarmAdminController extends Controller
             "bird_type" => $type,
         ]);
 
-        return back()->with('success', 'Pen House added successfully');
+        return redirect()->back()->with('success', 'Pen House added successfully');
 
     }
 
-    public function setupBird()
-    {
-        // $is_setup = \App\Farm::where('is_setup',false)->find(auth()->user()->farm_id);
-        // if( $is_setup)
-        // $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)->get();
-        return view('admin.setup_bird');
-    }
+    /**
+     * Update the pen resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  string  $id
+     * @return \Illuminate\Http\Response
+     */
 
-    public function setupFinish()
+    public function editPen(Request $request, $id)
     {
-        $has_bird = \App\Birds::where('farm_id', auth()->user()->id)->get();
 
-        if (isset($has_bird) && count($has_bird) > 0) {
-            $farm = \App\Farm::where('id', auth()->user()->farm_id)->find(auth()->user()->farm_id);
-            $farm->is_setup = true;
-            $farm->save();
-            return redirect('/dashboard');
+        $request->validate([
+            "pen_id" => ['required', 'string'],
+            "pen_location" => ['required', 'string'],
+            "pen_size" => ['required', 'numeric', 'min:0'],
+            "pen_capacity" => ['required', 'numeric', 'min:0'],
+        ]);
+        $pen = \App\PenHouse::where('pen_id', $id)->first();
+        // change pen id if its a new id
+        if ($pen->pen_id !== $request->pen_id) {
+            $request->validate(["pen_id" => ['unique:pen_houses,pen_id']]);
+            $pen->pen_id = $request->pen_id;
         }
-        return back()->with('error', 'Please Add Birds to proceed');
+        $pen->location = $request->pen_location;
+        $pen->size = $request->pen_size;
+        $pen->capacity = $request->pen_capacity;
+        $pen->save();
+        return redirect()->back()->with('success', 'Pen updated');
+    }
+
+    /**
+     * Remove the pen resource from storage.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function deletePen($id)
+    {
+        $pen = \App\PenHouse::where('pen_id',$id);
+        $pen->delete();
+        return redirect()->back()->with('success',"Pen $id deleted successfully");
     }
 
     public function eggProduction($type)
     {
-        $pen = \App\PenHouse::select('pen_id')->where('farm_id', auth()->user()->farm_id)
-            ->where('bird_type', $type)->get();
-        $batch_id = \App\Birds::select('batch_id')
+        $birds = \App\Birds::select('batch_id','pen_id')
             ->where('bird_category', $type)->where('farm_id', auth()->user()->farm_id)->get();
         switch ($type) {
             case 'chicken':
-                return view('admin.chicken.egg_production', compact('pen', 'batch_id'));
+                return view('admin.chicken.egg_production', compact('birds'));
                 break;
 
             case 'turkey':
-                return view('admin.turkey.egg_production', compact('pen', 'batch_id'));
+                return view('admin.turkey.egg_production', compact( 'birds'));
                 break;
             case 'guinea_fowl':
-                return view('admin.guineafowl.egg_production', compact('pen', 'batch_id'));
+                return view('admin.guineafowl.egg_production', compact('birds'));
                 break;
             default:
                 return response()->view('errors.404');
@@ -342,7 +476,7 @@ class FarmAdminController extends Controller
 
     public function addFeed(Request $request)
     {
-        // dd($request->all());
+        
         $request->validate([
             "name" => ['required', 'string'],
             "price" => ['required', 'numeric', 'min:0'],
@@ -357,6 +491,7 @@ class FarmAdminController extends Controller
             "name" => $request->name,
             "price" => $request->price,
             "quantity" => $request->quantity,
+            "date" => new \DateTime($request->date),
             "description" => $request->description,
             "supplier" => $request->supplier,
             "feed_type" => $request->feed_type,
@@ -687,7 +822,7 @@ class FarmAdminController extends Controller
     {
         // dd($request->all());
         $request->validate([
-            'id' => ['required', 'string', 'unique:employees'],
+            'id' => ['required', 'string', 'unique:employees,employee_id'],
             "full_name" => ['required', 'string'],
             "dob" => ['required', 'date'],
             "email" => ['required', 'email', 'unique:employees'],
@@ -699,9 +834,7 @@ class FarmAdminController extends Controller
         ]);
 
         \App\Employee::create([
-            #Todo: change id to employee_id
-            // 'employee_id' => $request->id,
-            'id' => $request->id,
+            'employee_id' => $request->id,
             "farm_id" => auth()->user()->farm_id,
             "full_name" => $request->full_name,
             "dob" => new \DateTime($request->dob),
@@ -798,24 +931,6 @@ class FarmAdminController extends Controller
      * @param string $type
      * @return view
      */
-    public function report($type)
-    {
-
-        switch ($type) {
-            case 'chicken':
-                return view('admin.chicken.report');
-                break;
-            case 'turkey':
-                return view('admin.turkey.report');
-                break;
-            case 'chicken':
-                return view('admin.guineafowl.report');
-                break;
-            default:
-                return response()->view('errors.404');
-                break;
-        }
-    }
 
     public function allSales($type)
     {

@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateBirdSalesTable extends Migration
 {
@@ -21,9 +21,8 @@ class CreateBirdSalesTable extends Migration
             $table->decimal('weight');
             $table->decimal('price');
             $table->timestamps();
-            // $table->primary(['id','farm_id']);
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
-            $table->foreign('bird_batch_id')->references('batch_id')->on('birds')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
+            $table->foreign('bird_batch_id')->references('batch_id')->on('birds')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

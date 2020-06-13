@@ -126,3 +126,15 @@ Route::get('/{type}/transactions/export/excel', 'ApiController@exportTransaction
 Route::get('/sales', 'SalesController@getSales')->name('sales.all');
 // Route::get('/statement', 'StatementController@test')->name('statement.test');
 Route::get('/statement/all', 'StatementController@getStatement')->name('statement.all');
+
+// edit data routes
+Route::put('/edit/pen/{id}','FarmAdminController@editPen')->name('admin.edit.pen');
+Route::put('/edit/bird/{id}','FarmAdminController@editBird')->name('admin.edit.bird');
+Route::put('/edit/mortality/{id}','FarmAdminController@editMortality')->name('admin.edit.mortality');
+
+// delete data route
+Route::delete('/delete/pen/{id}', 'FarmAdminController@deletePen')->name('admin.delete.pen');
+Route::delete('/delete/bird/{id}', 'FarmAdminController@deleteBird')->name('admin.delete.bird');
+Route::delete('/delete/mortality/{id}', 'FarmAdminController@deleteMortality')->name('admin.delete.mortality');
+
+

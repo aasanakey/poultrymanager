@@ -14,6 +14,7 @@ class CreatePenHousesTable extends Migration
     public function up()
     {
         Schema::create('pen_houses', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('pen_id')->unique();
             $table->unsignedBigInteger('farm_id');
             $table->string('location');
@@ -21,8 +22,7 @@ class CreatePenHousesTable extends Migration
             $table->integer('capacity');
             $table->string('bird_type');
             $table->timestamps();
-            $table->primary(['pen_id', 'farm_id']);
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

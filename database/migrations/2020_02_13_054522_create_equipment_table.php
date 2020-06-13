@@ -24,7 +24,7 @@ class CreateEquipmentTable extends Migration
             $table->decimal('price');
             $table->string('type');
             $table->string('farm_category');
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
             $table->timestamps();
         });
     }

@@ -14,6 +14,7 @@ class CreateEmployeesTable extends Migration
     public function up()
     {
         Schema::create('employees', function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('employee_id')->unique();
             $table->unsignedBigInteger('farm_id');
             $table->string('full_name');
@@ -25,8 +26,8 @@ class CreateEmployeesTable extends Migration
             $table->string('photo')->nullable();
             $table->string('farm_category');
             $table->timestamps();
-            $table->primary('employee_id');
-            $table->foreign('farm_id')->references('id')->on('farms')->onDelete('cascade');
+            $table->unique(['employee_id', 'farm_id']);
+            $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });
     }
 

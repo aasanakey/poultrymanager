@@ -17,4 +17,12 @@ class Equipment extends Model
         "type",
         "farm_category",
     ];
+
+    /**
+     * Get the farm that owns the equipment.
+     */
+    public function farm()
+    {
+        return $this->belongsTo('App\Farm', 'farm_id');
+    }
 }
