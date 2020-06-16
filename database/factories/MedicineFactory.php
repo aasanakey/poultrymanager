@@ -14,7 +14,7 @@ $factory->define(Medicine::class, function (Faker $faker) {
         "quantity" => $faker->numberBetween($min = 1, $max = 50),
         "date" => new \DateTime(),
         "supplier" => $faker->company,
-        "description" => $faker->realText($maxNbChars = 190, $indexSize = 2),
+        "description" =>  $faker->sentence($nbWords = 6, $variableNbWords = true),
         "animal" => $faker->randomElement(['chicken', 'turkey', 'guinea_fowl']),
     ];
 });
