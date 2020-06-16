@@ -2,7 +2,7 @@
 @section('styles')
     @parent
      <style>
-         @media print{
+          @media print{
             footer,.no-print{
                 display:none;
             }
@@ -147,7 +147,6 @@
             }
         }
     });
-
    let y = new Date().getFullYear();
    loadSales(y);
     $("#heading-year").html(y);

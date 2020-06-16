@@ -111,7 +111,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="price">Price per Bird</label>
+                                        <label for="price">Price per Bird(GHS &#162;)</label>
                                         <input type="number" name="price" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">
@@ -185,7 +185,7 @@
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalCenterTitle">Edit Bird</h5>
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -238,7 +238,7 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="edit_price">Price per Bird</label>
+                                <label for="edit_price">Price per Bird(GHS &#162;)</label>
                                 <input type="number" name="bird_price" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="edit_price" value="{{ old('bird_price') }}">
                                 @error('bird_price')
                                     <span class="invalid-feedback" role="alert">
@@ -315,7 +315,6 @@
         $('#edit_number').val(bird_data.number);
         $('#edit_price').val(bird_data.unit_price);
         let date = new Date(bird_data.date);
-        console.log(date.format())
         $('#edit_date').val(date.format())
         $('#editPenForm').attr('action',`/edit/bird/${bird_data.batch_id}`)
         $('#edit-modal').modal('show');
@@ -325,6 +324,6 @@
        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
             let form = $(e.target).closest('form');
             form.submit();
-        } 
+        }
     });
 @endsection

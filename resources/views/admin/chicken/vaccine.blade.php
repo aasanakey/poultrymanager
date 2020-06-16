@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -112,7 +112,6 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Farm</th>
                             <th>Age</th>
                             <th>Disease</th>
                             <th>Mode</th>
@@ -122,7 +121,6 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Farm</th>
                             <th>Age</th>
                             <th>Disease</th>
                             <th>Mode</th>
@@ -132,6 +130,70 @@
                     </tfoot>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+      {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method('PUT')
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="_age">Age</label>
+                                    <input type="text" name="_age" class="form-control  @error('_age') is-invalid @enderror" id="_age" value="{{old('_age')}}">
+                                    @error('_age')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="_disease">Disease</label>
+                                    <input type="text" name="_disease"  class="form-control @error('_disease') is-invalid @enderror" id="_disease" value="{{ old('_disease') }}">
+                                    @error('_disease')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6">
+                                    <label for="_mode">Mode</label>
+                                    <input type="text" name="_mode" class="form-control @error('_mode') is-invalid @enderror" id="_mode" value="{{ old('_mode') }}">
+                                    @error('_mode')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label for="_type">Type</label>
+                                    <input type="text" name="_type" id="_type" class="form-control  @error('_type') is-invalid @enderror" value="{{ old('_type')}}"/>
+                                        @error('_type')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                </div>
+                            </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
             </div>
         </div>
     </div>
@@ -145,9 +207,6 @@
 @endsection
 @section('script')
     @parent
-    {{-- @if ($errors)
-        {{!!"$('#addBirdModal').modal('show');"!!}}
-    @endif --}}
     $('#datetimepicker1').datetimepicker({
         'format':'L',
         icons: {
@@ -156,18 +215,35 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('datatables.vaccine','chicken') }}",
-        columns: [
-            {data: 'farm_name', name: 'farm_name'},
-            {data: 'age', name: 'Age'},
-            {data:'disease',name:'Disease'},
-            {data:'mode',name:'Mode'},
-            {data:'type',name:'Type'},
-            {data: 'action', name: 'Action', orderable: false, searchable: false},
-        ]
+    let table = $('#dataTable').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('datatables.vaccine','chicken') }}",
+            columns: [
+                {data: 'age', name: 'age'},
+                {data:'disease',name:'disease'},
+                {data:'mode',name:'mode'},
+                {data:'type',name:'type'},
+                {data: 'action', name: 'Action', orderable: false, searchable: false},
+            ]
+    });
+
+    table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        $('#_age').val(data.age);
+        $('#_disease').val(data.disease);
+        $('#_mode').val(data.mode);
+        $('#_type').val(data.type);
+        $('#editPenForm').attr('action',`/edit/vaccine/${data.id}`)
+        $('#edit-modal').modal('show');
+    });
+
+     table.on('click','.delete-btn', (e)=>{
+       if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+            let form = $(e.target).closest('form');
+            form.submit();
+        }
     });
 @endsection
 

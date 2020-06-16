@@ -10,7 +10,7 @@
             border: none !important;
         }
     }
-     #msg {
+    #msg {
         /* font-size: 88px; */
         font-weight: normal;
         letter-spacing: 4px;
@@ -45,12 +45,12 @@
 @endsection
 @section('dash_content')
 <div class="container mt-4">
-    <div id="print-options">
+    <div >
         <select class="custom-select custom-select-sm" id="years" style="width:100px;" name="year"></select>
         <button type="button" class="btn btn-sm no-print" title="print" onclick="window.print()"><i class="fas fa-print" aria-hidden="true"></i></i></button>
         <h5 id="msg" class="col-md-12 no-print" >Loading data ...</h5>
     </div>
-    <h3>Income</h3>
+    <h3 class="mt-5">Income</h3>
     <table class="table table-condensed pl-table" id="income_table">
         <tbody></tbody>
         <tfoot class="summary">

@@ -10,7 +10,7 @@ $factory->define(MeatSale::class, function (Faker $faker) {
     return [
         "farm_id" => $farm['id'],
         "type" => $faker->randomElement(['chicken', 'turkey', 'guinea_fowl']),
-        "part" => $faker->randomElement(['chicken', 'turkey', 'guinea_fowl']),
+        "part" => $faker->randomElement(['Back','Whole','Breast','Drumstick','Wings','Neck and back','Legs','Thigh','Gizzard']),
         "price" => $faker->randomFloat(2, 30, 1000),
         "quantity" => $faker->randomFloat(2, 10, 100),
         "date" => new \DateTime(),

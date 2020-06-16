@@ -12,12 +12,13 @@ class FarmAdminSeeder extends Seeder
     public function run()
     {
         \App\FarmAdmin::create([
-            "farm_id" => 1,
+            "farm_id" => App\Farm::first()->id,
             "full_name" => "The Manager",
             'email' => "testaccount@mail.com",
             "contact" => "233 246 815 376",
             "role" => "SUPER_ADMIN",
-            'password' => "$2y$10$Z49BHKi4.u0f2zr5VjipXexUXuNMQM.Ku0AvBb4V7Sw...",
+            'password' => Hash::make('password'),
+            'email_verified_at' => now(),
         ]);
 
     }

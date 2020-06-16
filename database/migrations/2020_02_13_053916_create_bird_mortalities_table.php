@@ -21,7 +21,7 @@ class CreateBirdMortalitiesTable extends Migration
             $table->integer('number');
             $table->string('cause');
             $table->string('observation')->nullable();
-            $table->decimal('unit_price', 9, 2);
+            $table->decimal('unit_price', 10, 2);
             $table->date('dod');
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');

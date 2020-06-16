@@ -1,4 +1,4 @@
-@extends('admin.turkey.dashboard')
+@extends('admin.chicken.dashboard')
 @section('styles')
     @parent
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/css/tempusdominus-bootstrap-4.min.css" />
@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -32,11 +32,11 @@
                 @endif
                <span>
                    <button type="button" class="btn btn-sm btn-primary"  data-toggle="modal" data-target="#addMortalityModal">
-                       New User
+                        New User
                     </button>
                 </span>
                 {{-- <span>
-                    <a href="{{route('export.employees','turkey')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
+                    <a href="{{route('export.employees','chicken')}}"  class="btn btn-sm btn-primary ml-2">Export Data</a>
                 </span> --}}
            </div>
            {{-- modal --}}
@@ -116,7 +116,7 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>tables</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Admins</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -164,17 +164,24 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('datatables.admins','turkey') }}",
-        columns: [
-            {data:"full_name",name:"full_name"},
-            {data:"email",name: "email"},
-            {data:"contact",name: "contact"},
-            {data:"role",name:"role"},
-            {data: 'action', name: 'Action', orderable: false, searchable: false},
-        ]
-    });
+    let table =$('#dataTable').DataTable(
+        {
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('datatables.admins','chicken') }}",
+            columns: [
+                {data:"full_name",name:"full_name"},
+                {data:"email",name: "email"},
+                {data:"contact",name: "contact"},
+                {data:"role",name:"role"},
+                {data: 'action', name: 'Action', orderable: false, searchable: false},
+            ]
+        });
+    table.on('click','.delete-btn', (e)=>{
+        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+                let form = $(e.target).closest('form');
+                form.submit();
+            }
+        });
 @endsection
 

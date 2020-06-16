@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Exports\BirdMortalityExport;
 use App\Exports\BirdSaleExport;
 use App\Exports\BirdsExport;
@@ -14,9 +13,9 @@ use App\Exports\FeedExport;
 use App\Exports\FeedingExport;
 use App\Exports\MeatSaleExport;
 use App\Exports\MedicineExport;
-use App\Exports\VaccineExport;
 use App\Exports\TransactionsExport;
-use Illuminate\Http\Request;
+use App\Exports\VaccineExport;
+use Carbon\Carbon;
 use Maatwebsite\Excel\Facades\Excel;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -39,15 +38,11 @@ class ApiController extends Controller
 
         if ($type == 'all') {
 
-            $data = \App\Birds::join('farms', 'farms.id', '=', 'birds.farm_id')
-                ->select('farms.farm_name', 'birds.*')
-                ->where('farms.id', auth()->user()->farm_id)->get();
+            $data = \App\Birds::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
 
             $data = \App\Birds::where('bird_category', $type)
-                ->join('farms', 'farms.id', '=', 'birds.farm_id')
-                ->select('farms.farm_name', 'birds.*')
-                ->where('farms.id', auth()->user()->farm_id)->get();
+                ->where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         }
         //return $data;
 
@@ -92,15 +87,14 @@ class ApiController extends Controller
     {
         $data = null;
         if (\is_null($type) || $type == 'all') {
-            $data = \App\BirdMortality::join('farms', 'farms.id', '=', 'bird_mortality.farm_id')
-                ->select('farms.farm_name', 'bird_mortality.*')
-                ->where('farms.id', auth()->user()->farm_id)->get();
+            $data = \App\BirdMortality::join('birds', 'birds.batch_id', '=', 'bird_mortality.batch_id')
+            ->select('bird_mortality.*')
+            ->where('bird_mortality.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
-            $data = \App\BirdMortality::join('farms', 'farms.id', '=', 'bird_mortality.farm_id')
-                ->join('birds', 'birds.batch_id', '=', 'bird_mortality.batch_id')
-                ->select('farms.farm_name', 'bird_mortality.*')
-                ->where('birds.bird_category', $type)
-                ->where('farms.id', auth()->user()->farm_id)->get();
+            $data = \App\BirdMortality::join('birds', 'birds.batch_id', '=', 'bird_mortality.batch_id')
+                ->where('birds.bird_category', $type)->where('bird_mortality.farm_id', auth()->user()->farm_id)
+                ->select('bird_mortality.*')
+                ->where('birds.farm_id', auth()->user()->farm_id)->orderBy('bird_mortality.created_at','desc')->get();
 
         }
         return DataTables::of($data)
@@ -148,13 +142,9 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == "all") {
-            $data = \App\PenHouse::join('farms', 'farms.id', '=', 'pen_houses.farm_id')
-                ->select('farms.farm_name', 'pen_houses.*')
-                ->where('farms.id', auth()->user()->farm_id)->get();
+            $data = \App\PenHouse::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
-            $data = \App\PenHouse::join('farms', 'farms.id', '=', 'pen_houses.farm_id')
-                ->select('farms.farm_name', 'pen_houses.*')->where('pen_houses.bird_type', $type)
-                ->where('farms.id', auth()->user()->farm_id)->get();
+            $data = \App\PenHouse::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         }
         return DataTables::of($data)
@@ -164,8 +154,8 @@ class ApiController extends Controller
                                 <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
                             </span>
                             <span>
-                                <form action="'.route('admin.delete.pen',$row->pen_id).'" class="delete-row-form" method="post">
-                                    <input type="hidden" name="_token" value="'.csrf_token().'">
+                                <form action="' . route('admin.delete.pen', $row->pen_id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
                                     <input type="hidden" name="_method" value="delete">
                                     <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
                                 </form>
@@ -185,27 +175,35 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == 'all' || \is_null($type)) {
-            $data = \App\EggProduction::join('farms', 'farms.id', '=', 'egg_productions.farm_id')
-                ->select('farms.farm_name', 'egg_productions.*')
-                ->where('farms.id', auth()->user()->farm_id)->get();
+            $data = \App\EggProduction::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         } else {
             $data = \App\EggProduction::where('bird_category', $type)
-                ->join('farms', 'farms.id', '=', 'egg_productions.farm_id')
-                ->select('farms.farm_name', 'egg_productions.*')
-                ->where('farms.id', auth()->user()->farm_id)->get();
+                ->where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         }
         //return response()->json($data);
         return DataTables::of($data)
-            ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+            ->editColumn('date_collected', function ($user) {
+                return $user->date_collected ? with(new Carbon($user->date_collected))->format('l, d M Y') : '';
             })
             ->addColumn('good_eggs', function ($row) {
                 return $row->quantity - $row->bad_eggs;
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->batch_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.eggs', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
+
             })->make(true);
     }
 
@@ -230,23 +228,30 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == 'all' || is_null($type)) {
-            $data = \App\Feed::join('farms', 'farms.id', '=', 'feeds.farm_id')
-                ->select('farms.farm_name', 'feeds.*')
-                ->where('farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Feed::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         } else {
-            $data = \App\Feed::join('farms', 'farms.id', '=', 'feeds.farm_id')
-                ->select('farms.farm_name', 'feeds.*')
-                ->where('feed_type', $type)
-                ->where('farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Feed::where('feed_type', $type)
+                ->where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         }
 
         return DataTables::of($data)
             ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+                return $user->date ? with(new Carbon($user->date))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.feed', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }
@@ -272,18 +277,16 @@ class ApiController extends Controller
     {
         $data = null;
         if (is_null($type) || $type == 'all') {
-            $data = \App\Feeding::join('farms', 'farms.id', '=', 'feedings.farm_id')
-                ->join('feeds', 'feeds.id', '=', 'feedings.feed_id')
-                ->select('farms.farm_name', 'feeds.name', 'feedings.*')
-                ->where('feedings.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Feeding::join('feeds', 'feeds.id', '=', 'feedings.feed_id')
+                ->select('feeds.name', 'feedings.*')
+                ->where('feedings.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         } else {
-            $data = \App\Feeding::join('farms', 'farms.id', '=', 'feedings.farm_id')
-                ->join('feeds', 'feeds.id', '=', 'feedings.feed_id')
+            $data = \App\Feeding::join('feeds', 'feeds.id', '=', 'feedings.feed_id')
                 ->join('pen_houses', 'pen_houses.pen_id', '=', 'feedings.pen_id')
-                ->select('farms.farm_name', 'feeds.name', 'feedings.*')
+                ->select( 'feeds.name', 'feedings.*')
                 ->where('pen_houses.bird_type', $type)
-                ->where('feedings.farm_id', auth()->user()->farm_id)->get();
+                ->where('feedings.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         }
 
@@ -292,7 +295,18 @@ class ApiController extends Controller
                 return $row->date ? with(new Carbon($row->date))->format('l, d M Y H:i A') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+               $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.feeding', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }
@@ -318,21 +332,25 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == 'all' || is_null($type)) {
-            $data = \App\Medicine::join('farms', 'farms.id', '=', 'medicines.farm_id')
-                ->select('farms.farm_name', 'medicines.*')
-                ->where('medicines.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Medicine::where('medicines.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
-            $data = \App\Medicine::join('farms', 'farms.id', '=', 'medicines.farm_id')
-                ->select('farms.farm_name', 'medicines.*')->where('medicines.animal', $type)
-                ->where('medicines.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Medicine::where('medicines.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         }
 
         return DataTables::of($data)
-            ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
-            })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+               $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.medicine', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
 
@@ -359,19 +377,26 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == "all" || is_null($type)) {
-            $data = \App\Vaccine::join('farms', 'farms.id', '=', 'vaccines.farm_id')
-                ->select('farms.farm_name', 'vaccines.*')
-                ->where('vaccines.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Vaccine::where('vaccines.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
-            $data = \App\Vaccine::join('farms', 'farms.id', '=', 'vaccines.farm_id')
-                ->select('farms.farm_name', 'vaccines.*')->where('vaccines.animal', $type)
-                ->where('vaccines.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Vaccine::where('vaccines.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         }
 
         return DataTables::of($data)
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+               $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.vaccine', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
 
@@ -396,14 +421,24 @@ class ApiController extends Controller
     public function birdSale($type = null)
     {
 
-        $data = \App\BirdSale::join('farms', 'farms.id', '=', 'bird_sales.farm_id')
-            ->select('farms.farm_name', 'bird_sales.*')->where('bird_sales.farm_id', auth()->user()->farm_id)->where('bird_sales.bird_category', $type)->get();
+        $data = \App\BirdSale::where('bird_sales.farm_id', auth()->user()->farm_id)->where('bird_sales.bird_category', $type)->get();
         return DataTables::of($data)
             ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+                return $user->date ? with(new Carbon($user->date))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.sale.bird', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }
@@ -427,16 +462,25 @@ class ApiController extends Controller
 
     public function eggSale($type = null)
     {
-        $data = \App\EggSale::join('farms', 'farms.id', '=', 'egg_sales.farm_id')
-            ->select('farms.farm_name', 'egg_sales.*')
-            ->where('egg_sales.farm_id', auth()->user()->farm_id)->get();
+        $data = \App\EggSale::where('egg_sales.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         return DataTables::of($data)
             ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+                return $user->date ? with(new Carbon($user->date))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.sale.egg', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }
@@ -460,17 +504,26 @@ class ApiController extends Controller
 
     public function meatSale($type = null)
     {
-        $data = \App\MeatSale::join('farms', 'farms.id', '=', 'meat_sales.farm_id')
-            ->select('farms.farm_name', 'meat_sales.*')
-            ->where('meat_sales.farm_id', auth()->user()->farm_id)->get();
+        $data = \App\MeatSale::where('meat_sales.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         return DataTables::of($data)
             ->editColumn('date', function ($user) {
-                return $user->date ? with(new Carbon($user->date))->format('l, d M Y H:i A') : '';
+                return $user->date ? with(new Carbon($user->date))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
-                return $div;
+               $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.sale.meat', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
+                    return $div;
             })->make(true);
     }
 
@@ -494,26 +547,38 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == 'all' || $type == null) {
-            $data = \App\Employee::where('farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Employee::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
             $data = \App\Employee::where('farm_category', $type)
-                ->where('farm_id', auth()->user()->farm_id)->get();
+                ->where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         }
         // $data->employee_id = $data->id;
         return DataTables::of($data)
-            ->editColumn('dob', function ($employee) {
-                return $employee->dob ? with(new Carbon($employee->dob))->format('l, d M Y') : '';
-            })
+           
             ->editColumn('hire_date', function ($employee) {
                 return $employee->hire_date ? with(new Carbon($employee->hire_date))->format('l, d M Y') : '';
             })
             ->editColumn('photo', function ($employee) {
                 return $employee->photo ?? 'N/A';
             })
+            ->addColumn('age', function ($employee) {
+                return date_diff(date_create($employee->dob), date_create('today'))->y;;
+            })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->employee_id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
-                return $div;
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.employee', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
+                        return $div;
             })->make(true);
 
     }
@@ -537,13 +602,21 @@ class ApiController extends Controller
 
     public function admins()
     {
-        $data = \App\FarmAdmin::where('farm_id', auth()->user()->farm_id)->get();
+        $data = \App\FarmAdmin::where('farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         return DataTables::of($data)
-            ->editColumn('date_acquired', function ($row) {
-                return $row->date_acquired ? with(new Carbon($row->date_acquired))->format('l, d M Y') : '';
+            ->editColumn('role', function ($row) {
+                return $row->role == "SUPER_ADMIN" ? "Admin" : 'Farmhand';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+               $div = '<div>
+                            <span>
+                                <form action="' . route('admin.delete.admin', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }
@@ -557,13 +630,9 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == 'all' || is_null($type)) {
-            $data = \App\Equipment::join('farms', 'farms.id', '=', 'equipment.farm_id')
-                ->select('farms.farm_name', 'equipment.*')
-                ->where('equipment.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Equipment::where('equipment.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
-            $data = \App\Equipment::join('farms', 'farms.id', '=', 'equipment.farm_id')
-                ->select('farms.farm_name', 'equipment.*')
-                ->where('farm_category', $type)->where('equipment.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Equipment::where('farm_category', $type)->where('equipment.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         }
         return DataTables::of($data)
@@ -571,7 +640,18 @@ class ApiController extends Controller
                 return $row->date_acquired ? with(new Carbon($row->date_acquired))->format('l, d M Y') : '';
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.equipment', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
 
@@ -597,13 +677,9 @@ class ApiController extends Controller
     {
         $data = null;
         if ($type == 'all' || is_null($type)) {
-            $data = \App\Transation::join('farms', 'farms.id', '=', 'transactions.farm_id')
-                ->select('farms.farm_name', 'transactions.*')
-                ->where('transactions.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Transation::where('transactions.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
         } else {
-            $data = \App\Transaction::join('farms', 'farms.id', '=', 'transactions.farm_id')
-                ->select('farms.farm_name', 'transactions.*')
-                ->where('transactions.farm_category', $type)->where('transactions.farm_id', auth()->user()->farm_id)->get();
+            $data = \App\Transaction::where('transactions.farm_category', $type)->where('transactions.farm_id', auth()->user()->farm_id)->orderBy('created_at','desc')->get();
 
         }
         return DataTables::of($data)
@@ -614,19 +690,29 @@ class ApiController extends Controller
                 return $row->type ? ucfirst($row->type) : $row->type;
             })
             ->addColumn('action', function ($row) {
-                $div = "<div><span><a href=\"$row->id\" class=\"btn btn-primary btn-sm\"><i class=\"fas fa-edit\"></i></a></span><span><a href=\"#\" class=\"btn btn-primary btn-sm ml-4\"><i class=\"fas fa-trash-alt\"></i></a></span></div>";
+                $div = '<div>
+                            <span>
+                                <a href="#" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></a>
+                            </span>
+                            <span>
+                                <form action="' . route('admin.delete.transaction', $row->id) . '" class="delete-row-form" method="post">
+                                    <input type="hidden" name="_token" value="' . csrf_token() . '">
+                                    <input type="hidden" name="_method" value="delete">
+                                    <button type="button" class="btn btn-primary btn-sm ml-4 delete-btn"><i class="fas fa-trash-alt"></i></button>
+                                </form>
+                            </span>
+                        </div>';
                 return $div;
             })->make(true);
     }
 
-
     /**
- * Create excel sheet for transactions
- * @param string $type
- * @return Maatwebsite\Excel\Facades\Excel
- */
+     * Create excel sheet for transactions
+     * @param string $type
+     * @return Maatwebsite\Excel\Facades\Excel
+     */
 
-    public function exportTransactions($type=null)
+    public function exportTransactions($type = null)
     {
         return Excel::download(new TransactionsExport(auth()->user()->farm_id, $type), "transactions_$type.xlsx");
     }

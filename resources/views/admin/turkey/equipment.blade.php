@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -81,7 +81,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="price">Price</label>
+                                        <label for="price">Price(GHS &#162;)</label>
                                         <input type="number" min="0" step="0.01" name="price" id="price" class="form-control @error('price') is-invalid @enderror" value="{{old('price')}}">
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">
@@ -153,12 +153,11 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Farm</th>
                             <th>Equipment</th>
                             <th>Type</th>
                             <th>Purchase Date</th>
                             <th>State</th>
-                            <th>Price (GHS &#162)</th>
+                            <th>Price (GHS &#162;)</th>
                             <th>Supplier</th>
                             <th>Description</th>
                             <th>Action</th>
@@ -166,12 +165,11 @@
                     </thead>
                     <tfoot>
                         <tr>
-                           <th>Farm</th>
                             <th>Equipment</th>
                             <th>Type</th>
                             <th>Purchase Date</th>
                             <th>State</th>
-                            <th>Price (GHS &#162)</th>
+                            <th>Price (GHS &#162;)</th>
                             <th>Supplier</th>
                             <th>Description</th>
                             <th>Action</th>
@@ -179,6 +177,107 @@
                     </tfoot>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+         {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method('PUT')
+                         <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="_name">Equipment</label>
+                                        <input type="text"  name="_name" id="_name" class="form-control @error('_name') is-invalid @enderror" value="{{old('_name')}}">
+                                        @error('_name')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="_date_acquired">Date Acquired</label>
+                                        <div class="input-group date" id="_datetimepicker1" data-target-input="nearest">
+                                            <input type="text" name="_date_acquired" id="_date_acquired" class="form-control datetimepicker-input  @error('_date_acquired') is-invalid @enderror"
+                                            data-target="#_datetimepicker1" value="{{ old('_date_acquired')}}"/>
+                                            <div class="input-group-append" data-target="#_datetimepicker1" data-toggle="datetimepicker">
+                                                <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                            </div>
+                                            @error('_date_acquired')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="_price">Price(GHS &#162;)</label>
+                                        <input type="number" min="0" step="0.01" name="_price" id="_price" class="form-control @error('_price') is-invalid @enderror" value="{{old('_price')}}">
+                                        @error('_price')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="_supplier">Supplier</label>
+                                        <input type="text" name="_supplier"  class="form-control @error('_supplier') is-invalid @enderror" id="_supplier" value="{{ old('_supplier') }}">
+                                        @error('_supplier')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-6">
+                                        <label for="_type">Type</label>
+                                        <input type="text" name="_type" id="_type" class="form-control @error('_type') is-invalid @enderror" value="{{old('_type')}}">
+                                        @error('_type')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="_status">State</label>
+                                        <input type="text" name="_status"  class="form-control @error('_status') is-invalid @enderror" id="_status" value="{{ old('_status') }}">
+                                        @error('_status')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="form-row">
+                                    <div class="form-group col-md-12">
+                                        <label for="_description">Description</label>
+                                        <textarea name="_description" id="_description" cols="10" rows="5" class="form-control @error('_description') is-invalid @enderror" value="{{ old('_description') }}"></textarea>
+                                         @error('_description')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
             </div>
         </div>
     </div>
@@ -193,7 +292,7 @@
 @section('script')
     @parent
 
-    $('#datetimepicker1').datetimepicker({
+    $('#datetimepicker1,#_datetimepicker1').datetimepicker({
         format: 'L',
         icons: {
         time: "fa fa-clock",
@@ -201,21 +300,41 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: "{{ route('datatables.equipment','turkey') }}",
-            columns: [
-                {data: 'farm_name', name: 'Farm'},
-                {data:'equipment',name:'Equipment'},
-                {data:'type',name:'Type'},
-                {data:'date_acquired',name:'Purchase Date'},
-                {data:'status',name:'State'},
-                {data:'price',name:'Price'},
-                {data:'supplier',name:'Supplier'},
-                {data:'description',name:'Description'},
-                {data: 'action', name: 'action', orderable: false, searchable: false},
-            ]
+let table =  $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('datatables.equipment','turkey') }}",
+                columns: [
+                    {data:'equipment',name:'equipment'},
+                    {data:'type',name:'type'},
+                    {data:'date_acquired',name:'date_acquired'},
+                    {data:'status',name:'status'},
+                    {data:'price',name:'price'},
+                    {data:'supplier',name:'supplier'},
+                    {data:'description',name:'description'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                ]
+            });
+    table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        $('#_name').val(data.equipment);
+        $('#_price').val(data.price);
+        $('#_supplier').val(data.supplier);
+        $('#_type').val(data.type);
+        $('#_status').val(data.status);
+         $('#_description').val(data.description)
+        let date = new Date(data.date_acquired);
+        $('#_date_acquired').val(date.format());
+        $('#editPenForm').attr('action',`/edit/equipment/${data.id}`)
+        $('#edit-modal').modal('show');
+    });
+
+    table.on('click','.delete-btn', (e)=>{
+        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+                let form = $(e.target).closest('form');
+                form.submit();
+            }
         });
 @endsection
 

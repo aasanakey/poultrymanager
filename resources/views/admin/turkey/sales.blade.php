@@ -1,8 +1,8 @@
 @extends('admin.turkey.dashboard')
 @section('styles')
     @parent
-    <style>
-            @media print{
+     <style>
+          @media print{
             footer,.no-print{
                 display:none;
             }
@@ -55,7 +55,7 @@
         <button type="button" class="btn btn-sm" title="print" onclick="window.print()"><i class="fas fa-print" aria-hidden="true"></i></i></button>
     </div>
      <div class="row mt-5">
-          <h5 id="msg" class="col-md-12 no-print" >Loading data ...</h5>
+          <h5 id="msg" class="col-md-12 no-print">Loading data ...</h5>
           <h2 class="col-md-12" style="text-align:center;">Sales for <span id="heading-year"></span></h2>
         <div class="col-lg-6">
             <div class="card mb-4">
@@ -147,9 +147,8 @@
             }
         }
     });
-
-    let y = new Date().getFullYear();
-    loadSales(y);
+   let y = new Date().getFullYear();
+   loadSales(y);
     $("#heading-year").html(y);
     $('#years').change(e=>{
         let year = e.target.value;

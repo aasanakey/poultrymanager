@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -57,12 +57,15 @@
                                     <label for="part">Part</label>
                                     <select name="part" class="form-control  @error('part') is-invalid @enderror" id="part" value="{{old('part')}}">
                                         <option>--select--</option>
-                                        <option value="whole">Whole</option>
-                                        <option value="breast">Breast</option>
-                                        <option value="back">Back</option>
-                                        <option value="wings">Wings</option>
-                                        <option value="thigh">Thigh</option>
-                                        <option value="gizzard">Gizzard</option>
+                                        <option value="Whole">Whole</option>
+                                        <option value="Breast">Breast</option>
+                                        <option value="Back">Back</option>
+                                        <option value="Wings">Wings</option>
+                                        <option value="Thigh">Thigh</option>
+                                        <option value="Gizzard">Gizzard</option>
+                                        <option value="Drumstick">Drum Stick</option>
+                                        <option value="Neck and back">Neck and Back</option> 
+                                        <option value="Legs">Legs</option>
                                     </select>
                                     @error('part')
                                             <span class="invalid-feedback" role="alert">
@@ -71,8 +74,8 @@
                                         @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="price">Price</label>
-                                    <input type="number" min="0" name="price"  class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
+                                    <label for="price">Price (GHS &#162;)</label>
+                                    <input type="number" min="0" name="price" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
                                     @error('price')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -83,7 +86,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="quantity">Quantity (Kg)</label>
-                                    <input type="number" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
+                                    <input type="number" name="quantity" min="0" step="0.01" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
                                     @error('quantity')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -119,15 +122,14 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Bird Sale</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Meat Sale</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Farm</th>
                             <th>Quantity </th>
-                            <th>Price</th>
+                            <th>Price (GHS &#162;)</th>
                             <th>Part</th>
                             <th>Date</th>
                             <th>Action</th>
@@ -135,9 +137,8 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Farm</th>
                             <th>Quantity </th>
-                            <th>Price</th>
+                            <th>Price (GHS &#162;)</th>
                             <th>Part</th>
                             <th>Date</th>
                             <th>Action</th>
@@ -145,6 +146,75 @@
                     </tfoot>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+         {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_part">Part</label>
+                                <input type="text" name="_part" class="form-control  @error('_part') is-invalid @enderror" id="_part" value="{{old('_part')}}">
+                                @error('_part')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_price">Price (GHS &#162;)</label>
+                                <input type="number" min="0" name="_price" step="0.01" class="form-control @error('_price') is-invalid @enderror" id="_price" value="{{ old('_price') }}">
+                                @error('_price')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_quantity">Quantity (Kg)</label>
+                                <input type="number" name="_quantity" min="0" step="0.01" class="form-control @error('_quantity') is-invalid @enderror" id="_quantity" value="{{ old('_quantity') }}">
+                                @error('_quantity')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_date">Date</label>
+                                <div class="input-group date" id="_datetimepicker1" data-target-input="nearest">
+                                    <input type="text" name="_date" class="form-control _datetimepicker-input  @error('_date') is-invalid @enderror"
+                                    data-target="#_datetimepicker1" id="_date" value="{{ old('_date')}}"/>
+                                    <div class="input-group-append" data-target="#_datetimepicker1" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    @error('_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
             </div>
         </div>
     </div>
@@ -159,7 +229,7 @@
 @section('script')
     @parent
 
-    $('#datetimepicker1').datetimepicker({
+    $('#datetimepicker1,#_datetimepicker1').datetimepicker({
        format: 'L',
         icons: {
         time: "fa fa-clock",
@@ -167,18 +237,36 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('datatables.sale.meat','chicken') }}",
-        columns: [
-            {data: 'farm_name', name: 'farm_name'},
-            {data:'quantity',name:'Quantity'},
-            {data:'price',name:'Price'},
-            {data:'part',name:'Part'},
-            {data:'date',name:'Date'},
-            {data: 'action', name: 'Action', orderable: false, searchable: false},
-        ]
+    let  table =  $('#dataTable').DataTable({
+                    processing: true,
+                    serverSide: true,
+                    ajax: "{{ route('datatables.sale.meat','chicken') }}",
+                    columns: [
+                        {data:'quantity',name:'quantity'},
+                        {data:'price',name:'price'},
+                        {data:'part',name:'part'},
+                        {data:'date',name:'date'},
+                        {data: 'action', name: 'Action', orderable: false, searchable: false},
+                    ]
+                });
+
+    table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        $('#_part').val(data.part);
+        $('#_price').val(data.price);
+        $('#_quantity').val(data.quantity);
+        let date = new Date(data.date);
+        $('#_date').val(date.format());
+        $('#editPenForm').attr('action',`/edit/sale/meat/${data.id}`)
+        $('#edit-modal').modal('show');
     });
+
+    table.on('click','.delete-btn', (e)=>{
+        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+                let form = $(e.target).closest('form');
+                form.submit();
+            }
+        });
 @endsection
 

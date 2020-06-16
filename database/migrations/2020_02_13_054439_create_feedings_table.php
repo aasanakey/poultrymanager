@@ -17,7 +17,7 @@ class CreateFeedingsTable extends Migration
             $table->bigIncrements('id');
             $table->unsignedBigInteger('farm_id');
             $table->string('pen_id');
-            $table->date('date');
+            $table->timestamp('date');
             $table->unsignedBigInteger('feed_id');
             $table->decimal('feed_quantity');
             $table->decimal('water_quantity');

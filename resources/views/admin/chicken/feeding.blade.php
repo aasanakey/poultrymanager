@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -145,10 +145,9 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Farm</th>
                             <th>Pen House</th>
                             <th>Feed</th>
-                            <th>Date</th>
+                            <th>Date & Time</th>
                             <th>Water (l)</th>
                             <th>Feed Quantity (Kg)</th>
                             <th>Action</th>
@@ -156,10 +155,9 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Farm</th>
                             <th>Pen House</th>
                             <th>Feed</th>
-                            <th>Date</th>
+                            <th>Date & Time</th>
                             <th>Water (l)</th>
                             <th>Feed Quantity (Kg)</th>
                             <th>Action</th>
@@ -167,6 +165,88 @@
                     </tfoot>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+      {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method("PUT")
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_feed_id">Feed</label>
+                                <input type="text" name="_feed" class="form-control  @error('_feed') is-invalid @enderror" id="_feed_id" value="{{old('_feed')}}">
+
+                                @error('_feed')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_pen">Pen House</label>
+                                <input type="text" name="_pen"  class="form-control @error('_pen') is-invalid @enderror" id="_pen" value="{{ old('_pen') }}">
+                                @error('_pen')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_feed_quantity">Quantity per Serving (Kg)</label>
+                                <input type="number" name="_feed_quantity" min="0" step="0.01" class="form-control @error('_feed_quantity') is-invalid @enderror" id="_feed_quantity" value="{{ old('_feed_quantity') }}">
+                                @error('_feed_quantity')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_date">Date</label>
+                                <div class="input-group date" id="_datetimepicker1" data-target-input="nearest">
+                                    <input type="text" name="_date" class="form-control datetimepicker-input  @error('_date') is-invalid @enderror"
+                                    data-target="#_datetimepicker1" id="_date" value="{{ old('_date')}}"/>
+                                    <div class="input-group-append" data-target="#_datetimepicker1" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    @error('_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="_water_quantity">Water Quantity (L)</label>
+                                <input type="number" name="_water_quantity" min="0" step="0.01" class="form-control @error('_water_quantity') is-invalid @enderror" id="_water_quantity" value="{{ old('_water_quantity') }}">
+                                @error('_water_quantity')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
             </div>
         </div>
     </div>
@@ -180,30 +260,49 @@
 @endsection
 @section('script')
     @parent
-    {{-- @if ($errors)
-        {{!!"$('#addBirdModal').modal('show');"!!}}
-    @endif --}}
+
     $('#datetimepicker1').datetimepicker({
-        format: 'L',
+        {{-- format: 'L', --}}
         icons: {
         time: "fa fa-clock",
         date: "fa fa-calendar",
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
+    let table = $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: "{{ route('datatables.feeding','chicken') }}",
         columns: [
-            {data: 'farm_name', name: 'farm_name'},
-            {data: 'pen_id', name: 'Pen House'},
-            {data:'name',name:'Feed'},
-            {data:'date',name:'Date'},
-            {data:'water_quantity',name:'Water'},
-            {data:'feed_quantity',name:'Feed Quantity'},
+            {data: 'pen_id', name: 'pen_id'},
+            {data:'name',name:'name'},
+            {data:'date',name:'date'},
+            {data:'water_quantity',name:'water_quantity'},
+            {data:'feed_quantity',name:'feed_quantity'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
+    });
+    table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        {{-- console.log(data) --}}
+        $('#_feed_id').val(data.name);
+        $('#_feed_id').attr('disabled' ,true);
+        $('#f_id').val(data.feed_id);
+        $('#_pen').val(data.pen_id);
+        $('#_feed_quantity').val(data.feed_quantity);
+        $('#_water_quantity').val(data.water_quantity);
+        let date = new Date(data.date);
+        $('#_date').val(date.format())
+        $('#editPenForm').attr('action',`/edit/feeding/${data.id}`)
+        $('#edit-modal').modal('show');
+    });
+
+    table.on('click','.delete-btn', (e)=>{
+       if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+            let form = $(e.target).closest('form');
+            form.submit();
+        }
     });
 @endsection
 

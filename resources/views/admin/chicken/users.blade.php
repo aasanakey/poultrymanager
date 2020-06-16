@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -116,7 +116,7 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>tables</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Admins</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -164,17 +164,24 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('datatables.admins','chicken') }}",
-        columns: [
-            {data:"full_name",name:"full_name"},
-            {data:"email",name: "email"},
-            {data:"contact",name: "contact"},
-            {data:"role",name:"role"},
-            {data: 'action', name: 'Action', orderable: false, searchable: false},
-        ]
-    });
+    let table =$('#dataTable').DataTable(
+        {
+            processing: true,
+            serverSide: true,
+            ajax: "{{ route('datatables.admins','chicken') }}",
+            columns: [
+                {data:"full_name",name:"full_name"},
+                {data:"email",name: "email"},
+                {data:"contact",name: "contact"},
+                {data:"role",name:"role"},
+                {data: 'action', name: 'Action', orderable: false, searchable: false},
+            ]
+        });
+    table.on('click','.delete-btn', (e)=>{
+        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+                let form = $(e.target).closest('form');
+                form.submit();
+            }
+        });
 @endsection
 

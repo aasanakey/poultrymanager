@@ -52,9 +52,9 @@
                         <div class="modal-body">
                             <form id="birdForm" method="POST" action="{{ route('admin.add.bird','guinea_fowl')}}">
                                 @csrf
-                                 <div class="form-row">
+                                <div class="form-row">
                                     <div class="form-group col-md-12">
-                                        <label for="fowl_exampleFormControlSelect1">Breed</label>
+                                        <label for="exampleFormControlSelect1">Species</label>
                                         <select name="species" class="form-control" id="fowl_exampleFormControlSelect1">
                                             <option value="White-breasted">White-breasted guineafowl</option>
                                             <option value="Black guineafowl">Black guineafowl</option>
@@ -84,8 +84,8 @@
                                         @enderror
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="price">Number of Birds</label>
-                                        <input type="number" name="number" min="0" class="form-control @error('number') is-invalid @enderror" id="price" value="{{ old('number') }}">
+                                        <label for="number">Number of Birds</label>
+                                        <input type="number" name="number" min="0" class="form-control @error('number') is-invalid @enderror" id="number" value="{{ old('number') }}">
                                         @error('number')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="form-row">
                                     <div class="form-group col-md-6">
-                                        <label for="price">price</label>
+                                        <label for="price">Price per Bird(GHS &#162;)</label>
                                         <input type="number" name="price" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
                                         @error('price')
                                             <span class="invalid-feedback" role="alert">
@@ -138,26 +138,24 @@
                     <thead>
                         <tr>
                             <th>Batch</th>
-                            {{-- <th>Farm</th> --}}
                             <th>Pen</th>
                             <th>Number of Birds</th>
                             <th>Price per Bird(GHS &#162;)</th>
                             <th>Species</th>
                             <th>Date</th>
-                            {{-- <th>Type</th> --}}
+                            <th>Type</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
                                 <th>Batch</th>
-                                {{-- <th>Farm</th> --}}
                                 <th>Pen</th>
                                 <th>Number of Birds</th>
-                                <th>Price per Bird(GHS &#162;)</th>
+                                <th>Price per Bird (GHS &#162;)</th>
                                 <th>Species</th>
                                 <th>Date</th>
-                                {{-- <th>Type</th> --}}
+                                <th>Type</th>
                                 <th>Action</th>
                         </tr>
                     </tfoot>
@@ -166,13 +164,12 @@
             </div>
         </div>
     </div>
-
      {{-- edit form modal --}}
     <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="editModalCenterTitle">Edit Bird</h5>
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                     </button>
@@ -215,7 +212,7 @@
                         </div>
                         <div class="form-row">
                             <div class="form-group col-md-6">
-                                <label for="edit_price">Price per Bird</label>
+                                <label for="edit_price">Price per Bird(GHS &#162;)</label>
                                 <input type="number" name="bird_price" min="0" step="0.01" class="form-control @error('price') is-invalid @enderror" id="edit_price" value="{{ old('bird_price') }}">
                                 @error('bird_price')
                                     <span class="invalid-feedback" role="alert">
@@ -267,18 +264,18 @@
         down: "fa fa-arrow-down"
     }
     });
- let table = $('#dataTable').DataTable({
+    let table = $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: "{{ route('datatables.population','guinea_fowl') }}",
         columns: [
             {data: 'batch_id', name: 'batch_id'},
-            {{-- {data: 'farm_name', name: 'farm_name'}, --}}
             {data:'pen_id',name:'pen_id'},
             {data:'number',name:'number'},
             {data:'unit_price',name:'unit_price'},
             {data:'species',name:'species'},
-            {data:'date',name:'species'},  
+            {data:'date',name:'date'},
+            {data:'type',name:'type'},
             {data: 'action', name: 'action', orderable: false, searchable: false},
         ]
     });
@@ -287,6 +284,7 @@
         var tr = $(e.target).closest('tr');
         var bird_data = table.row(tr).data();
         $('#edit_species').val(bird_data.species);
+        {{-- $('#edit_type').val(bird_data.type); --}}
         $('#edit_pen').val(bird_data.pen_id);
         $('#edit_number').val(bird_data.number);
         $('#edit_price').val(bird_data.unit_price);
@@ -300,6 +298,6 @@
        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
             let form = $(e.target).closest('form');
             form.submit();
-        } 
+        }
     });
 @endsection

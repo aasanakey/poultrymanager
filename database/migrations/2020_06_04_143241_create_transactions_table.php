@@ -18,7 +18,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('farm_id');
             $table->string('type');
             $table->date('date');
-            $table->decimal('amount');
+            $table->decimal('amount',10,2);
             $table->string('category');
             $table->string('account');
             $table->string('description');

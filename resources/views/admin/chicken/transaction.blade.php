@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -162,7 +162,7 @@
                         <tr>
                            <th>Type</th>
                             <th>Date</th>
-                            <th>Amount</th>
+                            <th>Amount (GHS &#162;)</th>
                             <th>Category</th>
                             <th>Account Name</th>
                             <th>Description</th>
@@ -171,6 +171,108 @@
                     </tfoot>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+
+ {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-row">
+                            <div class="col-md-4">
+                                <label for="">Type</label>
+                            </div>
+                            <div class="form-check form-check-inline" style="margin-right:55px;">
+                                <input class="form-check-input @error('_type') is-invalid @enderror" type="radio" name="_type" id="_expense" value="expense" {{ old('_type')? 'checked' : 'checked'}}>
+                                <label class="form-check-label" for="_expense">Expense</label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <input class="form-check-input @error('_type') is-invalid @enderror" type="radio" name="_type" id="_income" value="income" {{ old('_type')? 'checked' : ''}}>
+                                <label class="form-check-label" for="_income">Income</label>
+                            </div>
+                                @error('type')
+                                <span class="invalid-feedback" role="alert">
+                                    <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_date">Transaction Date</label>
+                                <div class="input-group date" id="_datetimepicker1" data-target-input="nearest">
+                                    <input type="text" name="_date" id="_date" class="form-control datetimepicker-input  @error('_date') is-invalid @enderror"
+                                    data-target="#_datetimepicker1" value="{{ old('_date')}}"/>
+                                    <div class="input-group-append" data-target="#_datetimepicker1" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    @error('_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_amount">Amount (GHS &#162;) </label>
+                                <input type="number" name="_amount" min="0" step="0.01" id="_amount" placeholder="0.00" class="form-control  @error('_amount') is-invalid @enderror" value="{{ old('_amount')}}"/>
+                                    @error('_amount')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_category">Category</label>
+                                <input type="text" name="_category" id="_category" placeholder="eg rent,insurance" class="form-control  @error('_category') is-invalid @enderror" value="{{ old('_category')}}"/>
+                                    @error('_category')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                            </div>
+                            <div class="form-group col-md-6" >
+                                    <label  for="_account" id="_account-label">Account Name</label>
+                                    <input class="form-control @error('_account') is-invalid @enderror" id="_account"
+                                    type="text"  name="_account" value="{{ old('_account') }}" placeholder="eg Darko Farms"/>
+
+                                @error('_account')
+                                    <span id="farm_contact_error" class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="_description">Description</label>
+                                <textarea name="_description" id="_description" class="form-control @error('_description') is-invalid @enderror" cols="30" rows="5">{{ old('_description')}}</textarea>
+                                @error('_description')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
             </div>
         </div>
     </div>
@@ -184,7 +286,7 @@
 @endsection
 @section('script')
     @parent
-    $('input:radio[name=type]').change((e)=>{
+    {{-- $('input:radio[name=type]').change((e)=>{
         label = $('#account-label');
         switch(e.target.value){
             case 'income':
@@ -194,8 +296,8 @@
                 label.html("Payee")
                 break;
         }
-    });
-    $('#datetimepicker1,#hire_date_datetimepicker1').datetimepicker({
+    }); --}}
+    $('#datetimepicker1,#_datetimepicker1').datetimepicker({
         'format':'L',
         icons: {
         time: "fa fa-clock",
@@ -203,7 +305,8 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
+  let table = $('#dataTable').DataTable(
+      {
         processing: true,
         serverSide: true,
         ajax: "{{ route('datatables.transactions','chicken') }}",
@@ -217,14 +320,32 @@
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
     });
-    {{-- farm_name": "Test Farm",
-"id": "2",
-"farm_id": "2",
-"date": "Wednesday, 03 Jun 2020",
-"amount": "100.00",
-"category": "Light Bill",
-"account": "ECG",
-"description": "Bill for electricity",
-"farm_category" --}}
+
+      table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        if(data.type == 'Income'){
+            $('#_income').attr('checked',true);
+        }else{
+            $('#_expense').attr("checked",true);
+        }
+        $('#_amount').val(data.amount);
+        $('#_category').val(data.category);
+        $('#_type').val(data.type);
+        $('#_account').val(data.account);
+         $('#_description').val(data.description)
+        let date = new Date(data.date);
+        $('#_date').val(date.format());
+        $('#editPenForm').attr('action',`/edit/transaction/${data.id}`)
+        $('#edit-modal').modal('show');
+    });
+
+    table.on('click','.delete-btn', (e)=>{
+        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+                let form = $(e.target).closest('form');
+                form.submit();
+            }
+        });
+
 @endsection
 

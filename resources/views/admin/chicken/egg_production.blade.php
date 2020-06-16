@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -144,7 +144,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <label for="number">Number of Badd Eggs</label>
+                                    <label for="number">Number of Bad Eggs</label>
                                     <input type="number" name="bad_eggs" min="0" class="form-control @error('bad_eggs') is-invalid @enderror" id="bad_eggs" value="{{ old('bad_eggs') }}">
                                     @error('bad_eggs')
                                         <span class="invalid-feedback" role="alert">
@@ -171,7 +171,6 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Farm</th>
                             <th>Pen House</th>
                             <th>Bird Batch</th>
                             <th>Number of Eggs</th>
@@ -183,7 +182,6 @@
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Farm</th>
                             <th>Pen House</th>
                             <th>Bird Batch</th>
                             <th>Number of Eggs</th>
@@ -198,6 +196,88 @@
             </div>
         </div>
     </div>
+
+     {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Pen</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edit_batch_id">Batch id</label>
+                                <input type="text" name="_batch_id" class="form-control  @error('_batch_id') is-invalid @enderror" id="edit_batch_id" value="{{old('_batch_id')}}">
+                                @error('_batch_id')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="edit_pen">Pen House</label>
+                                <input type="text" name="_pen"  class="form-control @error('_pen') is-invalid @enderror" id="edit_pen" value="{{ old('_pen') }}">
+                                @error('_pen')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="edit_number">Number of Eggs</label>
+                                <input type="number" name="_number" min="0" class="form-control @error('_number') is-invalid @enderror" id="edit_number" value="{{ old('_number') }}">
+                                @error('_number')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="edit_date">Date</label>
+                                <div class="input-group date" id="edit_datetimepicker1" data-target-input="nearest">
+                                    <input type="text" name="_date" id="edit_date" class="form-control datetimepicker-input  @error('_date') is-invalid @enderror"
+                                    data-target="#edit_datetimepicker1" value="{{ old('_date')}}"/>
+                                    <div class="input-group-append" data-target="#edit_datetimepicker1" data-toggle="datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    @error('_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-12">
+                                <label for="edit_bad_eggs">Number of Bad Eggs</label>
+                                <input type="number" name="_bad_eggs" min="0" class="form-control @error('_bad_eggs') is-invalid @enderror" id="edit_bad_eggs" value="{{ old('_bad_eggs') }}">
+                                @error('_bad_eggs')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
+            </div>
+        </div>
+    </div>
 </div>
 @endsection
 
@@ -208,10 +288,7 @@
 @endsection
 @section('script')
     @parent
-    {{-- @if ($errors)
-        {{!!"$('#addBirdModal').modal('show');"!!}}
-    @endif --}}
-    $('#datetimepicker1').datetimepicker({
+    $('#datetimepicker1,#edit_datetimepicker1').datetimepicker({
         format: 'L',
         icons: {
         time: "fa fa-clock",
@@ -219,20 +296,39 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
+    let table = $('#dataTable').DataTable({
         processing: true,
         serverSide: true,
         ajax: "{{ route('datatables.eggs','chicken') }}",
         columns: [
-            {data: 'farm_name', name: 'farm_name'},
-            {data: 'pen_id', name: 'Pen'},
+            {data: 'pen_id', name: 'pen_id'},
             {data:'layer_batch_id',name:'Batch'},
-            {data:'quantity',name:'Quantity'},
-            {data:'bad_eggs',name:'Bad Eggs'},
-            {data:'good_eggs',name:'Good Eggs'},
-            {data:'date_collected',name:'Date'},
+            {data:'quantity',name:'quantity'},
+            {data:'bad_eggs',name:'bad_eggs'},
+            {data:'good_eggs',name:'good_eggs'},
+            {data:'date_collected',name:'date_collected'},
             {data: 'action', name: 'Action', orderable: false, searchable: false},
         ]
+    });
+
+    table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        $('#edit_pen').val(data.pen_id);
+        $('#edit_batch_id').val(data.layer_batch_id);
+        $('#edit_number').val(data.quantity);
+        $('#edit_bad_eggs').val(data.bad_eggs);
+        let date = new Date(data.date_collected);
+        $('#edit_date').val(date.format())
+        $('#editPenForm').attr('action',`/edit/egg/${data.id}`)
+        $('#edit-modal').modal('show');
+    });
+
+     table.on('click','.delete-btn', (e)=>{
+       if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+            let form = $(e.target).closest('form');
+            form.submit();
+        }
     });
 @endsection
 

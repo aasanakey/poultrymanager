@@ -131,10 +131,33 @@ Route::get('/statement/all', 'StatementController@getStatement')->name('statemen
 Route::put('/edit/pen/{id}','FarmAdminController@editPen')->name('admin.edit.pen');
 Route::put('/edit/bird/{id}','FarmAdminController@editBird')->name('admin.edit.bird');
 Route::put('/edit/mortality/{id}','FarmAdminController@editMortality')->name('admin.edit.mortality');
+Route::put('/edit/egg/{id}', 'FarmAdminController@editEgg')->name('admin.edit.eggs');
+Route::put('/edit/feed/{id}', 'FarmAdminController@editFeed')->name('admin.edit.feed');
+Route::put('/edit/feeding/{id}', 'FarmAdminController@editFeeding')->name('admin.edit.feeding');
+Route::put('/edit/medicine/{id}', 'FarmAdminController@editMedicine')->name('admin.edit.medicine');
+Route::put('/edit/vaccine/{id}', 'FarmAdminController@editVaccine')->name('admin.edit.vaccine');
+Route::put('/edit/sale/bird/{id}', 'FarmAdminController@editBirdSale')->name('admin.edit.sale.bird');
+Route::put('/edit/sale/meat/{id}', 'FarmAdminController@editMeatSale')->name('admin.edit.sale.meat');
+Route::put('/edit/sale/egg/{id}', 'FarmAdminController@editEggSale')->name('admin.edit.sale.egg');
+Route::put('/edit/equipment/{id}', 'FarmAdminController@editEquipment')->name('admin.edit.mortality');
+Route::put('/edit/employee/{id}', 'FarmAdminController@editEmployee')->name('admin.edit.employee');
+Route::put('/edit/transaction/{id}', 'FarmAdminController@editTransaction')->name('admin.edit.transaction');
+// Route::put('/edit/admin/{id}', 'FarmAdminController@editAdmin')->name('admin.edit.admin');
 
 // delete data route
 Route::delete('/delete/pen/{id}', 'FarmAdminController@deletePen')->name('admin.delete.pen');
 Route::delete('/delete/bird/{id}', 'FarmAdminController@deleteBird')->name('admin.delete.bird');
 Route::delete('/delete/mortality/{id}', 'FarmAdminController@deleteMortality')->name('admin.delete.mortality');
-
+Route::delete('/delete/egg/{id}', 'FarmAdminController@deleteEgg')->name('admin.delete.eggs');
+Route::delete('/delete/feed/{id}', 'FarmAdminController@deleteFeed')->name('admin.delete.feed');
+Route::delete('/delete/feeding/{id}', 'FarmAdminController@deleteFeeding')->name('admin.delete.feeding');
+Route::delete('/delete/medicine/{id}', 'FarmAdminController@deleteMedicine')->name('admin.delete.medicine');
+Route::delete('/delete/vaccine/{id}', 'FarmAdminController@deleteVaccine')->name('admin.delete.vaccine');
+Route::delete('/delete/sale/bird/{id}', 'FarmAdminController@deleteBirdSale')->name('admin.delete.sale.bird');
+Route::delete('/delete/sale/meat/{id}', 'FarmAdminController@deleteMeatSale')->name('admin.delete.sale.meat');
+Route::delete('/delete/sale/egg/{id}', 'FarmAdminController@deleteEggSale')->name('admin.delete.sale.egg');
+Route::delete('/delete/equipment/{id}', 'FarmAdminController@deleteEquipment')->name('admin.delete.equipment');
+Route::delete('/delete/employee/{id}', 'FarmAdminController@deleteEmployee')->name('admin.delete.employee');
+Route::delete('/delete/transaction/{id}', 'FarmAdminController@deleteTransaction')->name('admin.delete.transaction');
+Route::delete('/delete/admin/{id}', 'FarmAdminController@deleteUser')->name('admin.delete.admin');
 

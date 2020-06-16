@@ -11,7 +11,7 @@ class BirdMortalitySeeder extends Seeder
      */
     public function run()
     {
-        factory(App\BirdMortality::class, 25)->create();
+        factory(App\BirdMortality::class, 30)->create();
 
     }
 }

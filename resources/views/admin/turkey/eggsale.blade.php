@@ -17,7 +17,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -55,7 +55,7 @@
                             <div class="form-row">
                                 <div class="form-group col-md-6">
                                     <label for="weight">Weight</label>
-                                    <input type="number" name="weight" class="form-control  @error('weight') is-invalid @enderror" id="weight" value="{{old('weight')}}">
+                                    <input type="number" name="weight" min="0" step="0.01" class="form-control  @error('weight') is-invalid @enderror" id="weight" value="{{old('weight')}}">
                                     @error('weight')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -63,8 +63,8 @@
                                         @enderror
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="price">Price</label>
-                                    <input type="number" min="0" name="price"  class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
+                                    <label for="price">Price per Crate(GHS &#162;)</label>
+                                    <input type="number" min="0" name="price" step="0.01"  class="form-control @error('price') is-invalid @enderror" id="price" value="{{ old('price') }}">
                                     @error('price')
                                         <span class="invalid-feedback" role="alert">
                                             <strong>{{ $message }}</strong>
@@ -74,7 +74,7 @@
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <label for="quantity">Number of crates</label>
+                                    <label for="quantity">Number of Crates Sold</label>
                                     <input type="number" name="quantity" min="0" class="form-control @error('quantity') is-invalid @enderror" id="quantity" value="{{ old('quantity') }}">
                                     @error('quantity')
                                         <span class="invalid-feedback" role="alert">
@@ -111,32 +111,99 @@
         </div>
     </div>
     <div class="card mb-4">
-        <div class="card-header"><i class="fas fa-table mr-1"></i>Bird Sale</div>
+        <div class="card-header"><i class="fas fa-table mr-1"></i>Egg Sale</div>
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                           <th>Farm</th>
                             <th>Number</th>
                             <th>Weight</th>
-                            <th>Price</th>
+                            <th>Price per Crate(GHS &#162;)</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Farm</th>
                             <th>Number</th>
                             <th>Weight</th>
-                            <th>Price</th>
+                            <th>Price per Crate(GHS &#162;)</th>
                             <th>Date</th>
                             <th>Action</th>
                         </tr>
                     </tfoot>
                     <tbody></tbody>
                 </table>
+            </div>
+        </div>
+    </div>
+       {{-- edit form modal --}}
+    <div class="modal fade" id="edit-modal" tabindex="-1" role="dialog" aria-labelledby="editModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalCenterTitle">Edit Record</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="editPenForm" method="POST" action="/edit">
+                        @csrf
+                        @method('PUT')
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_weight">Weight</label>
+                                <input type="number" name="_weight" min="0" step="0.01" class="form-control  @error('_weight') is-invalid @enderror" id="_weight" value="{{old('_weight')}}">
+                                @error('_weight')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_price">Price per Crate(GHS &#162;)</label>
+                                <input type="number" min="0" name="_price" step="0.01" class="form-control @error('_price') is-invalid @enderror" id="_price" value="{{ old('_price') }}">
+                                @error('_price')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <label for="_quantity">Number of Crates Sold</label>
+                                <input type="number" name="_quantity" min="0"  class="form-control @error('_quantity') is-invalid @enderror" id="_quantity" value="{{ old('_quantity') }}">
+                                @error('_quantity')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="_date">Date</label>
+                                <div class="input-group date" id="_datetimepicker1" data-target-input="nearest">
+                                    <input type="text" name="_date" class="form-control datetimepicker-input  @error('_date') is-invalid @enderror"
+                                    data-target="#_datetimepicker1" id="_date" value="{{ old('_date')}}"/>
+                                    <div class="input-group-append" data-target="#_datetimepicker1" data-toggle="_datetimepicker">
+                                        <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                    </div>
+                                    @error('_date')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" onclick="document.getElementById('editPenForm').submit()" class="btn btn-primary">Update</button>
+            </div>
             </div>
         </div>
     </div>
@@ -151,7 +218,7 @@
 @section('script')
     @parent
 
-    $('#datetimepicker1').datetimepicker({
+    $('#datetimepicker1,#_datetimepicker1').datetimepicker({
         format: 'L',
         icons: {
         time: "fa fa-clock",
@@ -159,18 +226,36 @@
         up: "fa fa-arrow-up",
         down: "fa fa-arrow-down"
     }});
-    $('#dataTable').DataTable({
-        processing: true,
-        serverSide: true,
-        ajax: "{{ route('datatables.sale.egg','turkey') }}",
-        columns: [
-            {data: 'farm_name', name: 'farm_name'},
-            {data:'quantity',name:'Number'},
-            {data:'weight_per_dozen',name:'Weight'},
-            {data:'price_per_dozen',name:'Price'},
-            {data:'date',name:'Date'},
-            {data: 'action', name: 'Action', orderable: false, searchable: false},
-        ]
+let table = $('#dataTable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: "{{ route('datatables.sale.egg','turkey') }}",
+                columns: [
+                    {data:'quantity',name:'quantity'},
+                    {data:'weight_per_dozen',name:'weight_per_dozen'},
+                    {data:'price_per_dozen',name:'price_per_dozen'},
+                    {data:'date',name:'date'},
+                    {data: 'action', name: 'Action', orderable: false, searchable: false},
+                ]
+            });
+
+table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var data = table.row(tr).data();
+        $('#_weight').val(data.weight_per_dozen);
+        $('#_price').val(data.price_per_dozen);
+        $('#_quantity').val(data.quantity);
+        let date = new Date(data.date);
+        $('#_date').val(date.format());
+        $('#editPenForm').attr('action',`/edit/sale/egg/${data.id}`)
+        $('#edit-modal').modal('show');
+    });
+
+table.on('click','.delete-btn', (e)=>{
+       if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+            let form = $(e.target).closest('form');
+            form.submit();
+        }
     });
 @endsection
 
