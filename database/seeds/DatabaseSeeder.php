@@ -13,8 +13,8 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call(UsersTableSeeder::class);
         $this->call([
-            FarmSeeder::class,
-            FarmAdminSeeder::class,
+            // FarmSeeder::class,
+            // FarmAdminSeeder::class,
             PenHouseSeeder::class,
             BirdsSeeder::class,
             BirdMortalitySeeder::class,
