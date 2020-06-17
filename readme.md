@@ -1,6 +1,6 @@
 # Poultry Farm Manager
 
-This is a web based poultry farm management
+This is a web based poultry farm management developed using the laravel framework.
 
 ## Requirement :
 
@@ -44,6 +44,6 @@ php artisan key:generate
 To populate the database with test data, seed the database
 php artisan db:seed
 
-## run
+### run
 
 php artisan serve
