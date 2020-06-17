@@ -50,8 +50,8 @@ run php artisan db:seed
 
 Use the credentials to access the test account
 
-email: testaccount@mail
-password: password
+_email: testaccount@mail
+password: password_
 
 ### run
 
