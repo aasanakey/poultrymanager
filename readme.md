@@ -36,7 +36,7 @@ In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_
 
 ### Create database tables
 
-php artisan migrate
+run php artisan migrate
 
 ### Generate an app encryption key
 
@@ -45,7 +45,13 @@ php artisan key:generate
 ### Seed database [Optional]
 
 To populate the database with test data, seed the database
-php artisan db:seed
+
+run php artisan db:seed
+
+Use the credentials to access the test account
+
+email: testaccount@mail
+password: password
 
 ### run
 
