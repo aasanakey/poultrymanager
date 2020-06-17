@@ -4,9 +4,12 @@ This is a web based poultry farm management developed using the laravel framewor
 
 ## Requirement :
 
-PHP >= 7
+PHP 7
+
 composer
+
 npm
+
 mysql database
 
 ## Set Up
