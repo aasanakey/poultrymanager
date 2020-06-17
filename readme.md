@@ -57,7 +57,7 @@ password: password_
 
 Provide the configurations for your smtp sever in the .env file for email notifications
 
-In the .env file fill in the MAIL_HOST.MAIL_PORT,MAIL_USERNAME,MAIL_PASSWORD,MAIL_ENCRYPTION,MAIL_FROM_ADDRESS options to match the credentials of the smtp server.
+In the .env file fill in the MAIL_HOST,MAIL_PORT,MAIL_USERNAME,MAIL_PASSWORD,MAIL_ENCRYPTION,MAIL_FROM_ADDRESS options to match the credentials of the smtp server.
 
 ### Start the development server
 
