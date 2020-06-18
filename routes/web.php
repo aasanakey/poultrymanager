@@ -13,7 +13,7 @@
 
 Route::get('/', function () {
     return view('welcome');
-});
+})->name('home');
 
 Route::get('/register', 'AppController@showFarmRegisterForm')->name('register');
 Route::post('/register', 'AppController@farmRegister')->name('farm.post.register');
