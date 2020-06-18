@@ -44,7 +44,7 @@ dd($has_pen);
     public function setupFinish()
     {
         $has_bird = \App\Birds::where('farm_id', auth()->user()->id)->get();
-dd($has_pen);
+dd($has_bird);
 
         if (isset($has_bird) && count($has_bird) > 0) {
             $farm = \App\Farm::where('id', auth()->user()->farm_id)->find(auth()->user()->farm_id);
