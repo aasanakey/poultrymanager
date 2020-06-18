@@ -162,9 +162,29 @@ class FarmManagerLoginController extends Controller
      */
     protected function sendFailedLoginResponse(Request $request)
     {
-        throw ValidationException::withMessages([
-            $this->username() => [trans('auth.failed')],
-        ]);
+        // throw ValidationException::withMessages([
+        //     $this->username() => [trans('auth.failed')],
+        // ]);
+         $errors = [ $this->username() => [trans('auth.email')]];
+
+        // Load admin from database
+        $admin = \App\FarmAdmin::where('email', $request->email)->first();
+
+       
+
+        // Check if user was successfully loaded, that the password matches
+        // If so, override the default error message.
+        if ($admin && ! \Hash::check($request->password, $admin->password)) {
+            $errors = ['password' => [trans('auth.password')]];
+        }
+
+        if ($request->expectsJson()) {
+            return response()->json($errors, 422);
+        }
+        return redirect()->back()
+            ->withInput($request->only($this->username(), 'remember'))
+            ->withErrors($errors);
+    
     }
 
     /**
@@ -212,4 +232,5 @@ class FarmManagerLoginController extends Controller
     {
         return Auth::guard('managers');
     }
+       
 }
