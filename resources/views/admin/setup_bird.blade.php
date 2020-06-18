@@ -532,7 +532,7 @@
        }
        form.submit();
     })
-    $('#chicken_datetimepicker,#fowl_datetimepicker,#turkey_datetimepicke,#edit_datetimepicker').datetimepicker({
+    $('#chicken_datetimepicker,#fowl_datetimepicker,#turkey_datetimepicker,#edit_datetimepicker').datetimepicker({
         format: 'L',
         icons: {
             time: "fa fa-clock",
