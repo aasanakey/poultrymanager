@@ -11,6 +11,12 @@
 @section('content')
 @include('layouts.logo')
     <div class="container">
+        <div class="div">
+            <a class="btn btn-primary" href="{{ route('admin.logout') }}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();"> <i class="fas fa-sign-out-alt"></i>logout</a>
+            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                @csrf
+            </form>
+        </div>
         <div class="row mt-4" style="margin-bottom:10px;">
             <div class="card col-md-4">
                 <a href="{{route('admin.bird_type','chicken')}}">
