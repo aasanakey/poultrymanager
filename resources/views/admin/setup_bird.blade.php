@@ -22,7 +22,7 @@
                 </div>
                @endif
                @if (session()->has('error'))
-                <div class="alert alert-error col-md-12" role="alert">
+                <div class="alert alert-danger col-md-12" role="alert">
                     <span>{{ session()->get('error')}} </span>
                 </div>
                @endif
@@ -583,6 +583,6 @@
        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
             let form = $(e.target).closest('form');
             form.submit();
-        } 
+        }
     });
 @endsection
