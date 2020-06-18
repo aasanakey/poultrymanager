@@ -32,6 +32,8 @@ class FarmAdminController extends Controller
     public function setupBird()
     {
         $has_pen = auth()->user()->farm->pen;
+dd($has_pen);
+
         if (isset($has_pen) && count($has_pen) == 0) {
             return redirect()->back()->with('error', 'Please add pen');
         }
@@ -42,6 +44,7 @@ class FarmAdminController extends Controller
     public function setupFinish()
     {
         $has_bird = \App\Birds::where('farm_id', auth()->user()->id)->get();
+dd($has_pen);
 
         if (isset($has_bird) && count($has_bird) > 0) {
             $farm = \App\Farm::where('id', auth()->user()->farm_id)->find(auth()->user()->farm_id);
