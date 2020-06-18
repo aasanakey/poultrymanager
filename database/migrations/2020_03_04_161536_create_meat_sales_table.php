@@ -19,6 +19,8 @@ class CreateMeatSalesTable extends Migration
             $table->date('date');
             $table->decimal('quantity');
             $table->decimal('price');
+            $table->string('type');
+            $table->string('part');
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
         });

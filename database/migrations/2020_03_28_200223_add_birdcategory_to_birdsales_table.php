@@ -13,11 +13,11 @@ class AddBirdcategoryToBirdsalesTable extends Migration
      */
     public function up()
     {
-        Schema::table('bird_sales', function (Blueprint $table) {
-            $table->string('bird_category');
-            $table->integer('number');
+        // Schema::table('bird_sales', function (Blueprint $table) {
+        //     $table->string('bird_category');
+        //     $table->integer('number');
 
-        });
+        // });
     }
 
     /**

@@ -14,7 +14,7 @@ class AddCategoryToEggSales extends Migration
     public function up()
     {
         Schema::table('egg_sales', function (Blueprint $table) {
-            $table->string('egg_type');
+            // $table->string('egg_type');
 
         });
     }

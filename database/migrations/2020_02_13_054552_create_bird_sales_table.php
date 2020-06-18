@@ -20,6 +20,8 @@ class CreateBirdSalesTable extends Migration
             $table->date('date');
             $table->decimal('weight');
             $table->decimal('price');
+            $table->string('bird_category');
+            $table->integer('number');
             $table->timestamps();
             $table->foreign('farm_id')->references('id')->on('farms')->onUpdate('cascade')->onDelete('cascade');
             $table->foreign('bird_batch_id')->references('batch_id')->on('birds')->onUpdate('cascade')->onDelete('cascade');
