@@ -129,7 +129,7 @@
                             <thead>
                                 <tr>
                                     <th>Pen ID</th>
-                                    <th>Farm</th>
+                                    {{-- <th>Farm</th> --}}
                                     <th>Location</th>
                                     <th>Size</th>
                                     <th>Capacity</th>
@@ -140,7 +140,7 @@
                             <tfoot>
                                 <tr>
                                     <th>Pen ID</th>
-                                    <th>Farm</th>
+                                    {{-- <th>Farm</th> --}}
                                     <th>Location</th>
                                     <th>Size</th>
                                     <th>Capacity</th>
@@ -267,7 +267,7 @@
         ajax: "{{ route('datatables.pen','all') }}",
         columns: [
             {data:'pen_id',name:'pen_id'},
-            {data: 'farm_name', name: 'farm_name'},
+            {{-- {data: 'farm_name', name: 'farm_name'}, --}}
             {data:'location',name:'location'},
             {data:'size',name:'size'},
             {data:'capacity',name:'capacity'},
@@ -290,6 +290,6 @@
        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
             let form = $(e.target).closest('form');
             form.submit();
-        } 
+        }
     });
 @endsection
