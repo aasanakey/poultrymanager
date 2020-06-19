@@ -15,7 +15,7 @@ class FarmAdminController extends Controller
     {
 
         $this->middleware('auth:managers');
-        $this->middleware('verified');
+        // $this->middleware('verified');
         // $this->middleware('role:SUPER_ADMIN');
     }
 
@@ -1372,7 +1372,7 @@ class FarmAdminController extends Controller
             "contact" => $request->contact,
             "role" => $request->role,
         ]);
-        $user->notify(new \App\Notifications\NewUserNotification(route('farm.manager.password.request'), $farm->farm_name));
+        // $user->notify(new \App\Notifications\NewUserNotification(route('farm.manager.password.request'), $farm->farm_name));
         return redirect()->back()->with('success', 'User added successfully. Email sent to user to create password');
 
     }

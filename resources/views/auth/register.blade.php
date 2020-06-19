@@ -43,13 +43,12 @@
                     @endif
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('farm.post.register')}}" method="post">
+                    <form action="{{ route('farm.post.credential.create')}}" method="post">
                         @csrf
                         <div class="form-row">
                             <div class="col-md-6">
                                 <div class="form-group">
                                     <label class="small mb-1" for="inputFarmName">Farm Name</label>
-                                        {{-- <i class="fa fa-user" aria-hidden="true"></i> --}}
                                     <input class="form-control py-4 @error('farm_name') is-invalid @enderror" id="inputFarmName"
                                         type="text"  name="farm_name" value="{{ old('farm_name') }}" aria-describedby="farm_name_error"/>
 
@@ -62,7 +61,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label class="small mb-1" for="inputEmail">Email</label>
+                                    <label class="small mb-1" for="inputEmail">Farm Email</label>
                                     <input class="form-control py-4 @error('farm_email') is-invalid @enderror" id="inputEmail"
                                     type="email" name="farm_email" value="{{ old('farm_email') }}" aria-describedby="farm_email_error"/>
 
@@ -103,42 +102,90 @@
                             </div>
                         </div>
 
-                    <div class="form-row">
-                        <div class="col-md-12">
-                            <div class="form-group">
-                                    <label class="small mb-1" for="inputFarmManager">Farm Manager</label>
-                                    <input class="form-control py-4 @error('farm_manager') is-invalid @enderror" id="inputFarmManager"
-                                    type="text"  name="farm_manager" value="{{ old('farm_manager') }}" aria-describedby="farm_manager_error"/>
 
-                                @error('farm_manager')
-                                    <span id="farm_manager_error" class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                    <div class="admin">
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                        <label class="small mb-1" for="inputFarmManager">Farm Manager</label>
+                                        <input class="form-control py-4 @error('farm_manager') is-invalid @enderror" id="inputFarmManager"
+                                        type="text"  name="farm_manager" value="{{ old('farm_manager') }}" aria-describedby="farm_manager_error"/>
+
+                                    @error('farm_manager')
+                                        <span id="farm_manager_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label class="small mb-1" for="inputEmail">Farm Manager Email</label>
+                                    <input class="form-control py-4 @error('farm_manager_email') is-invalid @enderror" id="inputEmail"
+                                    type="email" name="farm_manager_email" value="{{ old('farm_manager_email') }}" aria-describedby="farm_manager_email_error"/>
+
+                                    @error('farm_manager_email')
+                                        <span id="farm_manager_email_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                        <label class="small mb-1" for="inputFarmContact">Farm Manager Contact</label>
+                                        <input class="form-control py-4 @error('farm_manager_contact') is-invalid @enderror" id="inputFarmContact"
+                                        type="text"  name="farm_manager_contact" value="{{ old('farm_manager_contact') }}" placeholder="eg 233 200 066 655" aria-describedby="farm_manager_contact_error"/>
+
+                                    @error('farm_manager_contact')
+                                        <span id="farm_manager_contact_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row" hidden>
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                        <label class="small mb-1" for="inputFarmManager">Role</label>
+                                        <input class="form-control py-4 @error('farm_admin_role') is-invalid @enderror" id="inputFarmManager"
+                                        type="text"  name="farm_admin_role" value="SUPER_ADMIN" aria-describedby="role_error"/>
+
+                                    @error('farm_admin_role')
+                                        <span id="role_error" class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="password" class="small mb-1">{{ __('Password') }}</label>
+                                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password"  autocomplete="new-password">
+
+                                    @error('password')
+                                        <span class="invalid-feedback" role="alert">
+                                            <strong>{{ $message }}</strong>
+                                        </span>
+                                    @enderror
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group ">
+                                    <label for="password-confirm" class="small mb-1">{{ __('Confirm Password') }}</label>
+                                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation"  autocomplete="new-password">
+                                </div>
                             </div>
                         </div>
                     </div>
-
-                    {{-- <div class="form-row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="password" class="small mb-1">{{ __('Password') }}</label>
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password"  autocomplete="new-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="form-group ">
-                                <label for="password-confirm" class="small mb-1">{{ __('Confirm Password') }}</label>
-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation"  autocomplete="new-password">
-                            </div>
-                        </div>
-                    </div> --}}
                     <div class="form-group mt-4 mb-0">
                         <button class="btn btn-primary btn-block" type="submit">Register</button>
                     </div>
