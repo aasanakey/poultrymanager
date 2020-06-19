@@ -6,7 +6,12 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <div class="card">
-                <div class="card-header">{{ __('Reset Password') }}</div>
+                <div class="card-header">
+                    <h4>{{ __('Reset Password') }}</h4>
+                    <a href="{{route('farm.manager.password.request')}}" class="btn" style="color:white;" title="Go to home">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                </div>
 
                 <div class="card-body">
                     <form method="POST" action="{{ route('password.update') }}">

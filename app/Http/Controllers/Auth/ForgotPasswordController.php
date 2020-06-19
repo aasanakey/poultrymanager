@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use DB;
 use Illuminate\Foundation\Auth\SendsPasswordResetEmails;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Password;
@@ -64,7 +65,8 @@ class ForgotPasswordController extends Controller
             return $this->sendResetLinkFailedResponse($request, 'passwords.user');
         }
 
-        return $this->sendResetLinkResponse($user->id);
+        // dd($request->email);
+        return $this->sendResetLinkResponse($request);
     }
 
     /**
@@ -96,9 +98,18 @@ class ForgotPasswordController extends Controller
      * @param  string  $response
      * @return \Illuminate\Http\RedirectResponse|\Illuminate\Http\JsonResponse
      */
-    protected function sendResetLinkResponse($id)
+    protected function sendResetLinkResponse($request)
     {
-        return redirect(route('password.reset', $id));
+        $reset_token = strtolower(str_random(64));
+        DB::table('password_resets')->insert([
+            'email' => $request->email,
+            'token' => $reset_token,
+            'created_at' => \Carbon\Carbon::now(),
+        ]);
+
+        return redirect()
+            ->action('\App\Http\Controllers\Auth\ResetPasswordController@showResetForm',
+                [$request, 'token' => $reset_token]);
     }
 
     /**
