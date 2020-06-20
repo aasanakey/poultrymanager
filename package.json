@@ -24,6 +24,7 @@
         "vue-template-compiler": "^2.6.11"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.13.1",
         "chart.js": "^2.9.3",
         "datatables.net-dt": "^1.10.21",
         "tempusdominus-bootstrap-4": "^5.1.2"
