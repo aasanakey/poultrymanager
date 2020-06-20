@@ -444,13 +444,13 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.0-alpha14/js/tempusdominus-bootstrap-4.min.js"></script>
  @endsection
 
- @section('script')
+ {{-- @section('script')
     @parent
     let selectDOM = []
     function getPen(body){
 
         body = {...body,"_token":$('meta[name="csrf-token"]').attr('content')};
-        {{-- console.log(JSON.stringify(body)); --}}
+
         return fetch('{{ route('api.pen') }}', {
             method:'POST',
             headers: {
@@ -477,7 +477,7 @@
                     let select = $("#chicken_pen")
                     select.empty()
                     pen.forEach( (current,index) =>{
-                        {{-- console.logconsole.log(current,index) --}}
+
                         select.append(`<option value="${current.pen_id}">${current.pen_id}</option>`);
                     })
                 })
@@ -500,6 +500,149 @@
                 $('#turkey').attr('hidden',true);
                 $('#guinea_fowl').removeAttr('hidden')
                 getPen({"bird":"guinea_fowl","farm_id":"{{auth()->user()->farm_id}}"})
+                .then(pen =>{
+                    let select = $("#fowl_pen")
+                    select.empty()
+                    pen.forEach( (current,index) =>{
+
+                        select.append(`<option value="${current.pen_id}">${current.pen_id}</option>`);
+                    })
+                })
+                break;
+        }
+    });
+    $("#submitForm").on('click',(e)=>{
+       form = document.getElementById('birdForm');
+
+       switch(form['bird'].value){
+           case 'chicken':
+                $('#turkey').remove();
+                $('#guinea_fowl').remove();
+                break;
+           case 'turkey':
+            $('#chicken').remove();
+            $('#guinea_fowl').remove();
+            break;
+           case 'guinea_fowl':
+                $('#chicken').remove();
+                $('#turkey').remove();
+                break;
+           default:
+            alert("select a bird and enter detials");
+       }
+       form.submit();
+    })
+    $('#chicken_datetimepicker,#fowl_datetimepicker,#turkey_datetimepicker,#edit_datetimepicker').datetimepicker({
+        format: 'L',
+        icons: {
+            time: "fa fa-clock",
+            date: "fa fa-calendar",
+            up: "fa fa-arrow-up",
+            down: "fa fa-arrow-down"
+        }
+    });
+  let table = $('#dataTable').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: "{{ route('datatables.population','all') }}",
+        columns: [
+            {data: 'batch_id', name: 'batch_id'},
+
+            {data:'pen_id',name:'pen_id'},
+            {data:'number',name:'number'},
+            {data:'unit_price',name:'unit_price'},
+            {data:'species',name:'species'},
+            {data:'date',name:'date'},
+            {data:'type',name:'type'},
+            {data: 'action', name: 'action', orderable: false, searchable: false},
+        ]
+    });
+
+     table.on('click','.edit-btn',(e)=>{
+        var tr = $(e.target).closest('tr');
+        var bird_data = table.row(tr).data();
+        $('#edit_species').val(bird_data.species);
+        if( bird_data.type){
+            $('#edit_type').val(bird_data.type);
+        }else{
+            $('#edit_type').attr('disabled',true)
+        }
+        $('#edit_pen').val(bird_data.pen_id);
+        $('#edit_number').val(bird_data.number);
+        $('#edit_price').val(bird_data.unit_price);
+        let date = new Date(bird_data.date);
+        let dd = date.getDate() < 10 ? '0'+ date.getDate(): date.getDate();
+        let mm = (date.getMonth()+1 < 10) ? '0'+(date.getMonth()+1): date.getMonth()+1;
+        let yy = date.getFullYear();
+        $('#edit_date').val(`${dd}/${mm}/${yy}`)
+        $('#editPenForm').attr('action',`/edit/bird/${bird_data.batch_id}`)
+        $('#edit-modal').modal('show');
+    });
+
+    table.on('click','.delete-btn', (e)=>{
+       if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
+            let form = $(e.target).closest('form');
+            form.submit();
+        }
+    });
+@endsection --}}
+
+@section('script')
+    @parent
+    let selectDOM = []
+    function getPen(bird,farm_id){
+
+        body = {"bird":bird,"farm_id":farm_id,"_token":$('meta[name="csrf-token"]').attr('content')};
+        {{-- console.log(JSON.stringify(body)); --}}
+        return fetch('{{ route('api.pen') }}', {
+            method:'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body:JSON.stringify(body),
+        })
+        .then(response => response.json())
+        .then(data => {
+            return data;
+        })
+        .catch((error) => {
+        console.error('Error:', error);
+        });
+    }
+    $('input:radio[name=bird]').change((e)=>{
+        switch(e.target.value){
+            case 'chicken':
+                $('#turkey').attr('hidden',true);
+                $('#guinea_fowl').attr('hidden',true)
+                $('#chicken').removeAttr('hidden');
+                getPen("chicken","{{auth()->user()->farm_id}}")
+                .then(pen =>{
+                    let select = $("#chicken_pen")
+                    select.empty()
+                    pen.forEach( (current,index) =>{
+                        {{-- console.logconsole.log(current,index) --}}
+                        select.append(`<option value="${current.pen_id}">${current.pen_id}</option>`);
+                    })
+                })
+                break;
+            case 'turkey':
+                $('#chicken').attr('hidden',true);
+                $('#turkey').removeAttr('hidden');
+                $('#guinea_fowl').attr('hidden',true)
+                getPen("turkey","{{auth()->user()->farm_id}}")
+                .then(pen =>{
+                    let select = $("#turkey_pen")
+                    select.empty()
+                    pen.forEach( (current,index) =>{
+                        select.append(`<option value="${current.pen_id}">${current.pen_id}</option>`);
+                    })
+                })
+                break;
+            case 'guinea_fowl':
+                $('#chicken').attr('hidden',true);
+                $('#turkey').attr('hidden',true);
+                $('#guinea_fowl').removeAttr('hidden')
+                getPen("guinea_fowl","{{auth()->user()->farm_id}}")
                 .then(pen =>{
                     let select = $("#fowl_pen")
                     select.empty()
@@ -586,3 +729,4 @@
         }
     });
 @endsection
+
