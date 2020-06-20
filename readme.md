@@ -1,16 +1,15 @@
 # Poultry Farm Manager
 
 This is a web based poultry farm management developed using the laravel framework.
+The code has been modified to be integrated with php desktop and used as an offline desktop application using sqlite.
 
 ## Requirement :
 
-PHP 7
+PHP >=7.3
 
 composer
 
 npm
-
-mysql database
 
 ## Set Up
 
@@ -24,15 +23,15 @@ npm install
 
 ### Configure environment viarable
 
-create a copy of .env.exampl and rename to .env
+create a copy of .env.example and rename to .env
 or
 run php -r "file_exists('.env') || copy('.env.example', '.env')
 
 ### Database setup
 
-Create an empty database for the application.
+Create an empty sqlite file name database.sqlite in the database/ directory
 
-In the .env file fill in the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD options to match the credentials of the database you just created.
+In the .env delete the DB_HOST, DB_PORT, DB_DATABASE, DB_USERNAME, and DB_PASSWORD options and change the DB_CONNECTION option to sqlite.
 
 ### Create database tables
 
@@ -53,12 +52,6 @@ Use the credentials to access the test account
 _email: testaccount@mail
 password: password_
 
-### smtp server setup
+### Integration with phpdesktop
 
-Provide the configurations for your smtp sever in the .env file for email notifications
-
-In the .env file fill in the MAIL_HOST,MAIL_PORT,MAIL_USERNAME,MAIL_PASSWORD,MAIL_ENCRYPTION,MAIL_FROM_ADDRESS options to match the credentials of the smtp server.
-
-### Start the development server
-
-php artisan serve
+visit [phpdesktop project](https://github.com/cztomczak/phpdesktop) for instructions
