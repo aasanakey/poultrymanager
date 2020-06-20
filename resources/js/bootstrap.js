@@ -11,6 +11,7 @@ try {
     window.$ = window.jQuery = require("jquery");
 
     require("bootstrap");
+    require("datatables.net-dt")();
 } catch (e) {}
 
 /**
@@ -53,13 +54,16 @@ Array.prototype.unique = function() {
     return a;
 };
 
-Date.prototype.format = function(format ="mm/dd/yyyy",separator='/'){
-        format = format.toLowerCase()
-        var dd = this.getDate() < 10 ? '0'+ this.getDate(): this.getDate();
-        let mm = (this.getMonth()+1 < 10) ? '0'+(this.getMonth()+1): this.getMonth()+1;
-        let yy = this.getFullYear();
-        let date = format.replace('dd',dd);
-        date = date.replace('mm',mm);
-        date = date.replace('yyyy',yy);
-        return date;
-}
+Date.prototype.format = function(format = "mm/dd/yyyy", separator = "/") {
+    format = format.toLowerCase();
+    var dd = this.getDate() < 10 ? "0" + this.getDate() : this.getDate();
+    let mm =
+        this.getMonth() + 1 < 10 ?
+        "0" + (this.getMonth() + 1) :
+        this.getMonth() + 1;
+    let yy = this.getFullYear();
+    let date = format.replace("dd", dd);
+    date = date.replace("mm", mm);
+    date = date.replace("yyyy", yy);
+    return date;
+};
