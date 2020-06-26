@@ -25,7 +25,7 @@
         </div>
         <div class="sb-sidenav-footer">
             <div class="small">Logged in as:</div>
-            {{ auth()->user()->role}}
+            {{ auth()->user()->role == "SUPER_ADMIN" ? "Admin" : "Farmhand"}}
         </div>
     </nav>
 @endsection

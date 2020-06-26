@@ -1,10 +1,10 @@
-// Fonts
-@import url('https://fonts.googleapis.com/css?family=Nunito');
 // Variables
-@import 'variables';
+@import "variables";
 // Bootstrap
-@import '~bootstrap/scss/bootstrap';
+@import "~bootstrap/scss/bootstrap";
 // @import 'font-awesome.css';
-@import '~@fortawesome/fontawesome-free/scss/fontawesome.scss';
-@import '~@fortawesome/fontawesome-free/scss/solid.scss';
-@import 'custom';
+@import "~@fortawesome/fontawesome-free/scss/fontawesome.scss";
+@import "~@fortawesome/fontawesome-free/scss/solid.scss";
+@import "custom";
+@import "~tempusdominus-bootstrap-4/src/sass/tempusdominus-bootstrap-4-build";
+@import "dataTables.bootstrap4.min.css";

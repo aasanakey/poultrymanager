@@ -243,7 +243,7 @@
        if (confirm("Are you shure you want to delete record\nThis action will lead to permanent loss of data")) {
             let form = $(e.target).closest('form');
             form.submit();
-        } 
+        }
     });
 @endsection
 

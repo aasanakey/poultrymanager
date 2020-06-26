@@ -9,9 +9,11 @@ window._ = require("lodash");
 try {
     window.Popper = require("popper.js").default;
     window.$ = window.jQuery = require("jquery");
-
+    window.moment = require("moment");
+    window.datetimepicker = require("tempusdominus-bootstrap-4");
+    window.Chart = require("chart.js");
     require("bootstrap");
-    require("datatables.net-dt")();
+    // require("datatables.net-dt")();
 } catch (e) {}
 
 /**
